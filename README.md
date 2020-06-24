@@ -65,3 +65,16 @@ This guide will serve as a document for the DCDS section to prepare for the Basi
 	1. Graphs
 1. Bar C Coding Standard
 1. Git 
+
+## Documents
+I have decided to use Latex for writing this document.  I'll probably end up regretting this down the road but it had the ability to produce a nice PDF that will hopefully showcase DCDS professionalism.
+
+### Template
+I have downloaded a book template from: [Latex Templates](latextemplates.com/cat/books).  I'll probably modify it slightly but wanted to get some of the hard stuff out of the way early on.
+
+### Required Software
+Not sure if this is an all inclusive list, but I could compile the above template on PoP!_OS 20.04 after installing the below packages.  Your mileage may vary.
+
+```bash
+sudo apt-get install texstudio texworks texlive-latex-extra texlive-bibtex-extra biber
+```
