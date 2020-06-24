@@ -16,3 +16,5 @@
 *.lof
 *.brf
 *.out
+*.ptc
+output/*
