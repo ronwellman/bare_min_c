@@ -2,6 +2,6 @@
 \nopagebreak
 \tikz\node at (0pt,0pt) [draw=none,fill=ocre!50,line width=1pt,inner sep=5pt]{\parbox{\linewidth-2\fboxsep-2\fboxrule-2pt}{\centering\large\sffamily\bfseries\textcolor{white}{B}}};\vspace*{0.2cm}\nopagebreak
 
-  \item Basic Structure\dotfill \hyperpage{7}
+  \item Basic Structure\dotfill \hyperpage{3}
 
 \end{theindex}
