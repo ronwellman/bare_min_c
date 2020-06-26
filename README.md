@@ -1,5 +1,5 @@
 # Bare Min C
-This guide will serve as a document for the DCDS section to prepare for the Basic Service Level Exam (BSLE).  It is expected to grow as we identify common issues that our developers encounter or gap in their knowledge.  It is not expected to be an all encompassing guide to the C programming language. Below is a rough idea of the topics that will be covered.  Topics may or may not survive in this order or at all. 
+This guide will hopefully guide our developers in gaining a better understanding of the C programming language.  It is expected to grow as we identify common issues that our developers encounter or gaps in their knowledge.  It is not expected to be an all encompassing guide to the C programming language. Below is a rough idea of the topics that will be covered.  Topics may or may not survive in this order or at all. 
 
 ## General Outline
 1. C Basics - K&R, C in a Nutshell, Computer Science from the Ground Up
@@ -67,7 +67,7 @@ This guide will serve as a document for the DCDS section to prepare for the Basi
 1. Git 
 
 ## Documents
-I have decided to use Latex for writing this document.  I'll probably end up regretting this down the road but it had the ability to produce a nice PDF that will hopefully showcase DCDS professionalism.
+I have decided to use Latex for writing this document.  I'll probably end up regretting this down the road but for not, it stays.
 
 ### Template
 I have downloaded a book template from: [Latex Templates](latextemplates.com/cat/books).  I'll probably modify it slightly but wanted to get some of the hard stuff out of the way early on.
@@ -76,5 +76,5 @@ I have downloaded a book template from: [Latex Templates](latextemplates.com/cat
 Not sure if this is an all inclusive list, but I could compile the above template on PoP!_OS 20.04 after installing the below packages.  Your mileage may vary.
 
 ```bash
-sudo apt-get install texstudio texworks texlive-latex-extra texlive-bibtex-extra biber
+sudo apt-get install texstudio texworks texlive-latex-extra texlive-bibtex-extra biber valgrind gdb
 ```
