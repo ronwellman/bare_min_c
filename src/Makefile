@@ -2,15 +2,6 @@
 # https://gcc.gnu.org/onlinedocs/gcc/Option-Summary.html#Option-Summary
 CFLAGS= -std=c11 -Wall -Wextra -Wpedantic -Wwrite-strings -Wfloat-equal -Waggregate-return -Winline -Wvla
 
-# Samples that may require multithreading
-LDLIBS= -pthread
-
-# Samples that may require crypto
-LDLIBS= -lcrypto
-
-# Samples that may require math module
-LDLIBS= -lm
-
 # grab all files ending in c
 SRCS := $(wildcard *.c)
 
@@ -21,7 +12,9 @@ BINS := $(SRCS:%.c=%)
 .PHONY: all clean
 
 # compile all to binaries
-all: ${BINS}
+all: 01-basics1 01-basics2 01-basics3
+
+01-basics3: 01-helper.c 01-helper.h
 
 # remove all binaries verbosely
 clean: 
