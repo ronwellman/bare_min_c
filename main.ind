@@ -4,4 +4,50 @@
 
   \item Basic Structure\dotfill \hyperpage{3}
 
+  \indexspace
+\nopagebreak
+\tikz\node at (0pt,0pt) [draw=none,fill=ocre!50,line width=1pt,inner sep=5pt]{\parbox{\linewidth-2\fboxsep-2\fboxrule-2pt}{\centering\large\sffamily\bfseries\textcolor{white}{C}}};\vspace*{0.2cm}\nopagebreak
+
+  \item const\dotfill \hyperpage{5}
+
+  \indexspace
+\nopagebreak
+\tikz\node at (0pt,0pt) [draw=none,fill=ocre!50,line width=1pt,inner sep=5pt]{\parbox{\linewidth-2\fboxsep-2\fboxrule-2pt}{\centering\large\sffamily\bfseries\textcolor{white}{D}}};\vspace*{0.2cm}\nopagebreak
+
+  \item DRY principle\dotfill \hyperpage{5}
+
+  \indexspace
+\nopagebreak
+\tikz\node at (0pt,0pt) [draw=none,fill=ocre!50,line width=1pt,inner sep=5pt]{\parbox{\linewidth-2\fboxsep-2\fboxrule-2pt}{\centering\large\sffamily\bfseries\textcolor{white}{F}}};\vspace*{0.2cm}\nopagebreak
+
+  \item function
+    \subitem declaration\dotfill \hyperpage{5}
+    \subitem definition\dotfill \hyperpage{5}
+    \subitem static\dotfill \hyperpage{4}
+
+  \indexspace
+\nopagebreak
+\tikz\node at (0pt,0pt) [draw=none,fill=ocre!50,line width=1pt,inner sep=5pt]{\parbox{\linewidth-2\fboxsep-2\fboxrule-2pt}{\centering\large\sffamily\bfseries\textcolor{white}{G}}};\vspace*{0.2cm}\nopagebreak
+
+  \item guard\dotfill \hyperindexformat{\see {header, guard}}{6}
+
+  \indexspace
+\nopagebreak
+\tikz\node at (0pt,0pt) [draw=none,fill=ocre!50,line width=1pt,inner sep=5pt]{\parbox{\linewidth-2\fboxsep-2\fboxrule-2pt}{\centering\large\sffamily\bfseries\textcolor{white}{H}}};\vspace*{0.2cm}\nopagebreak
+
+  \item header\dotfill \hyperpage{4, 5}
+    \subitem guard\dotfill \hyperpage{6}
+
+  \indexspace
+\nopagebreak
+\tikz\node at (0pt,0pt) [draw=none,fill=ocre!50,line width=1pt,inner sep=5pt]{\parbox{\linewidth-2\fboxsep-2\fboxrule-2pt}{\centering\large\sffamily\bfseries\textcolor{white}{M}}};\vspace*{0.2cm}\nopagebreak
+
+  \item macro\dotfill \hyperpage{6}
+
+  \indexspace
+\nopagebreak
+\tikz\node at (0pt,0pt) [draw=none,fill=ocre!50,line width=1pt,inner sep=5pt]{\parbox{\linewidth-2\fboxsep-2\fboxrule-2pt}{\centering\large\sffamily\bfseries\textcolor{white}{V}}};\vspace*{0.2cm}\nopagebreak
+
+  \item void\dotfill \hyperpage{4}
+
 \end{theindex}
