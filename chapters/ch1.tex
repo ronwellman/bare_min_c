@@ -8,8 +8,61 @@
 
 \chapter{The Basics}
 
+
 \section{Basic Structure}\index{Basic Structure}
+\subsection{Basics 1}
+C is a general purpose language and a rather simple language by today's standards.  This does not mean it's easy to write good C code but rather that the language itself is small. C is also a typed language, meaning you as the programmer have to tell the compiler how to interpret the data flowing through your program.  We do this by assigning types to the data.  We'll talk all about types in due time.  Additionally, C is a compiled language.  This means, we write our source code in a human readable syntax and then a compiler converts that into machine-code ones and zeros our computer can understand.  Lets take a minute or two to discuss how a typical C program is laid out.  Don't worry too much about each and every command.  The point here is to see how to construct our program so that we can later compile and run it. A C source file ends in the ".c" file extension.
+\\
+\lstinputlisting[caption={\lstname}]{src/01-basics1.c}
 
+\textbf{Line 1}: We import the \textit{stdio.h} \textbf{header}\index{header} file. The \textit{stdio.h} header file is part of the \textit{standard library} which are essentially pre-written functions that are available for our use. This header file in particular informs the compiler about the existence of the \textit{printf} function.\\
+\textbf{Line 3}: We declare the \textit{main} function returns an integer.\\
+\textbf{Line 4}: The \textit{main} function serves as the entry point into our program and must exist in a C program.  In this example, nothing has been placed between the parentheses which means this function takes no arguments. The function body begins at the opening curly brace "\{" on line 4 and ends at the closing curly brace "\}" on line 7.\\
+\textbf{Line 6}: A \textit{return} of \textit{0} indicates successful completion of our program.  A \textit{return} of anything else, indicates there was an error.\\
 
+\subsection{Basics 2}
+In the first example, we used the \textit{printf} function which was part the \textit{standard library}.  In the next example, we're going to write our own function.  Lets take a look.
+\\
+\lstinputlisting[caption={\lstname}]{src/01-basics2.c}
+
+\textbf{Line 3}: Here we declare that \textit{anotherFunc} does not have a return value by using the \textbf{void}\index{void} keyword. Additionally, we use the \textbf{static}\index{function!static} keyword. The K\&R manual \cite{kr_manual} indicates declaring a function \textit{static} limits the scope of the function.  In other words, it doesn't exist outside of this source file and can therefore not be imported by another program. It is good programming practice to limit the scope of your functions and variables to just where they are needed.\\
+\textbf{Line 4}: This is a function \textbf{declaration}\index{function!declaration}.  Notice it ends with a semicolon.  It exists here because of line 9.  On line 9, \textit{anotherFunc} is called but at this point, since the compiler is reading the file from top to bottom, it doesn't know about the \textit{anotherFunc} function to include what arguments it requires and what it returns.  We therefore provide a function \textit{declaration} to make the compiler aware of this function, its parameters (arguments), and its return type.  Even if it doesn't know where the function exists, it now knows enough information to know how the function should be called.  We could have written lines 13 thru 16 above our \textit{main} function.  This means that we would not have required the function \textit{declaration}.  However, this example follows the convention of trying to keep the \textit{main} function as close to the top as possible.\\
+\textbf{Line 4}: Also included in this line is the keyword \textbf{const}\index{const}\index{const}.  I know we haven't discussed variables yet but essentially the \textit{const} keyword indicates the value of the \textit{msg} variable is "constant" and cannot be changed. This gives the programmer some assurance that the value will not be inadvertently changed inside of \textit{anotherFunc}.\\
+\textbf{Line 14}:  Earlier on line 4 we saw a function \textit{declaration}.  This line is a function \textbf{definition}\index{function!definition}.  It must be laid out in the same way as the \textit{declaration}.  This is where the function body is defined and really comes to life.\\
+
+\subsection{Basics 3}
+So we've seen how we can \textit{include} code from the \textit{standard library} and we've seen how we can write our own functions.  Now we'll take a look at building our own header\index{header}.  In this way, we can define variables and functions written elsewhere and \textit{include} them in our program.  Why would we want to do this?  One reason may be to keep our files as concise as possible.  In order to do this, we may logically group some of our functions together rather than have them scattered across one very large file.  
+
+While we're at it, we also want to ensure we are following the \textbf{DRY} principle\index{DRY principle}. \textbf{D}on't \textbf{R}epeat \textbf{Y}ourself means that there should ideally be a single function that performs a specific action.  In this way, we are not replicating the same capability multiple times throughout our code.  If we've been adhering to the \textit{DRY} principle and a change is required to that capability, we only need to make the change in one place rather than in multiple places.
+
+A header file assists us in keeping our files concise as well as adhering to the \textit{DRY} principle by allowing us to share functions across our program.  C header files end with the ".h" file extension.
+
+The following example consists of three files:
+\begin{enumerate}
+	\item \textit{01-helper.h} - Contains various \textit{definitions} and \textit{declarations}.
+	\item \textit{01-basics3.c} - Contains our main function.
+	\item \textit{01-helper.c} - Contains a single function \textit{definition}.
+\end{enumerate}
+
+\lstinputlisting[caption={\lstname}]{src/01-helper.h}
+
+\textbf{01-helper.h - Lines 1, 2, and 13}: These lines form a \textbf{header guard}\index{header!guard}\index{guard|see {header, guard}}.  A \textit{header guard} is a \textit{macro}\index{macro} that ensures that a header file is only pulled in a single time even if \textit{included} into multiple source files.  Otherwise, you may see multiple \textit{definitions} and \textit{declarations} for the same functions and variables strewn across a single program. By convention, the name of the \textit{header guard} will be the all caps version of the filename with an underscore instead of a period.  In my case, \textit{macro} names must start with letters and therefore \textit{01-helper.h} was shortened to \textit{HELPER\_H}.\\
+\textbf{01-helper.h - Lines 4 - 9}: This provides the \textit{declaration} and the \textit{definition} for a new type called \textit{MYSTERYMEMBER}.\\
+\textbf{01-helper.h - Line 11}:  This provides the \textit{declaration} for the \textit{distributeSnacks} function.\\
+
+\lstinputlisting[caption={\lstname}]{src/01-basics3.c}
+
+\textbf{01-basics3.c - Line 2}: On this line, notice the import uses quotation marks around the header file.  This instructs the compiler to look locally for \textit{01-helper.h} rather than in the standard library (typically found in \textit{/usr/include/}).  Without this file, lines 6 and 8 would cause compiler errors.\\
+\textbf{01-basics3.c - Line 6}: The type \textit{MYSTERYMEMBER} \textit{definition} is in the \textit{01-helper.h} header file.  Additionally, the \textit{enum} value assigned to SHAGGY comes from \textit{01-helper.h} as well.\\
+\textbf{01-basics3.c - Line 8}: The function \textit{distributeSnacks} \textit{declaration} is also in the \textit{01-helper.h} header file.\\
+
+\lstinputlisting[caption={\lstname}]{src/01-helper.c}
+
+\textbf{01-helper.c - Line 1}:  Again, we see the local \textit{01-helper.h} header file being imported.  Without this, \textit{01-helper.c} would not know about the \textit{MYSTERYMEMBER} type that is on line 4  or the enum values on lines 8 and 11.\\
+\textbf{01-helper.c - Line 4}:  This is the function \textit{definition} for distributeSnacks that defines what this function does.\\
+
+We have three files that will all get compiled together into a single executable.  The \textit{01-helper.h} header file is what makes all of this possible.  In the next section, we'll talk about what the compiler is, what it does, and how to use it.
+
+\section{Compilation}
 
 \end{document}
