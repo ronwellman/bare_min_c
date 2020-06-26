@@ -1,0 +1,46 @@
+\documentclass[../main.tex]{subfiles}
+\begin{document}
+	
+\frontmatter
+\chapter{The Ugly Truth}
+\section{About this Book}
+When I set out to write this book, we as a development section were struggling to certify our developers.  For one reason or another, we watched multiple failed attempts at a certification exam that we are required to pass. It is our hope that providing extra materials, guidance, and hands-on exercises, we'll be able to reverse this trend.  I don't expect this book to be all encompassing; you won't go from "Zero to Hero".  In some cases, at least some prior programming knowledge will be essential.  However, where I can, I'll attempt to be throughout without being overly verbose and guide you toward a deeper level of knowledge within the C programming language.
+
+I completely expect this book to have errors.  Writing it also serves as a forcing function for me to read and experiment more.  If you do find errors, please be kind and send me a message or submit your fixes in a pull request.
+
+\section{Why C}
+C is not my favorite language nor do I expect it to be yours.  However, C has been around for a long time and many languages take their roots from it.  Learning C will not only help you understand existing code bases, but will give you insights into and maybe even an appreciation for newer languages.  At the end of the day though, C is a major portion of our required exam and we need to know it in order to pass.
+
+\section{Following Along}
+I have attempted to include sample programs wherever appropriate.  I think its important for developers to read other developers code and to talk about it.  These samples are included within the \textit{src} directory of the repository.  They get compiled every time I build this document to ensure what you see in the book is at least syntactically correct enough to compile.
+
+The machine I have been building this on is a 64-bit machine running \emph{PoP!\_OS 20.04} which is based on \emph{Ubuntu 20.04} and running \emph{gcc 9.3.0}.  To my knowledge, nearly any modern Linux based system should have no issues compiling and running the code.  
+
+If you are compiling this document as well, it is written using \LaTeX.  There are a few extra packages you may require.  Hopefully I've fully captured them but I used \textit{apt} to install:
+\begin{itemize}
+	\item texstudio
+	\item texworks
+	\item texlive-latex-extra
+	\item texlive-bibtex-extra
+	\item biber
+\end{itemize}
+
+Where appropriate, I'll also try and point out programs such as \textit{valgrind} to look for memory leaks in your programs and \textit{gdb} to assist you in troubleshooting your code. I highly recommend installing and using these programs as we go along.  These should both be available via \textit{apt}.
+\begin{itemize}
+	\item gdb
+	\item valgrind
+\end{itemize}
+
+\section{Who am I}
+I am not an expert in C and I don't claim to be.  I first leaned it in college roughly 15+ years ago and only recently picked it back up about two years ago.  I knew just enough to pass our certification exam and as indicated earlier, I'm also writing this book to serve as a forcing function to progress my own knowledge.  Additionally, I am far removed from the academic side of development so expect me to slip up in my terminology from time to time.  Attempts will be made to not totally screw you up either but I am only human.
+
+I'm in no way an accomplished author.  I can barely speak English even though I've been doing so my whole life.  Prepare yourself mentally for the worst grammar you've ever seen or layout for a book.  When all else fails, focus on the points I'm attempting to make and not on how I'm presenting it.  If all else fails, put in a pull request to help fix my deficiencies.
+
+If you're reading this book after 2020, we are going through a Pandemic.  Yay us!  However, what this has given me is extra time to work on things like this.  Hopefully at least something good comes from it.
+
+\href{mailto:ron.wellman01@gmail.com}{ron.wellman01@gmail.com}
+
+\href{https://github.com/ronwellman/bare_min_c}{https://github.com/ronwellman/bare\_min\_c}.
+
+\mainmatter
+\end{document}
