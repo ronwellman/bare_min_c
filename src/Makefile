@@ -1,6 +1,8 @@
-# https://opensource.com/article/18/8/what-how-makefile
-# https://gcc.gnu.org/onlinedocs/gcc/Option-Summary.html#Option-Summary
-CFLAGS= -std=c11 -Wall -Wextra -Wpedantic -Wwrite-strings -Wfloat-equal -Waggregate-return -Winline -Wvla
+# https://www.gnu.org/software/make/manual/make.html
+# https://gcc.gnu.org/onlinedocs/gcc/Option-Summary.html
+CC= gcc
+CFLAGS= -std=c11 -Wall -Wextra -Wpedantic -Wwrite-strings
+CFLAGS+= -Wfloat-equal -Waggregate-return -Winline -Wvla
 
 # grab all files ending in c
 SRCS := $(wildcard *.c)

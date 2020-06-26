@@ -49,6 +49,39 @@
       \field{title}{The C Programming Language}
       \field{year}{2015}
     \endentry
+    \entry{c_nutshell}{book}{}
+      \name{author}{2}{}{%
+        {{hash=69d10dc27ddc268c7e6ea1d6768b1b15}{%
+           family={Prince},
+           familyi={P\bibinitperiod},
+           given={Peter},
+           giveni={P\bibinitperiod}}}%
+        {{hash=4518eb2f7dd58d0c84b6ee5e34c0e6b1}{%
+           family={Crawford},
+           familyi={C\bibinitperiod},
+           given={Tony},
+           giveni={T\bibinitperiod}}}%
+      }
+      \list{location}{1}{%
+        {Sebastopol}%
+      }
+      \list{publisher}{1}{%
+        {O'Reilly}%
+      }
+      \strng{namehash}{74216701f319bf55b2126c1f5b7bdc7a}
+      \strng{fullhash}{74216701f319bf55b2126c1f5b7bdc7a}
+      \strng{bibnamehash}{74216701f319bf55b2126c1f5b7bdc7a}
+      \strng{authorbibnamehash}{74216701f319bf55b2126c1f5b7bdc7a}
+      \strng{authornamehash}{74216701f319bf55b2126c1f5b7bdc7a}
+      \strng{authorfullhash}{74216701f319bf55b2126c1f5b7bdc7a}
+      \field{sortinit}{P}
+      \field{sortinithash}{bb5b15f2db90f7aef79bb9e83defefcb}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{edition}{2}
+      \field{title}{C in a Nutshell}
+      \field{year}{2016}
+    \endentry
   \enddatalist
 \endrefsection
 \endinput

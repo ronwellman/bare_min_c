@@ -1,5 +1,11 @@
 \begin{theindex}
 \nopagebreak
+\tikz\node at (0pt,0pt) [draw=none,fill=ocre!50,line width=1pt,inner sep=5pt]{\parbox{\linewidth-2\fboxsep-2\fboxrule-2pt}{\centering\large\sffamily\bfseries\textcolor{white}{A}}};\vspace*{0.2cm}\nopagebreak
+
+  \item assembler\dotfill \hyperpage{8}
+
+  \indexspace
+\nopagebreak
 \tikz\node at (0pt,0pt) [draw=none,fill=ocre!50,line width=1pt,inner sep=5pt]{\parbox{\linewidth-2\fboxsep-2\fboxrule-2pt}{\centering\large\sffamily\bfseries\textcolor{white}{B}}};\vspace*{0.2cm}\nopagebreak
 
   \item Basic Structure\dotfill \hyperpage{3}
@@ -8,6 +14,8 @@
 \nopagebreak
 \tikz\node at (0pt,0pt) [draw=none,fill=ocre!50,line width=1pt,inner sep=5pt]{\parbox{\linewidth-2\fboxsep-2\fboxrule-2pt}{\centering\large\sffamily\bfseries\textcolor{white}{C}}};\vspace*{0.2cm}\nopagebreak
 
+  \item compile\dotfill \hyperpage{7}
+  \item compiler\dotfill \hyperpage{8}
   \item const\dotfill \hyperpage{5}
 
   \indexspace
@@ -29,6 +37,7 @@
 \nopagebreak
 \tikz\node at (0pt,0pt) [draw=none,fill=ocre!50,line width=1pt,inner sep=5pt]{\parbox{\linewidth-2\fboxsep-2\fboxrule-2pt}{\centering\large\sffamily\bfseries\textcolor{white}{G}}};\vspace*{0.2cm}\nopagebreak
 
+  \item gcc\dotfill \hyperpage{7}
   \item guard\dotfill \hyperindexformat{\see {header, guard}}{6}
 
   \indexspace
@@ -40,9 +49,23 @@
 
   \indexspace
 \nopagebreak
+\tikz\node at (0pt,0pt) [draw=none,fill=ocre!50,line width=1pt,inner sep=5pt]{\parbox{\linewidth-2\fboxsep-2\fboxrule-2pt}{\centering\large\sffamily\bfseries\textcolor{white}{L}}};\vspace*{0.2cm}\nopagebreak
+
+  \item linker\dotfill \hyperpage{8}
+
+  \indexspace
+\nopagebreak
 \tikz\node at (0pt,0pt) [draw=none,fill=ocre!50,line width=1pt,inner sep=5pt]{\parbox{\linewidth-2\fboxsep-2\fboxrule-2pt}{\centering\large\sffamily\bfseries\textcolor{white}{M}}};\vspace*{0.2cm}\nopagebreak
 
   \item macro\dotfill \hyperpage{6}
+  \item make\dotfill \hyperpage{11}
+  \item Makefile\dotfill \hyperpage{11}
+
+  \indexspace
+\nopagebreak
+\tikz\node at (0pt,0pt) [draw=none,fill=ocre!50,line width=1pt,inner sep=5pt]{\parbox{\linewidth-2\fboxsep-2\fboxrule-2pt}{\centering\large\sffamily\bfseries\textcolor{white}{P}}};\vspace*{0.2cm}\nopagebreak
+
+  \item preprocessor\dotfill \hyperpage{8}
 
   \indexspace
 \nopagebreak
