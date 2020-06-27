@@ -6,13 +6,13 @@
 
 \chapterimage{chapter_head_2.pdf} % Chapter heading image
 
-\chapter{The Basics}
+\chapter{Getting Started}
 
 %----------------------------------------------------------------------------------------
 %	Basic Structure
 %----------------------------------------------------------------------------------------
 
-\section{Basic Structure}\index{Basic Structure}
+\section{Basic Structure of a C Program}\index{Basic Structure}
 \subsection{Basics 1}
 C is a general purpose language and a rather simple language by today's standards.  This does not mean it's easy to write good C code but rather that the language itself is small. C is also a typed language, meaning you as the programmer have to tell the compiler how to interpret the data flowing through your program.  We do this by assigning types to the data.  We'll talk all about types in due time.  Additionally, C is a compiled language.  This means, we write our source code in a human readable syntax and then a compiler converts that into machine-code ones and zeros our computer can understand.  Lets take a minute or two to discuss how a typical C program is laid out.  Don't worry too much about each and every command.  The point here is to see how to construct our program so that we can later compile and run it. A C source file ends in the ".c" file extension.
 \\
@@ -184,7 +184,7 @@ When you're compiling often or compiling a large number of files, typing in the 
 
 \begin{lstlisting}[language=bash, numbers=none]
 $ make 01-basics3
-cc     01-basics3.c   -o 01-basics3
+gcc     01-basics3.c   -o 01-basics3
 
 $ ls -laF
 ...
@@ -249,6 +249,6 @@ removed '01-basics2'
 removed '01-basics3'
 \end{lstlisting}
 
-You can see by running \textit{make} a single time, it compiles all of our files with the approriate compile time flags thereby eliminating a lot of typing and the possibility of missing a flag.  Additionally, if we run \textit{make} again, it already knows the binaries exist, and the source files have not changed, so there is not reason to recompile.  Lastly we run \textit{make clean} which automatically removes our binaries.  There is quite a bit of other functionality that you can build into your \textit{Makefiles}.  I invite you to check out: \href{https://www.gnu.org/software/make/manual/make.html}{https://www.gnu.org/software/make/manual/make.html}
+You can see by running \textit{make} a single time, it compiles all of our files with the approriate compile time flags thereby eliminating a lot of typing and the possibility of missing a flag.  Additionally, if we run \textit{make} again, it already knows the binaries exist, and the source files have not changed, so there is no reason to recompile.  Lastly we run \textit{make clean} which automatically removes our binaries.  There is quite a bit of other functionality that you can build into your \textit{Makefiles}.  I invite you to check out: \href{https://www.gnu.org/software/make/manual/make.html}{https://www.gnu.org/software/make/manual/make.html}
 
 \end{document}
