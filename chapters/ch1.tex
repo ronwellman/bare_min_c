@@ -200,12 +200,13 @@ This slightly shortens how much we need to type but to see the real power behind
 
 \lstinputlisting[caption={\lstname}, language=make]{src/Makefile}
 
-\textbf{Line 3}: This line indicates we want to use the \textit{gcc} compiler.
+\textbf{Line 3}: This line indicates we want to use the \textit{gcc} compiler.\\
 \textbf{Lines 4 and 5}: These lines set our compile time flags.  Every time we compile, these are the flags that will be used to reduce mistakes on forgetting to add one or mistyping another.\\
 \textbf{Lines 8 and 11}: These wildcards identify all is all of our ".c" files and \textit{BINS} is the name of the resulting binaries.\\
 \textbf{Line 14}: Identifies the targets below that do not refer to actual filesnames.\\
 \textbf{Line 17}: By convention, the first target is \textit{all}.  Since its the first, it will build each target specified.  By listing my three programs there, the matching ".c" files will be build by \textit{make} as you see below.\\
 \textbf{Line 19}: Since \textit{01-basics3} required two additional files (prerequisites) to build, those files are specified.  This takes the form of:
+
 \begin{verbatim}
 target: prerequisites
 <TAB> recipe
