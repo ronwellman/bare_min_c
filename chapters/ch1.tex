@@ -6,10 +6,13 @@
 
 \chapterimage{chapter_head_2.pdf} % Chapter heading image
 
-\chapter{The Basics}
+\chapter{Getting Started}
 
+%----------------------------------------------------------------------------------------
+%	Basic Structure
+%----------------------------------------------------------------------------------------
 
-\section{Basic Structure}\index{Basic Structure}
+\section{Basic Structure of a C Program}\index{Basic Structure}
 \subsection{Basics 1}
 C is a general purpose language and a rather simple language by today's standards.  This does not mean it's easy to write good C code but rather that the language itself is small. C is also a typed language, meaning you as the programmer have to tell the compiler how to interpret the data flowing through your program.  We do this by assigning types to the data.  We'll talk all about types in due time.  Additionally, C is a compiled language.  This means, we write our source code in a human readable syntax and then a compiler converts that into machine-code ones and zeros our computer can understand.  Lets take a minute or two to discuss how a typical C program is laid out.  Don't worry too much about each and every command.  The point here is to see how to construct our program so that we can later compile and run it. A C source file ends in the ".c" file extension.
 \\
@@ -63,6 +66,189 @@ The following example consists of three files:
 
 We have three files that will all get compiled together into a single executable.  The \textit{01-helper.h} header file is what makes all of this possible.  In the next section, we'll talk about what the compiler is, what it does, and how to use it.
 
+%----------------------------------------------------------------------------------------
+%	Compilation
+%----------------------------------------------------------------------------------------
+
 \section{Compilation}
+
+At a very high level, \textbf{compiling}\index{compile} a program is the act that takes raw source code into machine code that can be executed.  A common compiler, and the one I'll be using in this book, is the \textit{GCC}\index{gcc} compiler.  It is available on nearly every UNIX based system.  You can invoke it directly and in the following examples we will do so.  Later on we'll see how we can leverage the \textit{make} utility and \textit{Makefiles} to make this easier and repeatable.
+
+There are distinct steps that a compiler goes through in order to produce an executable.  These steps generally fall into four phases: \textit{preprocessing}, \textit{compiling}, \textit{assembling}, and \textit{linking}\cite{c_nutshell}.
+
+\paragraph{Preprocessing}\index{preprocessor}
+
+During this phase, the source code is cleaned up with consistent new lines and line continuations (the slash) are removed.  Comments are also removed as they a not needed.  The source code is further modified to expand out \textit{macros} and \textit{preprocessor directives}.  For example, the \textit{header guard} we saw earlier must be processed accordinly.  The \textit{preprocessor} also pulls in any header files specifed with the \textit{\#include} directive.  The output from this phase is just modified source code.  This source code can be output by passing the \textit{-E} option to \textit{gcc}.
+
+\paragraph{Compiling}\index{compiler}
+
+At this point, the source code is ready to be translated into something closer to what the machine can understand.  In this phase the source code is translated into assembly code.  Assembly code is still human readable but is architecture specific.  This assembly code can be output by \textit{gcc} by passing the \textit{-S} option.
+
+\paragraph{Assembling}\index{assembler}
+
+Since assembly code is architecture specific, the assembly code is now passed to an \textit{assembler}. The results of this phase is an object file ending with a ".o" file extension.  This object file contains the machine code of the program that was just compiled minus any external dependencies that were included.
+
+\paragraph{Linking}\index{linker}
+
+Now that all source files have been compiled into object files, it is the job of the \textit{linker} to link them together.  For example, because we used the \textit{printf} function from the \textit{standard library}, the \textit{libc} static library will be automatically linked in.  However, for other libraries, this process is not automatic.  For example, as we'll see later in this book, when we begin using \textit{pthreads}, we have to tell the linker to link to the \textit{libpthread} library by passing \textit{gcc} the \textit{-pthread} option or by adding \textit{-pthread} to the \textit{LDLIBS} environment variable.
+
+\subsection{gcc}
+
+
+\begin{lstlisting}[language=bash, numbers=none]
+$ ls
+01-basics1.c
+
+$ gcc 01-basics1.c
+
+$ ls -laF
+...
+-rw-rw-r-- 1 ron ron    88 Jun 26 10:30 01-basics1.c
+-rwxrwxr-x 1 ron ron 16696 Jun 26 12:22 a.out*
+
+$ ./a.out
+I can output to the screen!
+\end{lstlisting}
+
+On our Linux terminal, we run \textit{gcc} giving it our source code and it generates an executable called \textit{a.out}.  When we run it, we get the output "I can output to the screen!" to out terminal. \textit{a.out} is the default name given to the executable because we didn't tell the gcc compiler what name we wanted.  To do this, we use the \textit{-o} option.\\
+
+\begin{lstlisting}[language=bash, numbers=none]
+$ gcc -o 01-basics1 01-basics1.c
+
+$ ls -laF
+...
+-rwxrwxr-x 1 ron ron 16696 Jun 26 12:34 01-basics1*
+-rw-rw-r-- 1 ron ron    88 Jun 26 10:30 01-basics1.c
+ 
+$ ./01-basics1 
+I can output to the screen!
+\end{lstlisting}
+
+Up until now we've seen a single file being compiled with \textit{gcc} but in our Basic3 example, there were three files.  To compile that, we just need to specify the additional files.\\
+
+\begin{lstlisting}[language=bash, numbers=none]
+$ gcc -o 01-basics3 01-basics3.c 01-helper.h 01-helper.c 
+
+$ ls -laF
+...
+-rwxrwxr-x 1 ron ron 16776 Jun 26 13:08 01-basics3*
+-rw-rw-r-- 1 ron ron   166 Jun 26 10:30 01-basics3.c
+-rw-rw-r-- 1 ron ron   221 Jun 26 10:30 01-helper.c
+-rw-rw-r-- 1 ron ron   160 Jun 26 10:30 01-helper.h
+...
+
+$ ./01-basics3
+I get 20 scooby snacks!
+\end{lstlisting}
+
+So now we can compile our source code into an executable with the name of our choosing but still we're missing out on a bunch of checking we could have the compiler perform.\\
+
+\begin{lstlisting}[language=bash, numbers=none]
+$ gcc -std=c11 -Wall -Wextra -Wpedantic -Wwrite-strings \
+> -Wfloat-equal -Waggregate-return -Winline -Wvla \
+> -o 01-basics1 01-basics1.c
+
+$ ls -laF
+...
+-rwxrwxr-x 1 ron ron 16696 Jun 26 12:40 01-basics1*
+-rw-rw-r-- 1 ron ron    88 Jun 26 10:30 01-basics1.c
+
+$ ./01-basics1 
+I can output to the screen!
+\end{lstlisting}
+
+In this example, we compiled with the following flags:
+\begin{itemize}
+	\item \textit{-std=c11} - The 2011 ISO C++ standard plus amendments.
+	\item \textit{-Wall} - This enables all the warnings about constructions that some users consider questionable, and that are easy to avoid (or modify to prevent the warning), even in conjunction with macros.
+	\item \textit{-Wextra} - This enables some extra warning flags that are not enabled by -Wall.
+	\item \textit{-Wpedantic} - Issue all the warnings demanded by strict ISO C and ISO C++; reject all programs that use forbidden extensions, and some other programs that do not follow ISO C and ISO C++.  For ISO C, follows the version of the ISO C standard specified by any -std option used.
+	\item \textit{-Wwrite-strings} - When compiling C, give string constants the type "const char[length]" so that copying the address of one into a non-"const" "char *" pointer produces a warning.  These warnings help you find at compile time code that can try to write into a string constant, but only if you have been very careful about using "const" in declarations and prototypes.
+	\item \textit{-Wfloat-equal} - Warn if floating-point values are used in equality comparisons.
+	\item \textit{-Waggregate-return} - Warn if any functions that return structures or unions are defined or called.
+	\item \textit{-Winline} - Warn if a function that is declared as inline cannot be inlined.
+	\item \textit{-Wvla} - Warn if a variable-length array is used in the code.
+\end{itemize}
+
+The above options or flags are a small sample of what can be chosen.  However, they represent common issues with compiling C code and therefore are the flags I used in compiling the examples for this book.  The descriptions were pulled from referencing the \textit{gcc} manual page by running "\texttt{man gcc}".
+
+Additional information can be found on the GNU website at \href{https://gcc.gnu.org/onlinedocs/gcc/Option-Summary.html\#Option-Summary}{https://gcc.gnu.org/onlinedocs/gcc/Option-Summary.html\#Option-Summary}.
+
+%----------------------------------------------------------------------------------------
+%	Make
+%----------------------------------------------------------------------------------------
+
+\subsection{Make}
+
+When you're compiling often or compiling a large number of files, typing in the \textit{gcc} command manually can be cumbersome and error prone.  Luckily GNU has a utility called \textit{make}\index{make}.  It makes compiling much easier.\\
+
+\begin{lstlisting}[language=bash, numbers=none]
+$ make 01-basics3
+gcc     01-basics3.c   -o 01-basics3
+
+$ ls -laF
+...
+-rwxrwxr-x 1 ron ron 16696 Jun 26 14:28 01-basics1*
+-rw-rw-r-- 1 ron ron    88 Jun 26 10:30 01-basics1.c
+...
+
+$ ./01-basics1 
+I can output to the screen!
+\end{lstlisting}
+
+This slightly shortens how much we need to type but to see the real power behind the \textit{make} utility, you need to create a file called \textit{Makefile}\index{Makefile}.  Inside of that file, you can specify all sorts of things that will happen when you type \textit{make} in the same directory as the \textit{Makefile}.  \textit{Makefiles} are highly customizable.  Below is a part of the example I use for compiling the code for this book./\\
+
+\lstinputlisting[caption={\lstname}, language=make]{src/Makefile}
+
+\textbf{Line 3}: This line indicates we want to use the \textit{gcc} compiler.\\
+\textbf{Lines 4 and 5}: These lines set our compile time flags.  Every time we compile, these are the flags that will be used to reduce mistakes on forgetting to add one or mistyping another.\\
+\textbf{Lines 8 and 11}: These wildcards identify all is all of our ".c" files and \textit{BINS} is the name of the resulting binaries.\\
+\textbf{Line 14}: Identifies the targets below that do not refer to actual filesnames.\\
+\textbf{Line 17}: By convention, the first target is \textit{all}.  Since its the first, it will build each target specified.  By listing my three programs there, the matching ".c" files will be build by \textit{make} as you see below.\\
+\textbf{Line 19}: Since \textit{01-basics3} required two additional files (prerequisites) to build, those files are specified.  This takes the form of:
+
+\begin{verbatim}
+target: prerequisites
+<TAB> recipe
+\end{verbatim}
+The recipe is if you wanted to specify exactly the command or steps \textit{make} should take.  You can see an example of this on line 23.\\
+\textbf{Lines 22 and 23}: Here we define a target called \textit{clean} and specify the recipe is to run \textit{rm -rvf} (remove verbosely) against all local object files (files ending in ".o") as well as the compiled binaries.\\
+\begin{lstlisting}[language=bash]
+$ make
+gcc -std=c11 -Wall -Wextra -Wpedantic -Wwrite-strings \
+-Wfloat-equal -Waggregate-return -Winline -Wvla \
+01-basics1.c   -o 01-basics1
+
+gcc -std=c11 -Wall -Wextra -Wpedantic -Wwrite-strings \
+-Wfloat-equal -Waggregate-return -Winline -Wvla \
+01-basics2.c   -o 01-basics2
+
+gcc -std=c11 -Wall -Wextra -Wpedantic -Wwrite-strings \
+-Wfloat-equal -Waggregate-return -Winline -Wvla \
+01-basics3.c 01-helper.c 01-helper.h   -o 01-basics3
+
+$ ls -laF
+...
+-rwxrwxr-x 1 ron ron 16696 Jun 26 15:08 01-basics1*
+-rw-rw-r-- 1 ron ron    88 Jun 26 10:30 01-basics1.c
+-rwxrwxr-x 1 ron ron 16784 Jun 26 15:08 01-basics2*
+-rw-rw-r-- 1 ron ron   224 Jun 26 10:30 01-basics2.c
+-rwxrwxr-x 1 ron ron 16776 Jun 26 15:08 01-basics3*
+-rw-rw-r-- 1 ron ron   166 Jun 26 10:30 01-basics3.c
+-rw-rw-r-- 1 ron ron   221 Jun 26 10:30 01-helper.c
+-rw-rw-r-- 1 ron ron   160 Jun 26 10:30 01-helper.h
+-rw-rw-r-- 1 ron ron   595 Jun 26 14:59 Makefile
+
+$ make
+make: Nothing to be done for 'all'.
+
+$ make clean
+rm -rvf *.o 01-basics1 01-basics2 01-helper 01-basics3
+removed '01-basics1'
+removed '01-basics2'
+removed '01-basics3'
+\end{lstlisting}
+
+You can see by running \textit{make} a single time, it compiles all of our files with the approriate compile time flags thereby eliminating a lot of typing and the possibility of missing a flag.  Additionally, if we run \textit{make} again, it already knows the binaries exist, and the source files have not changed, so there is no reason to recompile.  Lastly we run \textit{make clean} which automatically removes our binaries.  There is quite a bit of other functionality that you can build into your \textit{Makefiles}.  I invite you to check out: \href{https://www.gnu.org/software/make/manual/make.html}{https://www.gnu.org/software/make/manual/make.html}
 
 \end{document}
