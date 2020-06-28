@@ -14,9 +14,12 @@ BINS := $(SRCS:%.c=%)
 .PHONY: all clean
 
 # compile all to binaries
-all: 01-basics1 01-basics2 01-basics3
+all: 01-basics1 01-basics2 01-basics3 02-integer-32bit 02-integer-64bit
 
 01-basics3: 01-helper.c 01-helper.h
+
+02-integer-32bit: 
+	${CC} ${CFLAGS} -m32 -o 02-integer-32bit 02-integer-32bit.c
 
 # remove all binaries verbosely
 clean: 

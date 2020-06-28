@@ -1,0 +1,72 @@
+\documentclass[../main.tex]{subfiles}
+
+\graphicspath{{pictures/}{../pictures/}}
+
+\chapterimage{chapter_head_2.pdf} % Chapter heading image
+
+\begin{document}
+	\chapter{Basic Syntax}
+	
+	%----------------------------------------------------------------------------------------
+	%	Basic Syntax
+	%----------------------------------------------------------------------------------------
+	
+	\section{Types}
+	
+	Much of programming is about the receiving, manipulating, and sending of data.  Since C is a typed language, it needs to know how to interpret the data that you are working with.  In many cases, the underlying bits that are actually being stored are the same.  However, based on the type assigned to that data, the C compiler will interpret it differently.  C can't really tell the difference between 41 and the letter 'A' (which has the ASCII value of 41).  Its up to you as the programmer to specify if the data is an integer or if its a character.
+	
+	There are a few basic data types you'll encounter in C.	
+	\begin{itemize}
+		\item \textbf{int}		-	Represents whole numbers.
+		\item \textbf{char}		-	Represents a single character.
+		\item \textbf{float}	-	Represents numbers with decimal points (single precision).
+		\item \textbf{double} 	-	Represents numbers with decimal points (double precision).
+	\end{itemize}
+
+	The platform that a program is compiled for can affect the number of bytes that a data type requires.  While most of today's platforms are 64-bit, there are still a few 32-bit systems out there.  If the max or min size of a data type is a concern to you, you'll want to be sure you know the size of that type on the platform your code will be compiled for.
+	
+	\subsection{Integers}
+	
+	By default, an integer utilizes 4 bytes on both the 32-bit and 64-bit platforms. However, there are a couple of qualifiers that can affect how the data is interpreted as well as how many bytes are used.  
+	\begin{itemize}
+		\item \textbf{short}	-	Utilizes 2 bytes (16 bits)
+		\item \textbf{long}		-	Utilizes 4 bytes on a 32 bit platform and 8 bytes on a 64 bit platform
+		\item \textbf{signed}	-	Integers are \text{signed} by default meaning they utilize two's complement to represent positive and negative numbers.  You do not need to specify \textit{signed} but can for greater clarity for someone reading your code.
+		\item \textbf{unsigned}	-	As an \textit{unsigned} integer, there is no sign bit.  Therefore you can store larger positive numbers but you cannot store negative numbers.\\
+	\end{itemize}
+	
+	\lstinputlisting[caption={\lstname}]{src/02-integer-32bit.c}
+	
+	\begin{lstlisting}[language=bash, numbers=none]
+		$ file 02-integer-32bit
+		02-integer-32bit: ELF 32-bit LSB shared object, Intel 80386
+		
+		$ ./02-integer-32bit
+		Sizes:
+		short int: 2
+		int: 4
+		long int: 4
+		Value of signed   short: -275
+		Value of unsigned short: 65261
+	\end{lstlisting}
+	
+	As you can see with the \textit{file} command, 02-integer-32bit has been compiled as a 32-bit binary.  Notice that an \textit{int} and \textit{long int} are both 4 bytes.  
+	
+	Also notice on line 9 that I assign the value of -275 to \text{si} which is a \textit{signed short int} and it prints out just fine on line 14.  However, when I print it out a second time on line 15 I cast it as an \textit{unsigned short int}.  Under the hood, the bits haven't changed; how they were interpreted did.  -275 is actually 1111111011101101 in binary.  The left-most bit (most significant bit) is the \textit{sign} bit.  When cast as an \textit{unsigned short int}, this bit is not longer interpreted as a signed bit which is why we now get a positive number.  I point this out only because it is important to note that you as the programmer need to understand the data you are working with because C only pays attention to whether or not you declared it as \textit{signed} or \textit{unsigned}.\\
+	
+	\lstinputlisting[caption={\lstname}]{src/02-integer-64bit.c}
+	
+	\begin{lstlisting}[language=bash, numbers=none]
+	$ file 02-integer-64bit
+	02-integer-64bit: ELF 64-bit LSB shared object, x86-64
+	
+	$ ./02-integer-64bit 
+	Sizes:
+	short int: 2
+	int: 4
+	long int: 8
+	\end{lstlisting}
+	
+	Notice this 02-integer-64bit is compiled as a 64-bit executable.  In this case, an \textit{int} is still 4 bytes but a \textit{long int} is now 8 bytes allowing you to store much larger numbers.
+	
+\end{document}
