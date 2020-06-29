@@ -15,7 +15,7 @@
 	
 	Much of programming is about the receiving, manipulating, and sending of data.  Since C is a typed language, it needs to know how to interpret the data that you are working with.  In many cases, the underlying bits that are actually being stored are the same.  However, based on the type assigned to that data, the C compiler will interpret it differently.  C can't really tell the difference between 41 and the letter 'A' (which has the ASCII value of 41).  Its up to you as the programmer to specify if the data is an integer or if its a character.
 	
-	There are a few basic data types you'll encounter in C.	
+	Below are a few of the basic data types you'll encounter in C.	
 	\begin{itemize}
 		\item \textbf{int}		-	Represents whole numbers.
 		\item \textbf{char}		-	Represents a single character.
@@ -31,10 +31,10 @@
 	
 	By default, an \textit{int}\index{int} utilizes 4 bytes on both the 32-bit and 64-bit platforms. However, there are a couple of qualifiers that can affect how the data is interpreted as well as how many bytes are used.  
 	\begin{itemize}
-		\item \textbf{short}	-	Utilizes 2 bytes (16 bits).
-		\item \textbf{long}		-	Utilizes 4 bytes on a 32 bit platform and 8 bytes on a 64 bit platform.
-		\item \textbf{long long}-	Utilizes 8 bytes on a 32 bit platform and 8 bytes on a 64 bit platform.
-		\item \textbf{signed}	-	Integers are \text{signed} by default meaning they utilize two's complement to represent positive and negative numbers.  You do not need to specify \textit{signed} but can for greater clarity for someone reading your code.
+		\item \textbf{short}\index{short}	-	Utilizes 2 bytes (16 bits).
+		\item \textbf{long}\index{long int}		-	Utilizes 4 bytes on a 32 bit platform and 8 bytes on a 64 bit platform.
+		\item \textbf{long long}\index{long long int}-	Utilizes 8 bytes on a 32 bit platform and 8 bytes on a 64 bit platform.
+		\item \textbf{signed}	-	Integers are \textit{signed} by default meaning they utilize two's complement to represent positive and negative numbers.  You do not need to specify \textit{signed} but can for greater clarity for someone reading your code.
 		\item \textbf{unsigned}	-	As an \textit{unsigned} integer, there is no sign bit.  Therefore you can store larger positive numbers but you cannot store negative numbers.\\
 	\end{itemize}
 	
@@ -81,7 +81,7 @@
 	
 	Notice this 02-integer-64bit is compiled as a 64-bit executable.  In this case, an \textit{int} is still 4 bytes but a \textit{long int} is now 8 bytes allowing you to store much larger numbers.  
 	
-	\subsection{stdint.h}
+	\subsubsection{stdint.h}
 	
 	The \textit{stdint.h} header imports other header files such as \textit{stdint-intn.h} and \textit{stdint-uintn.h} that specify a number of macros and type definitions (\textit{typedef}) to make working with integers more consistent across 32-bit and 64-bit platforms.  By using it, you can guarantee the size of the resulting integer. 
 	\begin{itemize}
@@ -117,7 +117,7 @@
 	%	Characters
 	%----------------------------------------------------------------------------------------
 
-	\section{Characters}
+	\subsection{Characters}
 	
 	A \textit{char}\index{char} within C typically requires just a single byte to store a single character.  This is based upon the fact that the \textit{char} was meant to store the ASCII\index{ASCII} value which only required 7 bits.  Depending upon the type of project you are working on, this may or may not be sufficient. Below is the ASCII chart \ref{fig:ascii} as printed out by running the \textit{ascii} command on the terminal.  Notice the values only go upto 127.
 	
@@ -127,7 +127,7 @@
 		\label{fig:ascii} % Unique label used for referencing the figure in-text
 	\end{figure}
 	
-	Obviously the ASCII chart was built for the English language.  When not sufficient, there are ways of using an \textit{unsigned int} and \textit{UTF-8} encoding instead.  I will not be going into this but if it interests you, I suggest checking out articles such as \href{https://www.cprogramming.com/tutorial/unicode.html}{https://www.cprogramming.com/tutorial/unicode.html}.\\
+	Obviously the ASCII chart was built for the English language.  When not sufficient, there are ways of using an \textit{unsigned int} and \textit{UTF-8} encoding instead.  Additionally, there are wider character data types such as \textit{wchar\_t} that utilize more than 1 byte in order to store character values by their Unicode value rather than an ASCII value.  I will not be going into these methods and alternate data types but if it interests you, I suggest checking out articles such as \href{https://www.cprogramming.com/tutorial/unicode.html}{https://www.cprogramming.com/tutorial/unicode.html}.\\
 	
 	\lstinputlisting[caption={\lstname}]{src/02-character1.c}
 	
@@ -153,11 +153,27 @@
 		\label{fig:isapha} % Unique label used for referencing the figure in-text
 	\end{figure}
 
+	\subsubsection{Character Constants}\index{character constant}
+	
+	A character constant is any character surrounded by single quotes.  For example, when we assigned 'a' to \textit{c1} in the previous example, that was an example of a character constant.  However, if we were using wider characters other than the standard \textit{char}, we may want to pass in the Unicode value.  To do this we may specify \textit{u'$\textbackslash$x3b3'}\cite{c_nutshell}.    
+	
+	The \textit{\textbackslash} we just saw with \textit{$\textbackslash$x} known as an escape sequence.  There are a number of other escape sequences you may encounter.  You've already seen me use '\textit{$\textbackslash$n}' int nearly every \textit{printf}.  This is a character constant for the newline character.  Some of the other character constants you may encounter are:
+	\begin{itemize}
+		\item \textbf{$\textbackslash$0}	- The NULL character.  You'll often see this as terminating a character array.
+		\item \textbf{$\textbackslash$n}	- New line.
+		\item \textbf{$\textbackslash$r}	- Carriage return.
+		\item \textbf{$\textbackslash$t} 	- Horizontal tab.
+		\item \textbf{$\textbackslash$v}	- Vertical tab.
+		\item \textbf{$\textbackslash$o}	- Octal values.  This will look something like \textit{$\textbackslash$o456} where we are referring to octal value 456 which is 302 in decimal.
+		\item \textbf{$\textbackslash$x}	- Hexidecimal values.  This will look something like \textit{$\textbackslash$x456} where we are referring to hexadecimal 456 which is 1110 in decimal.
+		\item \textbf{$\textbackslash$u}	- Unicode values.	
+	\end{itemize}
+
 	%----------------------------------------------------------------------------------------
 	%	Floats
 	%----------------------------------------------------------------------------------------
 	
-	\section{Floats}
+	\subsection{Floats}
 	
 	Floating point numbers are numbers with decimal points.  Just as with integers, the data type affects the number of bytes used to store values.  With integers, concern was with max and min values as well as overflows.  With floats, its about precision.  A floating point value is an approximation and the cost of being more precise in that approximation is in the number of bytes that are required to store it.
 	
@@ -168,9 +184,9 @@
 			\toprule
 			\textbf{Type} & \textbf{Storage Size} & \textbf{Value Range} & \textbf{Smallest positive Value} & \textbf{Precision}\\
 			\midrule
-			float & 4 bytes & $\pm$3.4$\epsilon$+38 & 1.2$\epsilon$-38 & 6 digits \\
-			double & 8 bytes & $\pm$1.7$\epsilon$+308 & 2.3$\epsilon$-308 & 15 digits \\
-			long double & 10 bytes & $\pm$1.1$\epsilon$+4932 & 3.4$\epsilon$-4932 & 19 digits \\
+			float\index{float} & 4 bytes & $\pm$3.4$\epsilon$+38 & 1.2$\epsilon$-38 & 6 digits \\
+			double\index{double} & 8 bytes & $\pm$1.7$\epsilon$+308 & 2.3$\epsilon$-308 & 15 digits \\
+			long double\index{long double} & 10 bytes & $\pm$1.1$\epsilon$+4932 & 3.4$\epsilon$-4932 & 19 digits \\
 			\bottomrule
 		\end{tabular}
 		\caption{Real floating-point types}
@@ -186,8 +202,59 @@
 	\end{lstlisting}
 	
 	\textbf{Line 7}: On this line, 1 is divided by 3 and the results are stored in \textit{x}.  However, when \textit{x} is printed out on line 8, we see that what actually got stored is 0.0.  This is because we divided one integer by another integer.  In C, this will result in another integer.  Since integers cannot have decimal points, 0 gets stored in X.\\
-	\textbf{Line 10}: Again we do the same division but instead of dividing two integers, we first cast 1 as a \textit{float}.  Under the hood, this operation should result in a \textit{double} being generated but because we are storing it in a \textit{float}, it it rounded to 6 digits of precision.  We can see this when we print \textit{x} on line 11 in that there are only 6 digits (leading and trailing zeros are ignored).
+	\textbf{Line 10}: Again we do the same division but instead of dividing two integers, we first cast 1 as a \textit{float}.  Under the hood, this operation should result in a \textit{double} being generated but because we are storing it in a \textit{floatmathmatical}, it it rounded to 6 digits of precision.  We can see this when we print \textit{x} on line 11 in that there are only 6 digits (leading and trailing zeros are ignored).
 	
 	There is another header file called \textit{complex.h} that allows for the use of complex floating point types.  I will not be discussing them here.
+	
+	\clearpage
+	%----------------------------------------------------------------------------------------
+	%	Mathmatical Operations
+	%----------------------------------------------------------------------------------------	
+	\section{Operators}
+	
+	The following operators are some of the most common you'll see when writing C.  
+	
+	\begin{table}[h]
+		\centering
+		\begin{tabular}{l l l}
+			\toprule
+			\textbf{Operator} & \textbf{Purpose} & \textbf{example}\\
+			\midrule
+			* 	& Multiplication 	& a * b \\
+			/ 	& Division 			& a / b \\
+			+ 	& Addition 			& a + b \\
+			- 	& Subtraction 		& a - b \\
+			\% 	& Modulus (remainder) & a \% b \\
+			++ 	& Increment 		& ++a or a++ \\
+			\verb|--| & Decrement 	& \verb|--|a or a\verb|--| \\
+			\& 	& BITWISE AND 		& a \& b \\
+			| 	& BITWISE OR 		& a | b \\
+			\textasciicircum 	& BITWISE XOR 		& a \textasciicircum b \\
+			\textasciitilde 	& BITWISE NOT 		& $\textasciitilde$a \\
+			<< 	& Left Shift 		& a << 2 \\
+			>> 	& Right Shift 		& a >> 2 \\
+			= 	& Assignment 		& c = a + b \\
+			==	& Equality 			& a == b \\
+			<	& Less than			& a < b \\
+			>	& Greater than		& a > b \\
+			<=	& Less than or equal to & a <= b \\
+			>=	& Greater than or equal to & a >= b \\
+			!	& Negation (NOT)	& !a \\
+			\&\&& Logical AND		& a \&\& b \\
+			|| 	& Logical OR		& a || b \\
+			\&	& Address of		& \&a \\
+			*	& Indirection		& *a \\
+			{[ ]}	& Subscript		& a[b] \\
+			.	& Struct or Union member designator & a.b \\
+			->	& Struct or Union member designator by Reference & a->b \\
+			?:	& Conditional Evaluation & a ? b : c \\
+			\bottomrule
+		\end{tabular}
+		\caption{Operators}
+		\label{tab:operators}
+	\end{table}
+
+	The Assignment '=' operator is often combined with other operators such as '+', '-', '/', ' to shorten the amount of code the programmer has to type.  For example, \texttt{a += 5;} is equivalent to \texttt{a = a + 5;}.
+	
 	
 \end{document}
