@@ -286,7 +286,14 @@
 
 	The Assignment '=' operator is often combined with other operators such as '+', '-', '/', ' to shorten the amount of code the programmer has to type.  For example, \texttt{a += 5} is equivalent to \texttt{a = a + 5}.
 	
-	Lets take a look at an example that uses a few of these operators.  Don't worry if it doesn't all make sense yet.
+	Just as in mathematical equations, certain operations are given precedence over other operations.  The same is true for C, certain operators have precedence\index{operator precedence} over other operators. "C in a Nutshell"\cite{c_nutshell} has a good chart listing them out in Chapter 5.  A small sampling of the chart shows that the postfix operators such as \texttt{[ ]}, \texttt{.}, and \texttt{->} have precedence over the unary operators \texttt{*}, \texttt{\&}, \texttt{!}, and \texttt{\textasciitilde} which have precedence over multiplication operators \texttt{*}, \texttt{/}, and \texttt{\%}.  This list goes on an on for the remainder of the operators.  It is good to generally understand the precedence but I don't suggest you rely on them.  Instead, I suggest taking following the guidance given in the "Embedded C Coding Standard"\cite{embedded_c}:
+
+	\begin{quotation}
+		a.	Do not rely on C's operator precedence rules, as they may not be obvious to those who maintain the code.  To aid clarity, use parentheses (and / or break long statements into multiple lines of code) to ensure proper execution order within a sequence of operations.\\
+		b.	Unless it is a single identifier or constant, each operand of the logical AND (\&\&) and logical OR (||) operators shall be surrounded by parentheses.
+	\end{quotation}
+	
+	Lets take a look at an example that uses a few of these operators.  Don't worry if it doesn't all make sense yet.\\
 	
 	\lstinputlisting[caption={\lstname}]{src/02-xor.c}
 	
