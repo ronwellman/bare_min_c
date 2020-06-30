@@ -112,7 +112,37 @@
 	# define UINT64_MAX             (__UINT64_C(18446744073709551615))
 	\end{verbatim}
 	
+	\subsubsection{stddef.h}\index{size\_t}
+	This header file defines a number of additional types as well as macros.  
 	
+	One type that you will see quite frequently is \textit{size\_t}.  This is an \textit{unsigned integer} that is often returned when the result is the number of bytes of something.  For example, the manpage for \textit{strlen} function shows:
+	
+	\begin{verbatim}
+	SYNOPSIS
+	#include <string.h>
+	
+	size_t strlen(const char *s);
+	
+	DESCRIPTION
+	The strlen() function calculates the length of the string pointed to by s, 
+	excluding the terminating null byte ('\0').
+	
+	RETURN VALUE
+	The strlen() function returns the number of bytes in the string pointed to 
+	by s.
+	\end{verbatim}
+	
+	So the \textit{strlen} function returns the number of bytes in the string as type \textit{size\_t} which under the hood, is really just an \textit{unsigned int}.
+	
+	\subsection{stdbool.h}\index{bool}
+	Languages other than C, often have a type for boolean variables.  These are variables that can only hold the value of \textit{true} or \textit{false}.  C accomplishes this with a set of macros which under the hood are really just integer constants.
+	
+	\begin{itemize}
+		\item \textbf{true} - constant 1
+		\item \textbf{false} - constant 0
+	\end{itemize}
+
+	You may see these returned from functions to indicate whether something was successful or not.  As a programmer using type \textit{bool} as a return may make it easy to ascertain the reason behind what a function is returning.  However, be cautious about using them to test the return from standard library functions.  In many cases, a success is returned as a zero but a failure is returned as a non-zero number.  It is always a good idea to read the manual page of a function to understand what it uses for return types and what the return values actually mean. 
 	%----------------------------------------------------------------------------------------
 	%	Characters
 	%----------------------------------------------------------------------------------------
