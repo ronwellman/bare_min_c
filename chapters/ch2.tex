@@ -134,7 +134,7 @@
 	
 	So the \textit{strlen} function returns the number of bytes in the string as type \textit{size\_t} which under the hood, is really just an \textit{unsigned int}.
 	
-	\subsection{stdbool.h}\index{bool}
+	\subsubsection{stdbool.h}\index{bool}
 	Languages other than C, often have a type for boolean variables.  These are variables that can only hold the value of \textit{true} or \textit{false}.  C accomplishes this with a set of macros which under the hood are really just integer constants.
 	
 	\begin{itemize}
@@ -238,11 +238,11 @@
 	
 	\clearpage
 	%----------------------------------------------------------------------------------------
-	%	Mathmatical Operations
+	%	Operators
 	%----------------------------------------------------------------------------------------	
 	\section{Operators}
 	
-	The following operators are some of the most common you'll see when writing C.  
+	The following operators are some of the most common you'll see when writing C.  I won't go into depth with them as you'll see most of them used in further examples.
 	
 	\begin{table}[h]
 		\centering
@@ -276,7 +276,8 @@
 			*	& Indirection		& *a \\
 			{[ ]}	& Subscript		& a[b] \\
 			.	& Struct or Union member designator & a.b \\
-			->	& Struct or Union member designator by Reference & a->b \\
+			->	& Struct or Union member designator by Refere(nce & a->b \\
+			sizeof & Storage size of object & sizeof(a) \\
 			?:	& Conditional Evaluation & a ? b : c \\
 			\bottomrule
 		\end{tabular}
@@ -303,4 +304,54 @@
 	\textbf{Line 40}: This may be our first example utilizing a \textit{for} loop.  Don't worry, we'll talk about control flow in coming sections.  For now, we use the assignment control operator \texttt{=} to set an initial value for variable \textit{i}.  We also utilize the less than operator \texttt{<} to make sure the value of \textit{i} doesn't exceed the value of \textit{oLen}.  This would indicate we've passed the end of the \textit{char array}.  Additionally we use the increment operator \texttt{++} to increment the value of \textit{i} after each loop.\\
 	\textbf{Line 41}:  In this line we use the subscript operators \texttt{[ ]} to operate on a single \textit{char} within the \textit{char array}.  In this case, \textit{i} is an index value that starts at 0 (corresponding to the first character in the \textit{char array}) and by incrementing by 1 after each loop, we'll XOR against each character.  We then combine the XOR operator \texttt{\textasciicircum} with the assignment operator \texttt{=} to form \texttt{$\textasciicircum$=}.  This means that we will XOR\index{XOR} the \textit{char} on the left side with the \textit{char} on the right side of this operator, and assign the result back to the same location as the original \textit{char} on the left. So what character are we using on the right?  Here we use the subscript operators \texttt{[ ]} once again to pull out a single \textit{char} from \textit{key}.  We utilize the modulus operator \texttt{\%} with index \textit{i} and \textit{kLen} which is the length of the key.  Since a modulus does remainder division, what we essentially get is a number between 0 and kLen - 1.  This allows us to loop back over each character within \textit{key} until we've gone all the way through each character in \textit{original}.  
 	
+	%----------------------------------------------------------------------------------------
+	%	Arrays
+	%----------------------------------------------------------------------------------------	
+	
+	\section{Arrays}
+	
+	Arrays\index{array} are objects that can contain multiple elements of the same type.  All elements are stored in a contiguous block of memory.  The number of elements is determined when the array is created and cannot be adjusted during its lifetime.  Individual elements of the array can be accessed via an index value that starts at 0.  This is why in the previous example, we started \texttt{i} with a value of 0 so that it would start at the beginning of the \textit{char array}.  
+
+	Most arrays sizes are determined by the programmer at compile time by passing in integer constants.  You can however, have variable sized arrays.  I tend not to use these and have compiler flags that will complain if the size of an array can't be determined at compile time because it is the result of an expression or user input.  Instead I would use dynamic memory by building my array on the heap.  We'll discuss dynamic memory in a later section.
+	
+	In the XOR example we saw earlier, we saw a \textit{char array} for \textit{clear} and \textit{key}.  Those were single dimension arrays.  However, you can add additional dimensions by adding additional subscript operators \texttt{[ ]}.
+	
+	It is almost a good idea to initialize a variable with a value.  This is especially true for arrays since not every element may be used right away.  When the memory is allocated for the array, whatever happens to be at the memory address will show up in the array.  This can cause problems down the road as you have no way of knowing how that value arrived.  For example:\\
+	
+	\lstinputlisting[caption={\lstname}]{src/02-array1.c}
+	
+	\textbf{Line 9}: Here I hardcode the size of the array through the use of a \textit{\#define}\index{\#define} macro.  Doing this makes it obvious what the dimensions of the array are for but won't trigger the compiler into thinking I'm creating a variable sized array. The use of \textit{\#define} should be used in very limited cases\cite{embedded_c}.\\
+	\textbf{Line 9}: A two-dimensional array is created to track students and their grades.  All of the grades will be of type \text{float}. Notice that this creates space for the array but does not assign it any values.\\
+	\textbf{Line 10}: The \text{sizeof}\index{sizeof} operator determines how many bytes were allocated for the array.\\
+	\textbf{Line 15}: This line runs inside of a nested for loop where the inner loop increments the \textit{test} index and the outer loop increments the \textit{student} index.  The end result is that we get all the grades for the first student and then each of the grades for each remaining student.\\
+	
+	\begin{lstlisting}[language=bash, numbers=none]
+		$ ./02-array1 
+		Grades consumes 24 bytes of memory.
+		Student 0	Test: 0	Grade: 0.000000
+		Student 0	Test: 1	Grade: 0.000000
+		Student 0	Test: 2	Grade: 0.000000
+		Student 1	Test: 0	Grade: 0.000000
+		Student 1	Test: 1	Grade: 1158749014972294498713827247390720.000000
+		Student 1	Test: 2	Grade: 0.000000
+	\end{lstlisting}
+	
+	Notice because I didn't initialize the contents of the array, I pick up a stray value that happened to already be in memory when the array space was allocated there.\\
+	
+	\lstinputlisting[caption={\lstname}]{src/02-array2.c}
+	
+	\textbf{Line 10}:  I now initialize my \textit{grades} array by placing a zero in curly braces.  This zeros out each of the grades.\\
+	\textbf{Line 9}: Here I under-allocate the size of the strings which are nothing more than \textit{char} arrays.  This causes no compile time warnings or errors.  However, as you'll see in the following output, this causes an issue in printing the first name in the array. The way that C knows it has reached the end of a string is that it reaches a null termination \texttt{$\textbackslash$0} character.  Since I under-allocated for the array, the first \textit{char} if the next string overwrites the \texttt{$\textbackslash$0}.  This is why they print out together when trying to print just the first string.  Just as disturbing and potentially distructive is the final \texttt{$\textbackslash$0} for the last name technically writes into memory that is not allocated to the \textit{students} array.\\
+
+
+	\begin{lstlisting}[language=bash, numbers=none]
+		$ ./02-array2 
+		Grades consumes 24 bytes of memory.
+		Student JennyJimmy	Test: 0	Grade: 0.000000
+		Student JennyJimmy	Test: 1	Grade: 0.000000
+		Student JennyJimmy	Test: 2	Grade: 0.000000
+		Student Jimmy	Test: 0	Grade: 0.000000
+		Student Jimmy	Test: 1	Grade: 0.000000
+		Student Jimmy	Test: 2	Grade: 0.000000
+	\end{lstlisting}
 \end{document}
