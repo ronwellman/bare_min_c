@@ -16,7 +16,7 @@ BINS := $(SRCS:%.c=%)
 # compile all to binaries
 all: 01-basics1 01-basics2 01-basics3 02-integer-32bit \
 	02-integer-64bit 02-character1 02-float1 \
-	02-xor
+	02-xor 02-array1 02-array2
 
 01-basics3: 01-helper.c 01-helper.h
 
