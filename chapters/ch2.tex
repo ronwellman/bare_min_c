@@ -5,13 +5,13 @@
 \chapterimage{chapter_head_2.pdf} % Chapter heading image
 
 \begin{document}
-	\chapter{Basic Syntax}
+	\chapter{Basic Types}
 	
 	%----------------------------------------------------------------------------------------
-	%	Basic Syntax
+	%	Basic Types
 	%----------------------------------------------------------------------------------------
 	
-	\section{Types}
+	\section{Data Types}
 	
 	Much of programming is about the receiving, manipulating, and sending of data.  Since C is a typed language, it needs to know how to interpret the data that you are working with.  In many cases, the underlying bits that are actually being stored are the same.  However, based on the type assigned to that data, the C compiler will interpret it differently.  C can't really tell the difference between 41 and the letter 'A' (which has the ASCII value of 41).  Its up to you as the programmer to specify if the data is an integer or if its a character.
 	
@@ -382,6 +382,5 @@
 	\textbf{Line 40}: This line passes two different pointer addresses to our \textit{swap} function using pointer arithmetic.  Under the hood, the pointer \textit{pArray} is an integer pointer.  An \textit{int} takes up 4 bytes so what we're actually doing is \textit{ADDRESS + (i * 4)} to calculate the adjusted address that we actually send to the \textit{swap} function.  This is the exact same math that gets applied when we use the subscript operators \texttt{[ ]}.  However, I didn't want to dereference into the array and access the value at a particular address.  I wanted the address itself.  I could have also used \texttt{\&pArray[i]} and gotten the same results. Care must be taken as C won't stop you from calculating addresses passed the original array address space.\\
 	\textbf{Line 48}: I once again check to ensure I received pointers that contain addresses and not \textit{NULL}.\\
 	\textbf{Lines 53 - 55}: Here we move the values between the pointers by defreferencing them via the \texttt{*} operator.  In essence, we copy the value at the memory address pointed to by \textit{p1} into temp.  We then copy the value at the memory address pointed to by \textit{p2} into the memory address pointed to by \textit{p1}.  Finally, we copy the value of temp into the memory address pointed to by \textit{p2}.\\
-	
 	
 \end{document}
