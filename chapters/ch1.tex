@@ -50,18 +50,18 @@ The following example consists of three files:
 \lstinputlisting[caption={\lstname}]{src/01-helper.h}
 
 \textbf{01-helper.h - Lines 1, 2, and 13}: These lines form a \textbf{header guard}\index{header!guard}\index{guard|see {header, guard}}.  A \textit{header guard} is a \textit{macro}\index{macro} that ensures that a header file is only pulled in a single time even if \textit{included} into multiple source files.  Otherwise, you may see multiple \textit{definitions} and \textit{declarations} for the same functions and variables strewn across a single program. By convention, the name of the \textit{header guard} will be the all caps version of the filename with an underscore instead of a period.  In my case, \textit{macro} names must start with letters and therefore \textit{01-helper.h} was shortened to \textit{HELPER\_H}.\\
-\textbf{01-helper.h - Lines 4 - 9}: This provides the \textit{declaration} and the \textit{definition} for a new type called \textit{MYSTERYMEMBER}.\\
-\textbf{01-helper.h - Line 11}:  This provides the \textit{declaration} for the \textit{distributeSnacks} function.\\
+\textbf{01-helper.h - Lines 4 - 10}: This provides the \textit{declaration} and the \textit{definition} for a new type called \textit{mysteryMember\_t}\cite{embedded_c}.\\
+\textbf{01-helper.h - Line 12}:  This provides the \textit{declaration} for the \textit{distributeSnacks} function.\\
 
 \lstinputlisting[caption={\lstname}]{src/01-basics3.c}
 
 \textbf{01-basics3.c - Line 2}: On this line, notice the import uses quotation marks around the header file.  This instructs the compiler to look locally for \textit{01-helper.h} rather than in the standard library (typically found in \textit{/usr/include/}).  Without this file, lines 6 and 8 would cause compiler errors.\\
-\textbf{01-basics3.c - Line 6}: The type \textit{MYSTERYMEMBER} \textit{definition} is in the \textit{01-helper.h} header file.  Additionally, the \textit{enum} value assigned to SHAGGY comes from \textit{01-helper.h} as well.\\
+\textbf{01-basics3.c - Line 6}: The type \textit{mysteryMember\_t} \textit{definition} is in the \textit{01-helper.h} header file.  Additionally, the \textit{enum}\index{enum} value assigned to SHAGGY comes from \textit{01-helper.h} as well.\\
 \textbf{01-basics3.c - Line 8}: The function \textit{distributeSnacks} \textit{declaration} is also in the \textit{01-helper.h} header file.\\
 
 \lstinputlisting[caption={\lstname}]{src/01-helper.c}
 
-\textbf{01-helper.c - Line 1}:  Again, we see the local \textit{01-helper.h} header file being imported.  Without this, \textit{01-helper.c} would not know about the \textit{MYSTERYMEMBER} type that is on line 4  or the enum values on lines 8 and 11.\\
+\textbf{01-helper.c - Line 1}:  Again, we see the local \textit{01-helper.h} header file being imported.  Without this, \textit{01-helper.c} would not know about the \textit{mysteryMember\_t} type that is on line 4  or the enum values on lines 8 and 11.\\
 \textbf{01-helper.c - Line 4}:  This is the function \textit{definition} for distributeSnacks that defines what this function does.\\
 
 We have three files that will all get compiled together into a single executable.  The \textit{01-helper.h} header file is what makes all of this possible.  In the next section, we'll talk about what the compiler is, what it does, and how to use it.

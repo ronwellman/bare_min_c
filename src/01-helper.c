@@ -1,7 +1,7 @@
 #include "01-helper.h"
 
 int
-distributeSnacks(MYSTERYMEMBER member) {
+distributeSnacks(mysteryMember_t member) {
 	int num = 0;
 
 	switch (member) {

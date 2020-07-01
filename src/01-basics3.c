@@ -3,7 +3,7 @@
 
 int
 main() {
-	MYSTERYMEMBER member = SHAGGY;
+	mysteryMember_t member = SHAGGY;
 
 	printf("I get %d scooby snacks!\n", distributeSnacks(member));
 	return 0;

@@ -143,6 +143,7 @@
 	\end{itemize}
 
 	You may see these returned from functions to indicate whether something was successful or not.  As a programmer using type \textit{bool} as a return may make it easy to ascertain the reason behind what a function is returning.  However, be cautious about using them to test the return from standard library functions.  In many cases, a success is returned as a zero but a failure is returned as a non-zero number.  It is always a good idea to read the manual page of a function to understand what it uses for return types and what the return values actually mean. 
+	
 	%----------------------------------------------------------------------------------------
 	%	Characters
 	%----------------------------------------------------------------------------------------
@@ -235,6 +236,25 @@
 	\textbf{Line 10}: Again we do the same division but instead of dividing two integers, we first cast 1 as a \textit{float}.  Under the hood, this operation should result in a \textit{double} being generated but because we are storing it in a \textit{floatmathmatical}, it it rounded to 6 digits of precision.  We can see this when we print \textit{x} on line 11 in that there are only 6 digits (leading and trailing zeros are ignored).
 	
 	There is another header file called \textit{complex.h} that allows for the use of complex floating point types.  I will not be discussing them here.
+	
+	%----------------------------------------------------------------------------------------
+	%	Enum
+	%----------------------------------------------------------------------------------------
+	\section{Enum}
+	An \textit{enum}\index{enum} is a data type that consists of named values that correspond to integer constants. Often times it makes sense to use an \textit{enum} rather than to constant to make it ee In the previous chapter, we built an enum in our header file to represent Mystery Inc members.
+	
+	\lstinputlisting[caption={\lstname}]{src/01-helper.h}
+	
+	By default, FRED would correspond to the value of 0, DAPHNE to 1, VELMA TO 2, SHAGGY to 3, and SCOOBY to 4.  However, I could have specified different values.
+	
+	\begin{verbatim}
+	enum temperature {
+	    FAHRENHEIT = 1,
+	    CELCIUS = 2,
+	}
+	\end{verbatim}
+	
+	Depending upon the coding standard you are following, it is often customary to pair up an \textit{enum} definition with a type declaration \textit{typedef}\cite{embedded_c}\index{typedef} and to name the resulting type with a trailing "\_t" to signify it is a custom type.  
 	
 	\clearpage
 	%----------------------------------------------------------------------------------------
