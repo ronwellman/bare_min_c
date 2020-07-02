@@ -59,7 +59,7 @@ The following example consists of three files:
 \textbf{01-basics3.c - Line 6}: The type \textit{mysteryMember\_t} \textit{definition} is in the \textit{01-helper.h} header file.  Additionally, the \textit{enum}\index{enum} value assigned to SHAGGY comes from \textit{01-helper.h} as well.\\
 \textbf{01-basics3.c - Line 8}: The function \textit{distributeSnacks} \textit{declaration} is also in the \textit{01-helper.h} header file.\\
 
-\lstinputlisting[caption={\lstname}]{src/01-helper.c}
+\lstinputlisting[caption={\lstname}, label={lst:distributeSnacks}]{src/01-helper.c}
 
 \textbf{01-helper.c - Line 1}:  Again, we see the local \textit{01-helper.h} header file being imported.  Without this, \textit{01-helper.c} would not know about the \textit{mysteryMember\_t} type that is on line 4  or the enum values on lines 8 and 11.\\
 \textbf{01-helper.c - Line 4}:  This is the function \textit{definition} for distributeSnacks that defines what this function does.\\
@@ -212,7 +212,7 @@ target: prerequisites
 \end{verbatim}
 
 \textbf{clean}: Here we define a target called \textit{clean} and specify the recipe is to run \textit{rm -rvf} (remove verbosely) against all local object files (files ending in ".o") as well as the compiled binaries.\\
-\begin{lstlisting}[language=bash]
+\begin{lstlisting}[language=bash, numbers=none]
 $ make
 gcc -std=c11 -Wall -Wextra -Wpedantic -Wwrite-strings \
 -Wfloat-equal -Waggregate-return -Winline -Wvla \

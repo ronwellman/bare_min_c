@@ -1,0 +1,52 @@
+\documentclass[../main.tex]{subfiles}
+
+\graphicspath{{pictures/}{../pictures/}}
+
+\chapterimage{chapter_head_2.pdf} % Chapter heading image
+
+\begin{document}
+	
+	\chapter{Control Flow}
+	
+	%----------------------------------------------------------------------------------------
+	%	If/Else
+	%----------------------------------------------------------------------------------------
+	\section{If/Else}
+	
+	Up to this point, we've seen a few examples of using an if statement.  We've even seen an example of the \texttt{?:} ternary conditional evaluation operator in src/02-character1.c [\ref{lst:ternary_conditional_evaluation}].  Also, as shown in src/02-xor.c (\ref{lst:xor}) when we are evaluating multiple things, it is common practice to surround each evaluation with parantheses\cite{embedded_c} to eliminate issues with operator precedence.\\
+	
+	\lstinputlisting[caption={\lstname}]{src/03-if.c}
+	
+	\textbf{Line 7}: The \textit{if} statement is an evaluation that either evaluates to true (non-zero) or false (zero), The order I've chosen, \texttt{6 == proto}, may look odd but is in fact strategic.  If you were to place \textit{proto} first in the evaluation and mistyped the \texttt{==} as \texttt{=}, this becomes an assignment instead of an evaluation.  This is an easy typo to miss as I have personally done it many times.  By placing the constant first, attempting to assign a value to a constant is automatically going to fail compilation and alert you to the issue. \\
+	\textbf{Line 10}: If the first evaluation is false, we evaluate to see if the \textit{proto} is equal to 17. \\
+	\textbf{Line 13}: If the first and second evaluation are both false, the last \textit{else} will be run.  An \textit{else} block is not required.\\
+	
+	%----------------------------------------------------------------------------------------
+	%	Switch
+	%----------------------------------------------------------------------------------------
+	\section{Switch}
+	The \textit{switch} statement is similar to \textit{if/else} but is restricted to integer types.  We've already seen the switch used in src/01-helper.c [\ref{lst:distributeSnacks}].  Lets take a look at it again.\\
+
+	\lstinputlisting[caption={\lstname}]{src/01-helper.c}
+
+	\textbf{Line 7}: The \textit{member} variable is being evaluated. \\
+	\textbf{Line 8}: The \textit{case} statement is a label and if the value of \textit{member} is equal to the value \textit{SHAGGY}, control of the program will jump here and begin processing each line that follows it. \\
+	\textbf{Line 10}: The break statement causes control to jump out of the \textit{switch} block.  Without it, control would keep going line by line through the next label.  If this is intentional, it should be noted with a comment \cite{embedded_c}.\\
+	\textbf{Line 14}: If none of the other evaluations end up bing true, the \textit{default} label is processed.  The "Embedded C Coding Standard" dictates that every \textit{switch} statement should have a \textit{default} label \cite{embedded_c}.\\
+	
+	%----------------------------------------------------------------------------------------
+	%	While
+	%----------------------------------------------------------------------------------------
+	\section{While}
+	
+	%----------------------------------------------------------------------------------------
+	%	For
+	%----------------------------------------------------------------------------------------
+	\section{For}
+	
+	%----------------------------------------------------------------------------------------
+	%	Goto
+	%----------------------------------------------------------------------------------------
+	\section{Goto}
+	
+\end{document}

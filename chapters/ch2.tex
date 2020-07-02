@@ -160,7 +160,7 @@
 	
 	Obviously the ASCII chart was built for the English language.  When not sufficient, there are ways of using an \textit{unsigned int} and \textit{UTF-8} encoding instead.  Additionally, there are wider character data types such as \textit{wchar\_t} that utilize more than 1 byte in order to store character values by their Unicode value rather than an ASCII value.  I will not be going into these methods and alternate data types but if it interests you, I suggest checking out articles such as \href{https://www.cprogramming.com/tutorial/unicode.html}{https://www.cprogramming.com/tutorial/unicode.html}.\\
 	
-	\lstinputlisting[caption={\lstname}]{src/02-character1.c}
+	\lstinputlisting[caption={\lstname}, label={lst:ternary_conditional_evaluation}]{src/02-character1.c}
 	
 	\textbf{Line 2}: Here I import \textit{ctype.h}.  Doing so gives me access to a number of functions and macros pertaining to the use of characters.\\
 	\textbf{Line 7}: Here I declare a \textit{char} and give it the value of \textit{a}.  Notice it holds a single character and I use single quotes.\\
@@ -319,7 +319,7 @@
 	
 	Lets take a look at an example that uses a few of these operators.  Don't worry if it doesn't all make sense yet.\\
 	
-	\lstinputlisting[caption={\lstname}]{src/02-xor.c}
+	\lstinputlisting[caption={\lstname}, label={lst:xor}]{src/02-xor.c}
 	
 	\textbf{Line 11}: Here we assign a string constant to a \textit{char} array.  We utilize the subscript operators \texttt{[ ]} to designate that the variable \textit{clear} is a \textit{char} array.  We'll talk about \textit{arrays} in future sections.  We also use the assignment operator \texttt{=} to assign the address of the string constant to the \textit{char} array.\\
 	\textbf{line 13}: We run the function \textit{stringlen} to get the length of the string stored in the \textit{character array} and use the assignment operator \texttt{=} to store the result in \textit{keyLen}.\\
