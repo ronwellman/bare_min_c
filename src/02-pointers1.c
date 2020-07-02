@@ -27,7 +27,7 @@ main() {
 
 void
 sort(int *pArray, size_t numElements) {
-    if (NULL == pArray || 0 == numElements) {
+    if ((NULL == pArray) || (0 == numElements)) {
         return;
     }
 
@@ -45,7 +45,7 @@ sort(int *pArray, size_t numElements) {
 
 void
 swap(int *p1, int *p2) {
-    if (NULL == p1 || NULL == p2) {
+    if ((NULL == p1) || (NULL == p2)) {
         return;
     }
 

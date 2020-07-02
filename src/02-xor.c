@@ -32,7 +32,7 @@ bool
 xor(char *original, size_t oLen, char *key, size_t kLen) {
     
     // quick check to see that we received a non-null array
-    if (NULL == original || NULL == key || 0 == oLen || 0 == kLen) {
+    if ((NULL == original) || (NULL == key) || (0 == oLen) || (0 == kLen)) {
         return false;
     }
 

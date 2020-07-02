@@ -388,7 +388,7 @@
 	
 	You'll often use the \textit{\&} operator when you need the memory address of something in order to pass it to a pointer.  You will also see the dereference \textit{*} operator used on a pointer to work with the data that resides at the memory address of the pointer.  In other words, the data that the pointer points to.  Using subscript operators \texttt{[ ]} with pointers is also quite common.  This can be used to dereference into a portion of the memory address based on index value and the data type of the pointer.  For example, lets assume we have a integer pointer and on a particular platform, an \textit{int} uses 4 bytes.  If we dereference into the 5th index position, we're going 20 bytes (4 * 5) passed the address held by the pointer.  In the following example, we'll see an example of this using a non-optimized version of a sorting algorithm.\\
 	
-	\lstinputlisting[caption={\lstname}]{src/02-pointers1.c}
+	\lstinputlisting[caption={\lstname}, label={lst:pointers}]{src/02-pointers1.c}
 	
 	\begin{lstlisting}[language=bash, numbers=none]
 		$ ./02-pointers1 
