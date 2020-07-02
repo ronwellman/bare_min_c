@@ -256,6 +256,9 @@
 	
 	Depending upon the coding standard you are following, it is often customary to pair up an \textit{enum} definition with a type declaration \textit{typedef}\cite{embedded_c}\index{typedef} and to name the resulting type with a trailing "\_t" to signify it is a custom type.  
 	
+	\section{Void}
+	In chapter 1, I mentioned a function can indicate it returns no values by using the \textit{void}\index{void} keyword.  However, \textit{void} can be a type as well.  C uses them with pointers all the time.  We'll discuss pointers shortly but for now, a \textit{void} pointer holds a memory address but does not indicate the data type that resides at the address.  This can be useful in making certain types of functions or data types generic to the data that they store or manipulate at the cost of additional code complexity.
+	
 	\clearpage
 	%----------------------------------------------------------------------------------------
 	%	Operators
