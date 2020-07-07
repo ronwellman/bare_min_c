@@ -1,0 +1,104 @@
+\documentclass[../main.tex]{subfiles}
+
+\graphicspath{{pictures/}{../pictures/}}
+
+\chapterimage{chapter_head_2.pdf} % Chapter heading image
+
+\begin{document}
+	
+	%----------------------------------------------------------------------------------------
+	%	CLI
+	%----------------------------------------------------------------------------------------
+	\chapter{Command Line Arguments}\index{cli}
+	
+	We've talked a bit about how to write very basic programs and compile them.  Now we'll talk about how to pass arguments into our program.  
+	
+	\section{Manual Parsing}
+	Up until now, our main function hasn't had any arguments.  However, it can actually receive input when our program is called and should look like \texttt{main(int argc, char **argv)}.  You may see this also written as \texttt{main(int argc, char *argv[])}.\\
+
+	\lstinputlisting[caption={\lstname}]{src/04-cli1.c}	
+	
+	\clearpage
+	
+	\begin{lstlisting}[language=bash, numbers=none]
+	$ ./04-cli1 
+	Number of args: 1
+	1: ./04-cli1
+	
+	$ ./04-cli1 these are the arguments
+	Number of args: 5
+	1: ./04-cli1
+	2: these
+	3: are
+	4: the
+	5: arguments
+	\end{lstlisting}
+	
+	\textbf{Line 6}: As we can see in the output, the \textit{argc} variable corresponds to the number of arguments that were passed including the name of the program as it was called. \\
+	\textbf{Line 9}: Here we can iterate through the array of character arrays.
+	
+	\section{getopt}
+	C provides the \textit{getopt} as well as the \textit{getopt\_long} functions to aid in parsing the various arguments you'll receive as well as enforce various rules around them.  I'll present a few of the options you'll see frequently but I suggest you check out the manual page by running \texttt{man 3 getopt} from a terminal.  There is an excellent example of its usage at the bottom of the manual page. The example I'll show you uses \textit{getopt} to allow for options such as \texttt{-h}.  Using \textit{getopt\_long} you can also specify long options such as \texttt{-{}-help}.  \\
+	
+	\lstinputlisting[caption={\lstname}]{src/04-cli2.c}
+	
+	Here we have a snippet from an application that takes a word from the command line and allows the user to specify if they want that word in uppercase, lowercase, and how many times they want it.  While not all of that logic has been written out, there is enough that you can see a mix of \textit{getopt} enforcing constraints on how the program can be called and logic that the programmer enforces as well.  As we'll see, \textit{getopt} is restricting what options can be used but does not specify if they have to be used or how many times they can be used.  That latter logic is up to the programmer.
+	  
+	\textbf{Line 25}: This line is nearly a copy and paste straight from the manual page for \textit{getopt}.  It is composed of a \textit{while} loop that utilizes \textit{getopt} to process each command line option one by one. "hulr:" indicates there is a \texttt{-h}, \texttt{-u}, \texttt{-l}, and \texttt{-r} options that can be supplied to the program.  Additionally, the \texttt{-r} option requires an argument due to the \texttt{:} that follows it. \\
+	\textbf{Lines 27, 33, 43}: Here we process valid options.\\
+	\textbf{Line 46}: Here we process invalid options.\\
+	\textbf{Line 34}: Since the \texttt{-r} options requires an argument, here we use \textit{strtol} to convert it to a \textit{long int}.  We also see the \textit{optarg} variable used.  This variable isn't something we created.  It was created in \textit{getopt.h} and contains the option argument for the \texttt{-r} option. \\
+	\textbf{Line 53}: Here we see another variable, \textit{optind}, that \textit{getopt} created for us.  This is the index value of the option within \textit{argv} that \textit{getopt} is processing.  At this point, all valid options should have been processed meaning that if \textit{argc} and \textit{optind} are equal, then the user forgot to supply a word.  \textit{argc} ideally should be one value higher than \textit{optind}.  If they are equal, the user didn't supply a name.  If the difference between \textit{argc} and \textit{optind} is greater than one, then the user supplied more than one word.  This is part of the logic enforcement that the programmer has decided to make.\\
+	\textbf{Line 59}: Here we merely print out the results of parsing the options and arguments.  What we should see is the last \texttt{-u} or \texttt{-l} will determine if it prints in uppercase or lowercase.  If neither are provided, then the original case is used.  If the \texttt{-r} option is used and a valid numeric argument is given, \textit{repeat} will hold that value.\\ 
+
+	
+	\begin{lstlisting}[language=bash, numbers=none]
+	$ ./04-cli2 pizza
+	Name: pizza argc:2 optind:1 case:0 repeat:1
+	
+	$ ./04-cli2 -h
+	Usage: ./04-cli2 [-r CNT] [-u] [-l] name
+		-r	Repeat Count
+		-u	Uppercase
+		-l	Lowercase
+
+	$ echo $?
+	0
+	
+	$ ./04-cli2 pizza the hut
+	Invalid number of args.
+	Usage: ./04-cli2 [-r CNT] [-u] [-l] name
+		-r	Repeat Count
+		-u	Uppercase
+		-l	Lowercase
+
+	$ echo $?
+	1
+	
+	$ ./04-cli2 pizza -p
+	./04-cli2: invalid option -- 'p'
+	Usage: ./04-cli2 [-r CNT] [-u] [-l] name
+	-r	Repeat Count
+	-u	Uppercase
+	-l	Lowercase
+	
+	$ echo $?
+	1
+	
+	$ ./04-cli2 -l pizza -r3
+	Name: pizza argc:4 optind:3 case:1 repeat:3
+	 
+	$ ./04-cli2 -l pizza -r3po
+	Invalid numeric value for '-r'.
+	Usage: ./04-cli2 [-r CNT] [-u] [-l] name
+		-r	Repeat Count
+		-u	Uppercase
+		-l	Lowercase
+	
+	$ ./04-cli2 -l -l -u pizza -r3
+	Name: pizza argc:6 optind:5 case:2 repeat:3
+	\end{lstlisting}
+	
+	As you can see in the first example, no options are required other than specifying a name or word.  We can also see using valid options results in 0 (SUCCESS) being returned to our terminal but invalid options results in a 1 (FAILURE).  Lastly we can see that multiple options can be specified but in the case of \texttt{-u} and \texttt{-l}, the last one to be specified wins.
+	
+\end{document}
