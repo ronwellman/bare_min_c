@@ -2,12 +2,13 @@
 
 int
 main() {
-    float x;
+	float x;
 
-    x = 1 / 3;
-    printf("1 / 3 = %f\n", x);
-    
-    x = (float)1 / 3;
-    printf("1 / 3 = %f\n", x);
-return 0;
+	x = 1 / 3;
+	printf("1 / 3 = %f\n", x);
+
+	x = (float)1 / 3;
+	printf("1 / 3 = %f\n", x);
+
+	return 0;
 }

@@ -9,17 +9,17 @@ main() {
     long long int lli;
 
     si = -275;
-    
+
     printf("Number of Bytes:\nshort int: %d\nint: %d\n",
-            sizeof(si), sizeof(i));
+	    sizeof(si), sizeof(i));
 
     printf("long int: %d\nlong long int: %d\n",
-            sizeof(li), sizeof(lli));
+	    sizeof(li), sizeof(lli));
 
     printf("\n");
     printf("Value of signed   short: %d\n", si);
     printf("Value of unsigned short: %u\n", (unsigned short)si);
-    
+
     printf("\n");
     i = 0x80000000; // 0b10000000000000000000000000000000
     printf("Min signed int: %d\n", i);
