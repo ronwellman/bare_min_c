@@ -1,4 +1,3 @@
-
 #ifndef PLAYER_H
 #define PLAYER_H
 
@@ -10,27 +9,26 @@ struct item {
 };
 
 struct inventory {
-	size_t max_items;
-	size_t total_items;
-	struct item *items;
+	size_t maxItems;   // max items
+	size_t totalItems; // current items
+	struct item *items;// array of pointers to items
 };
 
 typedef struct player {
-	struct inventory inv;
+	struct inventory inv;//player's inventory
 	char *name;
 } player_t;
 
-
 player_t *
-create_player();
+createPlayer();
 
 bool
-add_item(player_t *);
+addItem(player_t *);
 
 void
-list_items(const player_t *);
+listItems(const player_t *);
 
 bool
-destroy_player(player_t *);
+destroyPlayer(player_t *);
 
 #endif
