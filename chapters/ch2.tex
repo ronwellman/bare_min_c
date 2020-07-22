@@ -5,13 +5,13 @@
 \chapterimage{chapter_head_2.pdf} % Chapter heading image
 
 \begin{document}
-	\chapter{Basic Types}
+	\chapter{Data Types}
 	
 	%----------------------------------------------------------------------------------------
 	%	Basic Types
 	%----------------------------------------------------------------------------------------
 	
-	\section{Data Types}
+	\section{Basic Types}
 	
 	Much of programming is about the receiving, manipulating, and sending of data.  Since C is a typed language, it needs to know how to interpret the data that you are working with.  In many cases, the underlying bits that are actually being stored are the same.  However, based on the type assigned to that data, the C compiler will interpret it differently.  C can't really tell the difference between 41 and the letter 'A' (which has the ASCII value of 41).  Its up to you as the programmer to specify if the data is an integer or if its a character.
 	
@@ -405,5 +405,121 @@
 	\textbf{Line 40}: This line passes two different pointer addresses to our \textit{swap} function using pointer arithmetic.  Under the hood, the pointer \textit{pArray} is an integer pointer.  An \textit{int} takes up 4 bytes so what we're actually doing is \textit{ADDRESS + (i * 4)} to calculate the adjusted address that we actually send to the \textit{swap} function.  This is the exact same math that gets applied when we use the subscript operators \texttt{[ ]}.  However, I didn't want to dereference into the array and access the value at a particular address.  I wanted the address itself.  I could have also used \texttt{\&pArray[i]} and gotten the same results. Care must be taken as C won't stop you from calculating addresses passed the original array address space.\\
 	\textbf{Line 48}: I once again check to ensure I received pointers that contain addresses and not \textit{NULL}.\\
 	\textbf{Lines 53 - 55}: Here we move the values between the pointers by defreferencing them via the \texttt{*} operator.  In essence, we copy the value at the memory address pointed to by \textit{p1} into temp.  We then copy the value at the memory address pointed to by \textit{p2} into the memory address pointed to by \textit{p1}.  Finally, we copy the value of temp into the memory address pointed to by \textit{p2}.\\
+	
+	%----------------------------------------------------------------------------------------
+	%	Dynamic Memory
+	%----------------------------------------------------------------------------------------
+	
+	\section{Dynamic Memory}
+	
+	
+	
+	\subsection{Stack}
+	Up until this point, the variables we've created have a lifetime based on the control block they were created in.  For example, in \textit{src/01-helper.c} (\ref{lst:distributeSnacks}), the \textit{num} variable is created at the top of the \textit{distributeSnacks} function and is automatically cleaned up at the closing bracket of the function.  Lets take a look at the \textit{01-basics3} program we looked at in chapter 1.  In order to produce the below code, I decompiled the executable by running: \texttt{objdump -M "intel" -d 01-basics3}. Below is a copy of the decompiled \textit{main} and \textit{distributeSnacks} functions. \\ 
+	
+	\begin{lstlisting}[language={[x86masm]Assembler}]
+	0000000000001149 <main>:
+	1149:	f3 0f 1e fa          	endbr64 
+	114d:	55                   	push   rbp
+	114e:	48 89 e5             	mov    rbp,rsp
+	1151:	48 83 ec 10          	sub    rsp,0x10
+	1155:	c7 45 fc 03 00 00 00 	mov    DWORD PTR [rbp-0x4],0x3
+	115c:	8b 45 fc             	mov    eax,DWORD PTR [rbp-0x4]
+	115f:	89 c7                	mov    edi,eax
+	1161:	e8 1a 00 00 00       	call   1180 <distributeSnacks>
+	1166:	89 c6                	mov    esi,eax
+	1168:	48 8d 3d 95 0e 00 00 	lea    rdi,[rip+0xe95]
+	116f:	b8 00 00 00 00       	mov    eax,0x0
+	1174:	e8 d7 fe ff ff       	call   1050 <printf@plt>
+	1179:	b8 00 00 00 00       	mov    eax,0x0
+	117e:	c9                   	leave  
+	117f:	c3                   	ret 
+	
+	0000000000001180 <distributeSnacks>:
+	1180:	f3 0f 1e fa          	endbr64 
+	1184:	55                   	push   rbp
+	1185:	48 89 e5             	mov    rbp,rsp
+	1188:	89 7d ec             	mov    DWORD PTR [rbp-0x14],edi
+	118b:	c7 45 fc 00 00 00 00 	mov    DWORD PTR [rbp-0x4],0x0
+	1192:	83 7d ec 03          	cmp    DWORD PTR [rbp-0x14],0x3
+	1196:	74 08                	je     11a0 <distributeSnacks+0x20>
+	1198:	83 7d ec 04          	cmp    DWORD PTR [rbp-0x14],0x4
+	119c:	74 0b                	je     11a9 <distributeSnacks+0x29>
+	119e:	eb 12                	jmp    11b2 <distributeSnacks+0x32>
+	11a0:	c7 45 fc 14 00 00 00 	mov    DWORD PTR [rbp-0x4],0x14
+	11a7:	eb 10                	jmp    11b9 <distributeSnacks+0x39>
+	11a9:	c7 45 fc 28 00 00 00 	mov    DWORD PTR [rbp-0x4],0x28
+	11b0:	eb 07                	jmp    11b9 <distributeSnacks+0x39>
+	11b2:	c7 45 fc 00 00 00 00 	mov    DWORD PTR [rbp-0x4],0x0
+	11b9:	8b 45 fc             	mov    eax,DWORD PTR [rbp-0x4]
+	11bc:	5d                   	pop    rbp
+	11bd:	c3                   	ret    
+	11be:	66 90                	xchg   ax,ax
+	\end{lstlisting}
+	
+	If you've never looked at assembly code before, this can look a bit crazy.  Without going into the nitty gritty of assembly\index{assembly} language syntax, I wanted to take a second and point out a few things even though this isn't a very good example to use anyway.  There is something called a \textbf{stack frame}\index{stack frame}.  \textit{Stack frames} typically hold the variables declared within a function to include return addresses from the calling function.  Each function gets its own stack frame.  There is also something called a \textbf{call stack}\index{call stack} that is composed of various stack frames and the return addresses.  It might look something like this:
+	
+	\begin{figure}[h]
+		\centering\includegraphics[scale=0.3]{callstack3.png}
+		\caption{Call Stack}
+		\label{fig:callstack}
+	\end{figure}
+
+	In essence, as one function calls another, a new stack frame is built so that the called function has a place to store its variables and the program knows where to go back to once that called function is complete.  In the context of the assembly code above, you can see on lines 3-5, the main function is establishing its stack by saving the address of the current base pointer (push rbp), establishing a new location for the new base pointer (\texttt{mov rbp, rsp}) and then subtracting 16 bytes (sub rsp, 0x10) from the stack pointer (rsp) to establish 16 bytes worth of space on the new stack for storing variables.  Again, you don't need to understand assembly code but I wanted you to see this in action in order for you to understand the purpose of the stack.  Of note, notice that we subtract in order to allocate space.  This means that the stack actually grows down in memory addresses.  We can then see on line 7 that 3 is being copied onto the stack at location rbp - 0x4.  This correlates to where we created the variable \textit{member} and assigned to it the value of \textit{SHAGGY} back in \textit{01-basics3.c}(\ref{lst:basics3}).  
+	
+	For whatever reason, when the gcc compiler built this program, it didn't create a new stack for function \textit{distributeSnacks} large enough to store the \textit{num} variable.  This could be because the program is so small and this was a small optimization that the compiler made.  Whatever the reason, we can see that on lines 20 and 21, we save the address of our current base pointer address by pushing it on the stack and then set it equal to the current stack pointer address.  Although this is a whole new stack frame, it doesn't allocate space to save any variables by subtracting from the stack pointer.  Instead, we can see that on line 23, its actually storing its values in the previous stack frame.  Again, this is probably an optimization that saves 2 or more CPU cycles.
+	
+	Moving things on and off the stack is very common and fairly quick.  However, there are advantages and disadvantages for doing so.  One disadvantage is that because the return addresses for the calling function lives on the stack, its a place that a malicious user may want to attack in order to control what the program does upon returning from the called function.  A lot of work has been put into protecting the stack and detecting \textit{stack smashing} but nothing is full proof.  Additionally, because a \textit{stack frame} gets torn down after a function returns, the variables that lived there are no longer reachable.  Normally this is the functionality that you want but not always.  Instead, you may have reasons for wanting to allocate a larger amount of memory away from the rest of your stack variables or maybe you want it to outlive the end of the called function.  Additionally, you may not know how much memory you're going to require at the time of compilation.  Therefore, the compiler won't know how much space to allocate on the stack.
+	
+	\subsection{Heap}
+	The \textbf{heap}\index{heap} is a section of memory that allows for the dynamic allocation of memory and for the establishment of \textit{global} variables.  Dynamic memory does not get automatically cleaned up when a function returns.  Instead, the programmer has to keep track of it and clean it up manually as needed.  If not, memory will be lost (leaked).  The four most common functions you'll see when working with dynamic memory are:
+	
+	\begin{enumerate}
+		\item \textbf{malloc}\index{malloc} - void *malloc(size\_t size); \\ The  \textit{malloc()} function allocates \textit{size} bytes and returns a pointer to the allocated memory.  The memory is \textbf{not} initialized.
+		\item \textbf{calloc}\index{calloc} - void *calloc(size\_t nmemb, size\_t size); \\ The  \textit{calloc()} function allocates memory for an array of \textit{nmemb} elements of \textit{size} bytes each and returns a pointer to the allocated memory.  The memory \textbf{is} set to zero.
+		\item \textbf{realloc}\index{realloc} - void *realloc(void *ptr, size\_t size); \\ The  \textit{realloc()}  function  changes the size of the memory block pointed to by \textit{ptr} to \textit{size} bytes.
+		\item \textbf{free}\index{free} - void free(void *ptr); \\ The \textit{free()} function frees the memory space pointed to by \textit{ptr}, which must have been returned by a previous call to \textit{malloc()}, \textit{calloc()}, or \textit{realloc()}.
+	\end{enumerate}
+	
+	Lets take a look at some of these functions in action:\\
+	
+	\lstinputlisting[caption={\lstname}, label={lst:dynamicMemory}]{src/02-dynamic1.c}
+	
+	The point of the \textit{getInput} function is to prompt the user for input and take whatever the user types and store it into a buffer.  Its not particularly exciting code but will continually allocate blocks of 16 bytes until the user hits ENTER or send an End of File (EOF).  This code was meant to demonstrate the use of \textit{malloc}, \textit{realloc}, and \textit{free} and was not meant to be efficient or even practical for that matter.  
+	
+	Notice on line 14, the \textit{main} function calls the \textit{getInput} function and passes it the address of a \textit{char} pointer that currently doesn't point anywhere because it's set to \textit{NULL}.  This is why on line 23, \textit{getInput} receives a pointer to a pointer (\textit{char} **).  On line 24 we apply the \textit{ABC}\index{ABC} principle by making sure the address we're given for the buffer is not NULL.  This ensures we don't hit a \textit{SEGMENTATION} fault when we dereference the first pointer  of the buffer (*\textit{buffer}). 
+	
+	On line 33 we see \textit{malloc} used to allocate space on the \textit{heap} and assign the address to *\textit{buffer}.  Because there is no guarantee that \textit{malloc} will return successfully, on line 34 we test to make sure that an actual address was stored.  On line 41 we see a \textit{NULL} byte being written to the first byte of the new buffer.  This is because strings should be NULL terminated and \textit{malloc} only allocates memory; which means the new buffer is filled with garbage.
+	
+	Lines 48 - 53 reads user input but only enough to fill up the existing buffer that hasn't already been written to.  Lines 56 and 57 attempt to determine if the buffer is full and if so, line 62 performs a \textit{realloc} to increase the size of the buffer.  It is common to store the address returned from realloc to a temporary variable.  This is because \textit{realloc} may also fail to allocate the requested memory.  In that case, it will not make any changes to the buffer it was given and will return \textit{NULL}.  If successful, it will either extend the \textit{heap} allocation or allocate a new buffer, copy the existing data into it, and free the old buffer.  
+	
+	On line 18 we see the use of \textit{free}.  This releases the memory that was allocated for the buffer.  Without doing so, our program would leak memory.  Lets check to make sure this actually worked with the \textit{valgrind} program.
+	
+	\begin{verbatim}
+	$ valgrind ./02-dynamic1 
+	==28239== Memcheck, a memory error detector
+	==28239== Copyright (C) 2002-2017, and GNU GPL'd, by Julian Seward et al.
+	==28239== Using Valgrind-3.15.0 and LibVEX; rerun with -h for copyright info
+	==28239== Command: ./02-dynamic1
+	==28239== 
+	This input will exceed 16 characters and require a realloc.
+	Realloc maxSize: 32
+	Realloc maxSize: 48
+	Realloc maxSize: 64
+	result: 1
+	buffer: This input will exceed 16 characters and require a realloc.
+	
+	==28239== 
+	==28239== HEAP SUMMARY:
+	==28239==     in use at exit: 0 bytes in 0 blocks
+	==28239==   total heap usage: 6 allocs, 6 frees, 2,208 bytes allocated
+	==28239== 
+	==28239== All heap blocks were freed -- no leaks are possible
+	==28239== 
+	==28239== For lists of detected and suppressed errors, rerun with: -s
+	==28239== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 0 from 0)
+	\end{verbatim}
+	
+	Notice that we call \textit{valgrind} and as an argument we call our program.  Line 7 is the input that I typed into the program and then hit ENTER.  This resulted in having to call \textit{realloc} three times.  Also notice in the summary, \textit{valgrind} registered six allocations, six frees, and that leaks are not possible.  
 	
 \end{document}
