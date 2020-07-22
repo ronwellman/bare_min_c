@@ -1,0 +1,38 @@
+\documentclass[../main.tex]{subfiles}
+
+\graphicspath{{pictures/}{../pictures/}}
+
+\chapterimage{chapter_head_2.pdf} % Chapter heading image
+
+\begin{document}
+	
+	%----------------------------------------------------------------------------------------
+	%	CLI
+	%----------------------------------------------------------------------------------------
+	\chapter{Structures}\index{struct}
+	
+	We've now seen enough of the mechanics to talk about building a \textbf{structure}; better known as a \textbf{struct}. These allow us to build more complex or custom data types.  Unlike arrays, \textit{structs} allow for multiple different data types to be placed inside of a single object.  Often times, instead of passing around the struct itself, you'll see pointers to \textit{structs} being passed around instead.  This reduces the amount of data that has to be added to the stack or passed between functions.  
+	
+	In the following example, we'll use multiple \textit{structs} to represent a player capable of carrying items.\\
+	
+	\lstinputlisting[caption={\lstname}, label={lst:playerStructH}]{src/05-player.h}	
+	
+	There are three different \textit{structs} here: \textit{player} (line 17), \textit{inventory} (line 11), and \textit{item} (line 7).  Rather than have a single \textit{struct}, they are broken up by purpose to keep our player organized as we continue to build it out. Notice that a \textit{player struct} contains a single \textit{inventory struct}.  Also notice that an \textit{inventory struct} contains a pointer to an \textit{item struct}.  As we'll see in the next file, we'll use this pointer to actually allocate for an array of \textit{item structs}.  By doing this, a single player can have one inventory that contains multiple items.
+	
+	As should be easy to see, a \textit{struct} \textit{definition}\index{definition} begins with the \textit{struct} statement followed by the name of the \textit{struct}.  Inside the brackets we specify each member of the struct.
+	
+	On line 17, we can also see we're using the keyword \textit{typedef} and then on line 20 we're giving it the name \textit{player\_t}.  This allows us to refer to a \textit{player struct} as \textit{player\_t} rather than \textit{struct player}. Its customary to provide a \textit{typedef} when the user will be interacting with it. \\
+	
+	\lstinputlisting[caption={\lstname}, label={lst:playerStructC}]{src/05-player.c}
+	
+	I won't go over all of the above code.  I'll leave that as an exercise for the reader.  However, notice on line 14 that we use \textit{calloc} to allocate for a \textit{player struct}.  I'm using \textit{calloc} because all values will start at zero and all pointers will start as NULL.  This is convenient when initially setting up a \textit{struct} where you may not be setting initial values for each member.  On lines 30 and 31 we also use \textit{calloc} to allocate for our array of pointers to \textit{item structs}.  By doing this it sets the initial \textit{char} array for \textit{item struct names} to \textit{NULL}.  The number of pointers in this array is based on the value specified in \textit{maxItems}.
+	
+	Notice on line 29 that in order to access the \textit{inv} member from our \textit{player} we use "->".  Because \textit{player} is actually a pointer to a \textit{player struct} the "->" operator first dereferences the pointer and then accesses the member.  However, the \textit{inv} member is not a pointer and so it's members can be directly accessed via the "." operator.  Also notice that I'm checking for \textit{NULL} quite a bit throughout this code.  Anytime you are working with pointers and dynamically created memory, you have to be careful not to reach into a \textit{NULL} pointer and cause a SEGMENTATION fault.\\
+	
+	 
+	
+	\lstinputlisting[caption={\lstname}]{src/05-struct1.c}
+	
+		 
+	
+\end{document}
