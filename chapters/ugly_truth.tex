@@ -14,7 +14,7 @@ C is not my favorite language nor do I expect it to be yours.  However, C has be
 \section{Following Along}
 I have attempted to include sample programs wherever appropriate.  I think its important for developers to read other developers code and to talk about it.  These samples are included within the \textit{src} directory of the repository.  They get compiled every time I build this document to ensure what you see in the book is at least syntactically correct enough to compile.
 
-The machine I have been building this on is a 64-bit machine running \emph{PoP!\_OS 20.04} which is based on \emph{Ubuntu 20.04} and running \emph{gcc 9.3.0}. The following compile time flags were used: -std=c11 -Wall -Wextra -Wpedantic -Wwrite-strings -Wfloat-equal -Waggregate-return -Winline -Wvla. To my knowledge, nearly any modern Linux based system should have no issues compiling and running the code.  
+The machine I have been building this on is a 64-bit machine running \emph{PoP!\_OS 20.04} which is based on \emph{Ubuntu 20.04} and running \emph{gcc 9.3.0}. The following compile time flags were used: \texttt{-std=c11 -Wall -Wextra -Wpedantic -Wwrite-strings -Wfloat-equal -Waggregate-return -Winline -Wvla}. During an early chapter, I compiled one of the sample programs as a 32 bit binary.  In order to do this, I needed 32-bit libraries and therefore ran: \texttt{sudo apt install gcc-multilib}.  As long as this happens, nearly any modern Linux based system should have no issues compiling and running all of the sample code.  
 
 If you are compiling this document as well, it is written using \LaTeX.  There are a few extra packages you may require.  Hopefully I've fully captured them but I used \textit{apt} to install:
 \begin{itemize}
