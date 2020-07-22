@@ -53,7 +53,7 @@ The following example consists of three files:
 \textbf{01-helper.h - Lines 4 - 10}: This provides the \textit{declaration} and the \textit{definition} for a new type called \textit{mysteryMember\_t}\cite{embedded_c}.\\
 \textbf{01-helper.h - Line 12}:  This provides the \textit{declaration} for the \textit{distributeSnacks} function.\\
 
-\lstinputlisting[caption={\lstname}]{src/01-basics3.c}
+\lstinputlisting[caption={\lstname}, label={lst:basics3}]{src/01-basics3.c}
 
 \textbf{01-basics3.c - Line 2}: On this line, notice the import uses quotation marks around the header file.  This instructs the compiler to look locally for \textit{01-helper.h} rather than in the standard library (typically found in \textit{/usr/include/}).  Without this file, lines 6 and 8 would cause compiler errors.\\
 \textbf{01-basics3.c - Line 6}: The type \textit{mysteryMember\_t} \textit{definition} is in the \textit{01-helper.h} header file.  Additionally, the \textit{enum}\index{enum} value assigned to SHAGGY comes from \textit{01-helper.h} as well.\\
