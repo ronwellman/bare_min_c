@@ -59,7 +59,7 @@
 \begingroup
 \thispagestyle{empty} % Suppress headers and footers on the title page
 \begin{tikzpicture}[remember picture,overlay]
-\node[inner sep=0pt] (background) at (current page.center) {\includegraphics[width=\paperwidth]{background.pdf}};
+\node[inner sep=0pt] (background) at (current page.center) {\includegraphics[width=\paperwidth]{cover.pdf}};
 \draw (current page.center) node [fill=gray!30!white,fill opacity=0.6,text opacity=1,inner sep=1cm]{\Huge\centering\bfseries\sffamily\parbox[c][][t]{\paperwidth}{\centering C Programming\\[15pt] % Book title
 {\Large The Bare Minimum}\\[20pt] % Subtitle
 {\huge Ron Wellman}}}; % Author name
@@ -87,7 +87,7 @@
 
 %\usechapterimagefalse % If you don't want to include a chapter image, use this to toggle images off - it can be enabled later with \usechapterimagetrue
 
-\chapterimage{chapter_head_1.pdf} % Table of contents heading image
+\chapterimage{toc_head_1.pdf} % Table of contents heading image
 
 \pagestyle{empty} % Disable headers and footers for the following pages
 
@@ -149,6 +149,8 @@
 %	BIBLIOGRAPHY
 %----------------------------------------------------------------------------------------
 
+\chapterimage{bib_head_1.pdf} 
+
 \chapter*{Bibliography}
 \addcontentsline{toc}{chapter}{\textcolor{ocre}{Bibliography}} % Add a Bibliography heading to the table of contents
 
@@ -167,6 +169,8 @@
 %----------------------------------------------------------------------------------------
 %	INDEX
 %----------------------------------------------------------------------------------------
+
+\chapterimage{index_head_1.pdf} 
 
 \cleardoublepage % Make sure the index starts on an odd (right side) page
 \phantomsection

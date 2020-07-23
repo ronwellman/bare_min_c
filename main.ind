@@ -8,32 +8,38 @@
 \nopagebreak
 \tikz\node at (0pt,0pt) [draw=none,fill=ocre!50,line width=1pt,inner sep=5pt]{\parbox{\linewidth-2\fboxsep-2\fboxrule-2pt}{\centering\large\sffamily\bfseries\textcolor{white}{A}}};\vspace*{0.2cm}\nopagebreak
 
+  \item ABC\dotfill \hyperpage{38}
   \item ABC principle\dotfill \hyperpage{30}
   \item array\dotfill \hyperpage{28}
   \item ASCII\dotfill \hyperpage{20}
   \item assembler\dotfill \hyperpage{8}
+  \item assembly\dotfill \hyperpage{34}
 
   \indexspace
 \nopagebreak
 \tikz\node at (0pt,0pt) [draw=none,fill=ocre!50,line width=1pt,inner sep=5pt]{\parbox{\linewidth-2\fboxsep-2\fboxrule-2pt}{\centering\large\sffamily\bfseries\textcolor{white}{B}}};\vspace*{0.2cm}\nopagebreak
 
-  \item Basic Structure\dotfill \hyperpage{3}
   \item bool\dotfill \hyperpage{19}
 
   \indexspace
 \nopagebreak
 \tikz\node at (0pt,0pt) [draw=none,fill=ocre!50,line width=1pt,inner sep=5pt]{\parbox{\linewidth-2\fboxsep-2\fboxrule-2pt}{\centering\large\sffamily\bfseries\textcolor{white}{C}}};\vspace*{0.2cm}\nopagebreak
 
+  \item call stack\dotfill \hyperpage{34}
+  \item calloc\dotfill \hyperpage{36}
   \item char\dotfill \hyperpage{20}
   \item character constant\dotfill \hyperpage{22}
+  \item cli\dotfill \hyperpage{45}
   \item compile\dotfill \hyperpage{7}
   \item compiler\dotfill \hyperpage{8}
   \item const\dotfill \hyperpage{5}
+  \item control flow\dotfill \hyperpage{41}
 
   \indexspace
 \nopagebreak
 \tikz\node at (0pt,0pt) [draw=none,fill=ocre!50,line width=1pt,inner sep=5pt]{\parbox{\linewidth-2\fboxsep-2\fboxrule-2pt}{\centering\large\sffamily\bfseries\textcolor{white}{D}}};\vspace*{0.2cm}\nopagebreak
 
+  \item definition\dotfill \hyperpage{54}
   \item double\dotfill \hyperpage{23}
   \item DRY principle\dotfill \hyperpage{5}
 
@@ -48,6 +54,7 @@
 \tikz\node at (0pt,0pt) [draw=none,fill=ocre!50,line width=1pt,inner sep=5pt]{\parbox{\linewidth-2\fboxsep-2\fboxrule-2pt}{\centering\large\sffamily\bfseries\textcolor{white}{F}}};\vspace*{0.2cm}\nopagebreak
 
   \item float\dotfill \hyperpage{23}
+  \item free\dotfill \hyperpage{36}
   \item function
     \subitem declaration\dotfill \hyperpage{4}
     \subitem definition\dotfill \hyperpage{5}
@@ -66,6 +73,7 @@
 
   \item header\dotfill \hyperpage{3}, \hyperpage{5}
     \subitem guard\dotfill \hyperpage{6}
+  \item heap\dotfill \hyperpage{36}
 
   \indexspace
 \nopagebreak
@@ -89,6 +97,7 @@
   \item macro\dotfill \hyperpage{6}
   \item make\dotfill \hyperpage{10}
   \item Makefile\dotfill \hyperpage{11}
+  \item malloc\dotfill \hyperpage{36}
 
   \indexspace
 \nopagebreak
@@ -112,12 +121,23 @@
 
   \indexspace
 \nopagebreak
+\tikz\node at (0pt,0pt) [draw=none,fill=ocre!50,line width=1pt,inner sep=5pt]{\parbox{\linewidth-2\fboxsep-2\fboxrule-2pt}{\centering\large\sffamily\bfseries\textcolor{white}{R}}};\vspace*{0.2cm}\nopagebreak
+
+  \item rbp\dotfill \hyperpage{34}
+  \item realloc\dotfill \hyperpage{36}
+  \item rip\dotfill \hyperpage{35}
+  \item rsp\dotfill \hyperpage{34}
+
+  \indexspace
+\nopagebreak
 \tikz\node at (0pt,0pt) [draw=none,fill=ocre!50,line width=1pt,inner sep=5pt]{\parbox{\linewidth-2\fboxsep-2\fboxrule-2pt}{\centering\large\sffamily\bfseries\textcolor{white}{S}}};\vspace*{0.2cm}\nopagebreak
 
   \item short\dotfill \hyperpage{16}
   \item signed\dotfill \hyperpage{17}
   \item size\_t\dotfill \hyperpage{19}
   \item sizeof\dotfill \hyperpage{29}
+  \item stack frame\dotfill \hyperpage{34}
+  \item struct\dotfill \hyperpage{53}
 
   \indexspace
 \nopagebreak
