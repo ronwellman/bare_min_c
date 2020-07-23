@@ -18,7 +18,10 @@ main() {
 	
 	listItems(player1);
 	
-	destroyPlayer(player1);
+	result = destroyPlayer(&player1);
+	if ((true == result) && (NULL == player1)) {
+		printf("Successfully destroyed.\n");
+	}
 	return 0;
 }
 

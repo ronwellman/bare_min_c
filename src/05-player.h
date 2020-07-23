@@ -29,6 +29,6 @@ void
 listItems(const player_t *);
 
 bool
-destroyPlayer(player_t *);
+destroyPlayer(player_t **);
 
 #endif

@@ -68,7 +68,7 @@ addItem(player_t *player) {
 
 void
 listItems(const player_t *player) {
-	if (NULL == player || NULL == player->name) {
+	if ((NULL == player) || (NULL == player->name)) {
 		perror("Can't list NULL player.\n");
 		return;
 	}
@@ -76,7 +76,7 @@ listItems(const player_t *player) {
 	printf("Player: %s\n", player->name);
 	
 	// empty inventory
-	if (0 == player->inv.totalItems || NULL == player->inv.items) {
+	if ((0 == player->inv.totalItems) || (NULL == player->inv.items)) {
 		printf("\tempty inventory\n");
 		return;
 	}
@@ -88,28 +88,29 @@ listItems(const player_t *player) {
 }
 
 bool
-destroyPlayer(player_t *player) {
-	if (NULL == player) {
-		return true;	
+destroyPlayer(player_t **player) {
+	if ((NULL == player) || (NULL == *player)) {
+		perror("Player is already NULL.\n");
+		return false;	
 	}
-	
-	if (NULL != player->inv.items) {
-		for (size_t num = 0; num < player->inv.totalItems; num++) {
+
+	if (NULL != (*player)->inv.items) {
+		for (size_t num = 0; num < (*player)->inv.totalItems; num++) {
 			// free individual items
-			free(player->inv.items[num].name);
-			player->inv.items[num].name = NULL;
+			free((*player)->inv.items[num].name);
+			(*player)->inv.items[num].name = NULL;
 		}
 		// free array of pointers to items
-		free(player->inv.items);
-		player->inv.items = NULL;
-		player->inv.totalItems = 0;
+		free((*player)->inv.items);
+		(*player)->inv.items = NULL;
+		(*player)->inv.totalItems = 0;
 	}
 
 	// free player
-	free(player->name);
-	player->name = NULL;
-	free(player);
-	player = NULL;
+	free((*player)->name);
+	(*player)->name = NULL;
+	free(*player);
+	*player = NULL;
 
 	return true;
 }
