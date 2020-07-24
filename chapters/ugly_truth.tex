@@ -1,12 +1,15 @@
 \documentclass[../main.tex]{subfiles}
+\graphicspath{{pictures/}{../pictures/}}
+
+\chapterimage{preface_head_1.pdf} % Chapter heading image
 \begin{document}
 	
 \frontmatter
 \chapter{The Ugly Truth}
 \section{About this Book}
-When I set out to write this book, we as a development section were struggling to certify our developers.  For one reason or another, we watched multiple failed attempts at a certification exam that we are required to pass. It is our hope that providing extra materials, guidance, and hands-on exercises, we'll be able to reverse this trend.  I don't expect this book to be all encompassing; you won't go from "Zero to Hero".  In some cases, at least some prior programming knowledge will be essential.  However, where I can, I'll attempt to be throughout without being overly verbose and guide you toward a deeper level of knowledge within the C programming language.
+When I set out to write this book, we as a development section were struggling to certify our developers.  For one reason or another, we watched multiple failed attempts at a certification exam that we are required to pass. It is our hope that providing extra materials, guidance, and hands-on exercises, we'll be able to reverse this trend.  I don't expect this book to be all encompassing; you won't go from "Zero to Hero".  In some cases, at least some prior programming knowledge will be essential.  However, where I can, I'll attempt to be thorough without being overly verbose and guide you toward a deeper level of knowledge within the C programming language.
 
-I completely expect this book to have errors.  Writing it also serves as a forcing function for me to read and experiment more.  If you do find errors, please be kind and send me a message or submit your fixes in a pull request.
+I completely expect this book to have errors.  Writing it also serves as a forcing function for me to read and experiment more.  If you do find errors, please be kind and send me a message or submit your fixes in a pull request.  Some of the code will frankly look a bit odd.  I tried to make sure it would all fit on the screen nicely.
 
 \section{Why C}
 C is not my favorite language nor do I expect it to be yours.  However, C has been around for a long time and many languages take their roots from it.  Learning C will not only help you understand existing code bases, but will give you insights into and maybe even an appreciation for newer languages.  At the end of the day though, C is a major portion of our required exam and we need to know it in order to pass.
@@ -14,7 +17,7 @@ C is not my favorite language nor do I expect it to be yours.  However, C has be
 \section{Following Along}
 I have attempted to include sample programs wherever appropriate.  I think its important for developers to read other developers code and to talk about it.  These samples are included within the \textit{src} directory of the repository.  They get compiled every time I build this document to ensure what you see in the book is at least syntactically correct enough to compile.
 
-The machine I have been building this on is a 64-bit machine running \emph{PoP!\_OS 20.04} which is based on \emph{Ubuntu 20.04} and running \emph{gcc 9.3.0}. The following compile time flags were used: -std=c11 -Wall -Wextra -Wpedantic -Wwrite-strings -Wfloat-equal -Waggregate-return -Winline -Wvla. To my knowledge, nearly any modern Linux based system should have no issues compiling and running the code.  
+The machine I have been building this on is a 64-bit machine running \emph{PoP!\_OS 20.04} which is based on \emph{Ubuntu 20.04} and running \emph{gcc 9.3.0}. The following compile time flags were used: \texttt{-std=c11 -Wall -Wextra -Wpedantic -Wwrite-strings -Wfloat-equal -Waggregate-return -Winline -Wvla}. During an early chapter, I compiled one of the sample programs as a 32 bit binary.  In order to do this, I needed 32-bit libraries and therefore ran: \texttt{sudo apt install gcc-multilib}.  As long as this happens, nearly any modern Linux based system should have no issues compiling and running all of the sample code.  
 
 If you are compiling this document as well, it is written using \LaTeX.  There are a few extra packages you may require.  Hopefully I've fully captured them but I used \textit{apt} to install:
 \begin{itemize}
@@ -41,6 +44,12 @@ If you're reading this book after 2020, we are going through a Pandemic.  Yay us
 \href{mailto:ron.wellman01@gmail.com}{ron.wellman01@gmail.com}
 
 \href{https://github.com/ronwellman/bare_min_c}{https://github.com/ronwellman/bare\_min\_c}.
+
+\section{Images}
+All of the pictures used throughout this book were primarily borrowed from the US Department of State and the European Space Agency's Flickr pages.
+
+\url{https://www.flickr.com/photos/iip-photo-archive/}\\
+\url{https://www.flickr.com/photos/europeanspaceagency/}
 
 \mainmatter
 \end{document}

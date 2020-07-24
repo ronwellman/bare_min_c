@@ -19,6 +19,34 @@
 
 \refsection{0}
   \datalist[entry]{nyt/global//global/global}
+    \entry{embedded_c}{book}{}
+      \name{author}{1}{}{%
+        {{hash=1f590f436d602e75c03b0fa9947edc3c}{%
+           family={Barr},
+           familyi={B\bibinitperiod},
+           given={Michael},
+           giveni={M\bibinitperiod}}}%
+      }
+      \list{location}{1}{%
+        {Germantown, MD}%
+      }
+      \list{publisher}{1}{%
+        {Barr Group}%
+      }
+      \strng{namehash}{1f590f436d602e75c03b0fa9947edc3c}
+      \strng{fullhash}{1f590f436d602e75c03b0fa9947edc3c}
+      \strng{bibnamehash}{1f590f436d602e75c03b0fa9947edc3c}
+      \strng{authorbibnamehash}{1f590f436d602e75c03b0fa9947edc3c}
+      \strng{authornamehash}{1f590f436d602e75c03b0fa9947edc3c}
+      \strng{authorfullhash}{1f590f436d602e75c03b0fa9947edc3c}
+      \field{sortinit}{B}
+      \field{sortinithash}{8de16967003c7207dae369d874f1456e}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{edition}{BARR-C:2018}
+      \field{title}{Embedded C Coding Standard}
+      \field{year}{2018}
+    \endentry
     \entry{kr_manual}{book}{}
       \name{author}{2}{}{%
         {{hash=cef3a18f3097ba31cc4cf18c95bfdfbc}{%
@@ -63,7 +91,7 @@
            giveni={T\bibinitperiod}}}%
       }
       \list{location}{1}{%
-        {Sebastopol}%
+        {Sebastopol, CA}%
       }
       \list{publisher}{1}{%
         {O'Reilly}%

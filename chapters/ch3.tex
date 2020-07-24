@@ -1,0 +1,93 @@
+\documentclass[../main.tex]{subfiles}
+
+\graphicspath{{pictures/}{../pictures/}}
+
+\chapterimage{chapter_head_3.pdf} % Chapter heading image
+
+\begin{document}
+	
+	\chapter{Control Flow}\index{control flow}
+	
+	%----------------------------------------------------------------------------------------
+	%	If/Else
+	%----------------------------------------------------------------------------------------
+	\section{If/Else}
+	
+	Up to this point, we've seen a few examples of using an if statement.  We've even seen an example of the \texttt{?:} ternary conditional evaluation operator in src/02-character1.c [\ref{lst:ternary_conditional_evaluation}].  Also, as shown in src/02-xor.c (\ref{lst:xor}) when we are evaluating multiple things, it is common practice to surround each evaluation with parantheses\cite{embedded_c} to eliminate issues with operator precedence.\\
+	
+	\lstinputlisting[caption={\lstname}]{src/03-if.c}
+	
+	\textbf{Line 7}: The \textit{if} statement is an evaluation that either evaluates to true (non-zero) or false (zero), The order I've chosen, \texttt{6 == proto}, may look odd but is in fact strategic.  If you were to place \textit{proto} first in the evaluation and mistyped the \texttt{==} as \texttt{=}, this becomes an assignment instead of an evaluation.  This is an easy typo to miss as I have personally done it many times.  By placing the constant first, attempting to assign a value to a constant is automatically going to fail compilation and alert you to the issue. \\
+	\textbf{Line 10}: If the first evaluation is false, we evaluate to see if the \textit{proto} is equal to 17. \\
+	\textbf{Line 13}: If the first and second evaluation are both false, the last \textit{else} will be run.  An \textit{else} block is not required.\\
+	
+	%----------------------------------------------------------------------------------------
+	%	Switch
+	%----------------------------------------------------------------------------------------
+	\section{Switch}
+	The \textit{switch} statement is similar to \textit{if/else} but is restricted to integer types.  We've already seen the switch used in src/01-helper.c [\ref{lst:distributeSnacks}].  Lets take a look at it again.\\
+
+	\lstinputlisting[caption={\lstname}]{src/01-helper.c}
+
+	\textbf{Line 7}: The \textit{member} variable is being evaluated. \\
+	\textbf{Line 8}: The \textit{case} statement is a label and if the value of \textit{member} is equal to the value \textit{SHAGGY}, control of the program will jump here and begin processing each line that follows it. \\
+	\textbf{Line 10}: The break statement causes control to jump out of the \textit{switch} block.  Without it, control would keep going line by line through the next label.  If this is intentional, it should be noted with a comment \cite{embedded_c}.\\
+	\textbf{Line 14}: If none of the other evaluations end up bing true, the \textit{default} label is processed.  The "Embedded C Coding Standard" dictates that every \textit{switch} statement should have a \textit{default} label \cite{embedded_c}.\\
+	
+	%----------------------------------------------------------------------------------------
+	%	While
+	%----------------------------------------------------------------------------------------
+	\section{While}
+	We've seen a while loop while discussing our pointers in src/02-pointers1.c [\ref{lst:pointers}].  A \textit{while} loop will continuously loop until its evaluation criterial evaluates to false or zero.
+	
+	It is quite common to see an "infinite" loop in a program implemented in a \textit{while} loop.  These are loops that will intentionally essentially loop forever.  It is quite common to see them implemented as:
+	
+	\begin{verbatim}
+	while (1) {
+		...
+	}
+	\end{verbatim}
+	
+	The "Embedded C Coding Standard" \cite{embedded_c} advises against this and instead recommends using a for loop like this:
+	
+	\begin{verbatim}
+	for (;;) {
+		...
+	}
+	\end{verbatim}
+	
+	\subsection{Do/While}
+	In C, there is also a \textit{do/while} loop.  In this case, the evaluation criteria is not until the end of the loop instead of at the beginning like with a traditional \textit{while} loop.  A \textit{while} loop will be executed zero or more times but a \textit{do/while} loop will be executed one or more times.
+	
+	%----------------------------------------------------------------------------------------
+	%	For
+	%----------------------------------------------------------------------------------------
+	\section{For}
+	We've already seen a number of \textit{for} loops such as in src/02-xor.c \ref{lst:xor}.  They allow us to concisely control when a loop starts and ends. A \textit{for} loop has three main parts separated by semi-colons:
+	
+	\begin{enumerate}
+		\item Variable initialization - This value may be loop counter or index value but is typically part of the evaluation criterial that determines when the loop should exit.
+		\item Evaluation criteria - This is some type of conditional that will determine when the when the \textit{for} loop will exit.
+		\item Increment - Traditionally this is where a counter or index value will be incremented after the completion of each loop.
+	\end{enumerate}
+	
+	\begin{verbatim}
+	for (COUNTER_INITIALIZATION; LOOP_EVALUATION; COUNTER_INCREMENT) {
+		...
+	}
+	\end{verbatim}
+	
+	%----------------------------------------------------------------------------------------
+	%	Goto
+	%----------------------------------------------------------------------------------------
+	\section{Goto}
+	A \textit{goto} is a way to perform an unconditional jump to a portion of your code. A quote from Michael Barr in "Embedded C Coding Standard" \cite{embedded_c}:
+	
+	\begin{quotation}
+		c. It is a preferred practice to avoid all use of the goto keyword.  If goto is used it shall only jump to a label declared later in the same or an enclosing block.
+	\end{quotation}
+
+	I agree with Mr. Barr's assessment of the \textit{goto}.  There is such a thing as the "lifetime" of a variable.  Using a \textit{goto} incorrectly can mess with this and so the advice to either avoid its use entirely or only jump to a label later in your code that is in the same or enclosed block helps to minimize issues with this. The only place I have found a good use for them is when I've encoutered some type of fail condition that I want to return from a function immediately but not before I've had a chance to clean up memory that I may have allocated.  In those cases, I may use a \textit{goto} to jump near the bottom of my function to a point right before I \textit{free} up some memory and then exit the function. 
+	
+	
+\end{document}

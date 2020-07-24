@@ -1,13 +1,14 @@
 #ifndef HELPER_H
 #define HELPER_H
 
-typedef enum mysteryMember {
+typedef enum {
 	FRED,
 	DAPHNE,
+	VELMA,
 	SHAGGY,
 	SCOOBY
-} MYSTERYMEMBER;
+} mysteryMember_t;
 
-int distributeSnacks(MYSTERYMEMBER);
+int distributeSnacks(mysteryMember_t);
 
 #endif

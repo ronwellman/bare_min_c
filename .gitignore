@@ -18,3 +18,4 @@
 *.out
 *.ptc
 output/*
+.vscode
