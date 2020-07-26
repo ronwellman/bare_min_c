@@ -3,6 +3,7 @@
 #include <string.h>
 
 #define STUDENTIDSIZE 16
+
 typedef struct __attribute__ ((__packed__)) student {
     float grade;
     char studentID[STUDENTIDSIZE];
@@ -20,7 +21,8 @@ main() {
     // create student grades
     class_t myClass = { 0 };
     myClass.numStudents = 2;
-    myClass.students = malloc(sizeof(*(myClass.students)) * myClass.numStudents);
+    myClass.students = malloc(sizeof(*(myClass.students)) * \
+            myClass.numStudents);
     myClass.students[0].grade = 90.5;
     strncpy(myClass.students[0].studentID, "rwell123456", STUDENTIDSIZE);
     myClass.students[1].grade = 87.3;
@@ -36,7 +38,8 @@ main() {
     }
    
     // save student grades to file
-    size_t items = fwrite(&myClass, sizeof(myClass) - sizeof(myClass.students), 1, fp);
+    size_t items = fwrite(&myClass, sizeof(myClass) - sizeof(myClass.students),
+            1, fp);
     if (1 != items) {
         fprintf(stderr, "Something went wrong when writing to: %s\n", pathname);
         returnCode = 1;
@@ -45,7 +48,8 @@ main() {
     for (unsigned int i = 0; i < myClass.numStudents; i++) {
         items = fwrite(&(myClass.students[i]), sizeof(student_t), 1, fp);
         if (1 != items) {
-            fprintf(stderr, "Something went wrong when writing to: %s\n", pathname);
+            fprintf(stderr, "Something went wrong when writing to: %s\n",
+                    pathname);
             returnCode = 1;
             goto exitNow;
         }
@@ -74,27 +78,30 @@ main() {
     // read in the class
     items = fread(&myClass, sizeof(myClass) - sizeof(myClass.students), 1, fp);
     if (1 != items) {
-        fprintf(stderr, "Something went wrong reading myClass from: %s\n", pathname);
+        fprintf(stderr, "Something went wrong reading myClass from: %s\n", 
+                pathname);
         returnCode = 1;
         goto exitNow;
     }
 
     // allocate for number of students indicated in file
-    myClass.students = malloc(sizeof(*(myClass.students)) * myClass.numStudents);
+    myClass.students = malloc(sizeof(*(myClass.students)) * \
+            myClass.numStudents);
     
     // read in the students
-    for (unsigned int i = 0; i < myClass.numStudents; i++) {
-        items = fread(&(myClass.students[i]), sizeof(student_t), 1, fp);
-        if (1 != items) {
-            fprintf(stderr, "Something went wrong reading student %d from: %s\n", i, pathname);
-            returnCode = 1;
-            goto exitNow;
-        }
+    items = fread(&(myClass.students[0]), sizeof(student_t),
+            myClass.numStudents, fp);
+    if (myClass.numStudents != items) {
+        fprintf(stderr, "Something went wrong reading students from: "\
+                "%s\n", pathname);
+        returnCode = 1;
+        goto exitNow;
     }
-
+    
     printf("Number of Students: %d\n", myClass.numStudents);
     for (unsigned int i = 0; i < myClass.numStudents; i++) {
-        printf("\tStudent: %-18s Grade: %f\n", myClass.students[i].studentID, myClass.students[i].grade);
+        printf("\tStudent: %-18s Grade: %f\n", myClass.students[i].studentID,
+                myClass.students[i].grade);
     }
 
 exitNow:

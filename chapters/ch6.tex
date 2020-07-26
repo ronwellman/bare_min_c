@@ -1,0 +1,130 @@
+\documentclass[../main.tex]{subfiles}
+
+\graphicspath{{pictures/}{../pictures/}}
+
+\chapterimage{chapter_head_6.pdf} % Chapter heading image
+
+\begin{document}
+	
+	%----------------------------------------------------------------------------------------
+	%	Working with Files
+	%----------------------------------------------------------------------------------------
+	\chapter{Working with Files}
+	At some point, we either have to read from a file or write to a file.  You'll typically see this done in one of two ways, with \textit{fopen}\index{fopen} or with \textit{open}.  \textit{fopen} is part of the C standard library where \textit{open} is a system call to the operating system.  This means that while \textit{open} may allow for more advanced functionality, it comes with the cost of your code not being as portable between operating systems.  Unless you have good reason, it is usually best to stick with the standard C library.  For this reason, we will mainly focus on \textit{fopen} and associated functions.
+
+	\section{Opening a File}
+	There are multiple modes that you can use to open a file.  The man page for \textit{fopen} specifies the following modes:
+	
+	\begin{quote}
+		\textbf{r} \quad Open text file for reading.  The stream is positioned at the beginning of the file.\\
+		\textbf{r+} \quad Open for reading and writing.  The stream is positioned at the beginning of the file.\\
+		\textbf{w} \quad Truncate file to zero length or create text file for writing.  The stream is positioned at the beginning of the file.
+		\textbf{w+} \quad Open for reading and writing.  The file is created if it does not exist, otherwise it is truncated.  The stream is positioned at the beginning of the file.\\
+		\textbf{a} \quad Open for appending (writing at end of file).  The file is created if it does not exist.  The stream is positioned at the end of the file.\\
+		\textbf{a+} \quad Open  for  reading  and  appending (writing at end of file).  The file is created if it does not exist.  Output is always appended to the end of the file.  POSIX is silent on what the initial read position is when using this mode.  For glibc, the initial file position for reading is at the beginning of the file, but for Android/BSD/MacOS, the initial file position for  reading  is at the end of the file.
+		
+		The mode string can also include the letter 'b' either as a last character or as a character between the characters in any of the two-character strings described above.  This is strictly for compatibility with C89 and has no effect; the 'b' is ignored on all POSIX conforming systems, including Linux.  (Other systems may treat text files and binary files differently, and adding the 'b' may  be a good idea if you do I/O to a binary file and expect that your program may be ported to non-UNIX environments.
+	\end{quote} 
+
+	\section{Reading Text}
+	
+	Lets take a look at opening a text file and reading from it.\\
+	
+	\lstinputlisting[caption={\lstname}, label={lst:06-file1}]{src/06-file1.c}
+	
+	On Line 8 we see \textit{fopen} used to open the file \texttt{../sample/file1} in read mode.  This function returns the file pointer \textit{fp}.  We then test on line 9 to ensure that we actually received a file pointer.  If \textit{fp} is \textit{NULL} this indicates we were unable to open the file.  This could be because of permissions applied to the file, the file doesn't exist, or a myriad of other issues.  Later in this chapter, we'll talk about using \textit{fstat} to get information about the file before attempting to open it.
+	
+	On line 19 we use \textit{fgets}\index{fgets} to read text from the file.  The man page for \textit{fgets} indicates:
+	
+	\begin{quotation}
+		fgets() reads in at most one less than size characters from stream and stores them into the buffer pointed to by s.  Reading stops after an EOF or a newline.  If a newline is read, it is stored into the buffer.  A terminating null byte ('\\0') is stored after the last character in the buffer.
+	\end{quotation}
+
+	So \textit{fgets} automatically makes sure we leave room for the terminating \textit{NULL} byte for our string.  Additionally, \textit{fgets} returns \textit{NULL} when it encouters an error or it is unable to read any more characters from the stream.  This makes for an easy to construct loop that will read until no more characters remain.
+	
+	Had we been writing text instead of reading text, we could have used \textit{fputs}\index{fputs}.  This would have allowed us to constuct a buffer and write that to the file.
+	
+	On line 30 I close my file using \textit{fclose}\index{fclose}.  It is important to do so especially when writing to files.  Because the streams we're writing to are buffered by default, its important that all remaining writes get flushed from the buffer to the file.  Additionally, closing the file releases memory back to the operating system.  Had I not closed the above file, \texttt{valgrind} would have showed the following:
+	
+	\begin{verbatim}
+	$ valgrind --leak-check=full --show-leak-kinds=all ./06-file1 
+	==29442== Memcheck, a memory error detector
+	==29442== Copyright (C) 2002-2017, and GNU GPL'd, by Julian Seward et al.
+	==29442== Using Valgrind-3.15.0 and LibVEX; rerun with -h for copyright info
+	==29442== Command: ./06-file1
+	==29442== 
+	This is a sample text file.
+	Not much to see here.
+	Move along.
+	==29442== 
+	==29442== HEAP SUMMARY:
+	==29442==     in use at exit: 472 bytes in 1 blocks
+	==29442==   total heap usage: 3 allocs, 2 frees, 5,592 bytes allocated
+	==29442== 
+	==29442== 472 bytes in 1 blocks are still reachable in loss record 1 of 1
+	==29442==    at 0x483B7F3: malloc (in /usr/lib/x86_64-linux-gnu/valgrind/\
+				 vgpreload_memcheck-amd64-linux.so)
+	==29442==    by 0x48EEAAD: __fopen_internal (iofopen.c:65)
+	==29442==    by 0x48EEAAD: fopen@@GLIBC_2.2.5 (iofopen.c:86)
+	==29442==    by 0x109252: main (06-file1.c:8)
+	==29442== 
+	==29442== LEAK SUMMARY:
+	==29442==    definitely lost: 0 bytes in 0 blocks
+	==29442==    indirectly lost: 0 bytes in 0 blocks
+	==29442==      possibly lost: 0 bytes in 0 blocks
+	==29442==    still reachable: 472 bytes in 1 blocks
+	==29442==         suppressed: 0 bytes in 0 blocks
+	==29442== 
+	==29442== For lists of detected and suppressed errors, rerun with: -s
+	==29442== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 0 from 0)
+	\end{verbatim}
+	
+	Notice it is pointing to line 8 (\textit{main (06-file1.c:8)}) of our file as the source of the memory leak.  This is where we ran \textit{fopen}.
+	
+	\section{Reading and Writing Binary Data}
+	
+	Reading and binary data to a file isn't much different than text data.  However, a little bit of extra thought should go into this to ensure you don't shoot yourself in the foot.  For example, in chapter \ref{ch:5} we talked about using a \textit{struct} to represent a player.  Wouldn't it be nice to save that player's state to file so that we can maintain state between games?  Well actually you can.  However, if you attempt to write the player \textit{structs} as they are currently written, you may find that reading them back in doesn't work so well.  This could be for a number of reasons.  First off, certain members of the \textit{struct} could be pointers.  Without dereferencing to the actual data, you'll end up writing an address rather than the data itself.  Additionally, a compiler may align on certain byte boundaries to make reading from and writing to the \textit{struct} more efficient. Additionally it may also pad certain members in the process of that alignment.  This will result in gaps between members.  If these things are not taken into consideration, you can find yourself with corrupted data.
+	
+	There are a number of ways around this.  You could write each member individually ensuring you do so in a manner that allows you to determine the number of bytes written for members that may variable in size much like our items array was in \ref{lst:playerStructH}.  This is one of the safest options but requires additional work when reading and writing.
+	
+	Additionally, you can instruct the compiler not to align structs via the \texttt{-fpack-struct} \cite{c_nutshell} compile time flag.   You can also use \textit{\_\_attribute\_\_ ((\_\_packed\_\_))}\index{packed} \cite{gnu_website} in your \textit{struct} definition to instruct the compiler to pack it.	Let see an example of this:\\
+	
+	\lstinputlisting[caption={\lstname}, label={lst:06-file1}]{src/06-file2.c}
+	
+	On line 33 I open a file with \textit{fopen}.  The mode I have chosen to use is "\texttt{w+b}".  This means the file is opened in read and write mode.  The "\texttt{b}" indicated binary mode even though its not required on POSIX systems.
+	
+	As you can see on lines 7 and 12, the two \textit{structs} will be packed.  This means we shouldn't have an issue writing them directly to file.  However, notice on line 14 that the \textit{class struct} contain a pointer that could point to one or more \textit{student structs}.  To get around this, we'll first store all the members up to the \textit{student struct} pointer. We can see this on lines 41 and 42.  Notice how we use \textit{fwrite}\index{fwrite} and pass it the address of \textit{myClass}.  The next parameter that \textit{fwrite} is expecting is the size of the item we are trying to write.  I subtract the size of the pointer from the size of the overall \textit{struct} so that we write everything up to the pointer.  This works fine because the pointer is the last item in the \textit{struct}.  The next parameter is the number of items to write.  Since I'm only writing a single \textit{struct} I enter 1.  The last parameter is the file stream that I want to write to.  For this, I enter the file pointer created on line 33.
+	
+	On line 48 I begin a \textit{for} loop based on the number of students I made entries for.  I then use \textit{fwrite} on line 49 to write each \textit{student structs} to the file.  I write them one at a time but could have just as easily written them all at once as well see later.
+	
+	Now that all of the \textit{fwrites} have been completed, in order to prove I can read the data back out, I free the \textit{student structs} and wipe the \textit{class struct} on lines 59 and 60.  At this point, the data should only exist on disk.  To be sure none of the data is still sitting in a buffer, I use \textit{fflush}\index{fflush} to instuct the system to flush everyting to disk.  I then use \textit{fseek} on line 71 to move back to the beginning of the file.
+	
+	I now begin reading from the file with \textit{fread}.  Notice again that I am only reading data up to but not including the pointer to the \textit{student structs}.  Once complete, I should know how many students I need to allocate for which I do on lines 88 and 89.  Once I've allocated for my \textit{student structs}, I read them back out of the file on lines 92 and 93.  Notice this time around, instead of building a \textit{for} loop and reading in each one at a time, I'm able to take advantage of the fact that the \textit{malloc} that places the memory addresses right next to each other.  I could have also written them this way.
+	
+	Lets quickly validate that we haven't done anyting too unusual that \texttt{valgrind} throws a fit.
+	  
+	\begin{verbatim}
+	$ valgrind --leak-check=full --show-leak-kinds=all ./06-file2
+	==48126== Memcheck, a memory error detector
+	==48126== Copyright (C) 2002-2017, and GNU GPL'd, by Julian Seward et al.
+	==48126== Using Valgrind-3.15.0 and LibVEX; rerun with -h for copyright info
+	==48126== Command: ./06-file2
+	==48126== 
+	Number of Students: 2
+	Student: rwell123456        Grade: 90.500000
+	Student: rdash246810        Grade: 87.300003
+	==48126== 
+	==48126== HEAP SUMMARY:
+	==48126==     in use at exit: 0 bytes in 0 blocks
+	==48126==   total heap usage: 5 allocs, 5 frees, 5,672 bytes allocated
+	==48126== 
+	==48126== All heap blocks were freed -- no leaks are possible
+	==48126== 
+	==48126== For lists of detected and suppressed errors, rerun with: -s
+	==48126== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 0 from 0)
+	\end{verbatim}
+	
+	\section{File Stats}
+	
+	
+\end{document}
