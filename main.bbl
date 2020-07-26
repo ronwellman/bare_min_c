@@ -47,6 +47,34 @@
       \field{title}{Embedded C Coding Standard}
       \field{year}{2018}
     \endentry
+    \entry{gnu_website}{online}{}
+      \name{author}{1}{}{%
+        {{hash=24d8eced16f9eb9a4f1e3622560d470c}{%
+           family={Foundation},
+           familyi={F\bibinitperiod},
+           given={Free\bibnamedelima Software},
+           giveni={F\bibinitperiod\bibinitdelim S\bibinitperiod}}}%
+      }
+      \strng{namehash}{24d8eced16f9eb9a4f1e3622560d470c}
+      \strng{fullhash}{24d8eced16f9eb9a4f1e3622560d470c}
+      \strng{bibnamehash}{24d8eced16f9eb9a4f1e3622560d470c}
+      \strng{authorbibnamehash}{24d8eced16f9eb9a4f1e3622560d470c}
+      \strng{authornamehash}{24d8eced16f9eb9a4f1e3622560d470c}
+      \strng{authorfullhash}{24d8eced16f9eb9a4f1e3622560d470c}
+      \field{sortinit}{F}
+      \field{sortinithash}{fb0c0faa89eb6abae8213bf60e6799ea}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{addendum}{(accessed: 07.25.2020)}
+      \field{title}{A GNU Manual}
+      \verb{urlraw}
+      \verb https://gcc.gnu.org/onlinedocs/gcc-4.0.2/gcc/Type-Attributes.html
+      \endverb
+      \verb{url}
+      \verb https://gcc.gnu.org/onlinedocs/gcc-4.0.2/gcc/Type-Attributes.html
+      \endverb
+      \keyw{attributes,packed,struct}
+    \endentry
     \entry{kr_manual}{book}{}
       \name{author}{2}{}{%
         {{hash=cef3a18f3097ba31cc4cf18c95bfdfbc}{%
