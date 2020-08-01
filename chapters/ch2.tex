@@ -493,12 +493,20 @@
 	
 	On line 33 we see \textit{malloc} used to allocate space on the \textit{heap} and assign the address to *\textit{buffer}.  Because there is no guarantee that \textit{malloc} will return successfully, on line 34 we test to make sure that an actual address was stored.  On line 41 we see a \textit{NULL} byte being written to the first byte of the new buffer.  This is because strings should be NULL terminated and \textit{malloc} only allocates memory; which means the new buffer is currently filled with garbage (whatever was already in memory where the buffer was allocated).
 	
-	Lines 48 - 53 reads user input but only enough to fill up the existing buffer that hasn't already been written to.  Lines 56 and 57 attempt to determine if the buffer is full and if so, line 62 performs a \textit{realloc} to increase the size of the buffer.  It is common to store the address returned from realloc to a temporary variable.  This is because \textit{realloc} may also fail to allocate the requested memory.  In that case, it will not make any changes to the existing buffer it was given and will return \textit{NULL}.  If successful, it will either extend the \textit{heap} allocation or allocate a new buffer, copy the existing data into it, and free the old buffer.  
+	Lines 48 - 53 reads user input but only enough to fill up the existing buffer that hasn't already been written to.  Lines 56 and 57 attempt to determine if the buffer is full and if so, line 62 performs a \textit{realloc} to increase the size of the buffer.  The actual man page for \textit{realloc} indicates:
+	
+	\begin{quotation}
+		The realloc() function returns a pointer to the newly allocated memory, which is suitably aligned for any built-in type, or NULL if the request failed.  The returned pointer may be the same  as  ptr
+		if  the allocation was not moved (e.g., there was room to expand the allocation in-place), or different from ptr if the allocation was moved to a new address.  If size was equal to 0, either NULL or
+		a pointer suitable to be passed to free() is returned.  If realloc() fails, the original block is left untouched; it is not freed or moved.
+	\end{quotation}
+
+	This is why you see the address returned from \textit{realloc} being assigned to a temporary variable.  If it fails, it will not make any changes to the existing buffer it was given and will return \textit{NULL}.  If successful, it will either extend the \textit{heap} allocation or allocate a new buffer, copy the existing data into it, and free the old buffer.  In the latter case of having to allocate a new buffer, that address will show up in the temporary variable and will need to be assigned back to the original buffer.  
 	
 	On line 18 we see the use of \textit{free}.  This releases the memory that was allocated for the buffer.  Without doing so, our program would leak memory.  Lets check to make sure this actually worked with the \textit{valgrind} program.
 	
 	\begin{verbatim}
-	$ valgrind ./02-dynamic1 
+	$ valgrind ./02-dynamic1
 	==28239== Memcheck, a memory error detector
 	==28239== Copyright (C) 2002-2017, and GNU GPL'd, by Julian Seward et al.
 	==28239== Using Valgrind-3.15.0 and LibVEX; rerun with -h for copyright info
