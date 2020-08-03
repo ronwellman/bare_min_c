@@ -101,7 +101,7 @@
 	
 	I now begin reading from the file with \textit{fread}.  Notice again that I am only reading data up to but not including the pointer to the \textit{student structs}.  Once complete, I should know how many students I need to allocate for which I do on lines 88 and 89.  Once I've allocated for my \textit{student structs}, I read them back out of the file on lines 92 and 93.  Notice this time around, instead of building a \textit{for} loop and reading in each one at a time, I'm able to take advantage of the fact that the \textit{malloc} that places the memory addresses right next to each other.  I could have also written them this way.
 	
-	Lets quickly validate that we haven't done anyting too unusual that \texttt{valgrind} throws a fit.
+	Lets quickly validate that we haven't done anything too unusual that \texttt{valgrind} throws a fit.
 	  
 	\begin{verbatim}
 	$ valgrind --leak-check=full --show-leak-kinds=all ./06-file2
@@ -126,5 +126,39 @@
 	
 	\section{File Stats}
 	
+	When working with files, you may want to know certain things about a file before attempting to open it. You may also want to know things about a file after you've opened it. For example, it would be nice to know that a file actually exists, that the file is a regular file, the file size, who owns the file, or when it was last accessed.  This information is return through a \textit{stat struct} from either the \textit{stat}, \textit{lstat}, or \textit{fstat} functions.  These are system calls available on POSIX systems.  Additionally, for larger files, there is \textit{stat64}, \textit{fstat64}, and \textit{lstat64}.
+		
+	int \textbf{stat}(const char *pathname, struct stat *statbuf);\\
+	int \textbf{fstat}(int fd, struct stat *statbuf);\\
+	int \textbf{lstat}(const char *pathname, struct stat *statbuf);
+
+	The \textit{stat struct} has the following members:\\
+	
+	\lstinputlisting[caption={\lstname}, numbers=none, label={lst:stat}]{chapters/ch6-stat.txt}
+	
+	Lets look at an example:\\
+	
+	\lstinputlisting[caption={\lstname}, label={lst:stat}]{src/06-file3.c}
+	
+	On line 11 I create a \textit{stat struct} and call it \textit{statbuf}.  I then call \textit{stat} on line 14 to fill it.  The struct now contains information about the pathname that I passed to it.
+	
+	The \textit{stat struct} contains information about the mode.  This information is stored in \textit{st\_mode} which is a bit field.  Although we haven't talked about bit fields, they are essentially a data structure that stores information by individually setting bits.  In the context of the \textit{stat struct} each of the bits stands for something like "is this a regular file", "is this a directory", "is this a character device", "is this a named pipe", "is this a symbolic link", or "is this a socket".  Knowing which bit answers which question can be difficult.  Fortunately, there are a number of macros that help.  On line 22 I use the \textit{S\_ISREG} macro to determine if the file is a regular file.  I then use \textit{S\_ISDIR} on line 24 to determine if this is a directory.  To lookup additional macros specific to the \textit{stat struct} type \texttt{man 7 inode} into the terminal.  Additionally there is more information about each of the different fields within the \textit{stat struct}.
+	
+	The \textit{stat struct} has \textit{timespec structs} that indicate access, modify, and last change times.  In order to print them out nicely, I am utilizing the \textit{ctime} function on lines 28 - 30.
+	
+	Let take a look at the output:
+ 	
+	\begin{verbatim}
+	$ ./06-file3
+	Pathname:                   ../sample/file1
+	Is the file a regular file: true
+	Is the file a directory:    false
+	User ID of owner:           1000
+	Group ID of group owner:    1000
+	Size of file:               62 bytes
+	Last status change:         Fri Jul 24 18:06:13 2020
+	Last file access:           Fri Jul 24 18:06:13 2020
+	Last file modification:     Fri Jul 24 18:06:13 2020
+	\end{verbatim}
 	
 \end{document}
