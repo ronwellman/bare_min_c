@@ -1,0 +1,61 @@
+\documentclass[../main.tex]{subfiles}
+
+\graphicspath{{pictures/}{../pictures/}}
+
+\chapterimage{chapter_head_7.pdf} % Chapter heading image
+
+\begin{document}
+	%----------------------------------------------------------------------------------------
+	%	Multithreading
+	%----------------------------------------------------------------------------------------
+	\chapter{Concurrency}\index{concurency}\label{ch:7}
+	Up until this point the programs that we've seen have only been able to execute a single task at any given time.  However, there are times when you may want your program to handle multiple things at the same time.  This is often the case with networked applications.  You may need to listen for incoming connections while processing existing connections.  There are a number of ways to do this and in this chapter we'll talk about a two.  
+	One way in which you can do this is to \textbf{fork} a process.  When a process is \textit{forked}, a child process with duplicate memory of the parent process is spun up.  These two processes can work independently of one another.  Another way in which a program may execute multiple tasks at a time is to create another \textbf{thread}.  Threads are independant streams of instructions.  In other words, a single process can have multiple threads where each thread is executing different instructions at the same time.
+	
+	\section{Forking}\index{fork}
+	In our example of handling multiple tasks at once we'll use the UNIX system call \textit{fork}.  Its fairly simple and straightforward to use.  As mentioned earlier, each process (parent and child) has a copy of the memory as it was when the \textit{fork} occurred.  This means there is an initial cost involved when the \textit{fork} occurs to copy memory from the parent process into the child process. 
+	
+	Lets take a look at a simple example of using \textit{fork}:\\
+	
+	\lstinputlisting[caption={\lstname}]{src/07-concurrency1.c}
+	
+	On lines 14 - 16 we can see that we are creating variables to store the various process IDs (PID) that we'll see.  We then fill two of those PIDs on lines 18 and 19.
+	
+	On line 23, we perform a \textit{fork}.  According to the man page:
+	
+	\begin{quotation}
+		On success, the PID of the child process is returned in the parent, and 0 is returned in the child.  On failure, -1 is returned in the parent, no child process is created, and errno is set appropriately.
+	\end{quotation}
+
+	This is why we follow up the \textit{fork} with an if statement to detect which process we are working with.  As you can see on lines 28 - 31, the child is merely looking up who its parent is and then calling the echo function that starts on line 40.  On line 35 the parent process calls the same echo function so that we can see them executing simultaneously.  
+	
+	Since the execution of the echo function happens so quickly, I've added a \textit{nanosleep}\index{nanosleep} to slow it down.  With out this slow down, the parent process often finishes all of its prints before memory has been replicated into the child process and it begins printing as well.
+	
+	\begin{verbatim}
+	$ ./07-concurrency1 
+	Program begins with:
+		PID: 29803
+		ParentPid: 3866
+	My Child's PID: 29804
+	PARENT: I am a shared string!
+	Child Process:
+		PID: 0
+		ParentPid: 29803
+	CHILD: I am a shared string!
+	PARENT: I am a shared string!
+	CHILD: I am a shared string!
+	PARENT: I am a shared string!
+	CHILD: I am a shared string!
+	PARENT: I am a shared string!
+	CHILD: I am a shared string!
+	PARENT: I am a shared string!
+	CHILD: I am a shared string!
+	\end{verbatim}
+	
+	Notice, that our program starts with a PID of 29803 and once \textit{fork} has taken place, the parent reports that its child has PID 29804.  Also notice that the child indicates it's parent is PID 29803.  Lastly notice that the nice both processes go about their business printing to the school.  Although this looks like a back and forth movement, this is really artificially created based on the sleeps that were added and the low CPU utilization on my computer when I ran it.  Since we didn't add any mechanisms for controlling when a process can execute, had my CPU been under a heavy load, we may have seen different results.
+	
+	\section{Multithreading}\index{multithreading}
+	
+	As mentioned, using multiple \textbf{thread}\index{threads} is one way in which a program can execute different tasks concurrently.  
+	
+\end{document}
