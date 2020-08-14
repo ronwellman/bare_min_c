@@ -16,20 +16,20 @@ doWork(void *);
 int
 main() {
 	int returnCode = 0;
-    int result; 
-   	thrd_t *threads = NULL;
+	int result; 
+	thrd_t *threads = NULL;
 	char work[ITEMS][2] = {"A","B","C","D","E","F","G","H","I","J"};
 
-        /* create and initialize mutex */
-    mtx_t qMtx = { 0 };
-    if (thrd_success != mtx_init(&qMtx, mtx_plain )) {
-        fprintf(stderr, "Unable to initialize queue mutex.");
-		returnCode = 1;
-		goto exitNow;
-    }
+		/* create and initialize mutex */
+		mtx_t qMtx = { 0 };
+		if (thrd_success != mtx_init(&qMtx, mtx_plain )) {
+			fprintf(stderr, "Unable to initialize queue mutex.");
+			returnCode = 1;
+			goto exitNow;
+		}
 
-	/* add work to a queue	 */
-    q = createQueue();
+	/* add work to a queue */
+	q = createQueue();
 	printf("Enqueu work.\n");
 	for (int i = 0; i < ITEMS; i++) {
 		result = mtx_lock(&qMtx);
@@ -39,7 +39,7 @@ main() {
 		}
 	}
 
-    /* create threads to begin work */
+	/* create threads to begin work */
 	threads = malloc(THREADCNT *  sizeof(*threads));
 	for (int i = 0; i < THREADCNT; i++) {
 		printf("Creating Threads.\n");
@@ -49,18 +49,18 @@ main() {
 			goto exitNow;
 		}
 	}
-    
+
 	/* wait for threads to exit */
-    for (int i = 0; i < THREADCNT; i++) {
+	for (int i = 0; i < THREADCNT; i++) {
 		thrd_join(threads[i], &result);
 		printf("Thread %d joined with result: %d\n", i, result);
 	}
 
 exitNow:
-	destroyQueue(q);	
+	destroyQueue(q);
 	mtx_destroy(&qMtx);
 	free(threads);
-    return returnCode;
+	return returnCode;
 }
 
 static int
@@ -86,6 +86,6 @@ doWork(void *nothing) {
 			}
 		}
 	}
-    /* return 0 */
+	/* return 0 */
 	thrd_exit(0);
 }
