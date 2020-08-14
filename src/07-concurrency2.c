@@ -78,12 +78,12 @@ doWork(void *nothing) {
 			mtx_unlock(&qMtx);
 			if (NULL != job) {
 				/* perform work */
-				thrd_yield();
 				printf("%lu: dequeue: %s\n", thisThread, (char *)job);
 			} else {
 				printf("%lu: No work.\n", thisThread);
 				break;
 			}
+			thrd_yield();
 		}
 	}
 	/* return 0 */
