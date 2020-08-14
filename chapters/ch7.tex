@@ -13,7 +13,7 @@
 	One way in which you can do this is to \textbf{fork} a process.  When a process is \textit{forked}, a child process with duplicate memory of the parent process is spun up.  These two processes can work independently of one another.  Another way in which a program may execute multiple tasks at a time is to create another \textbf{thread}.  Threads are independant streams of instructions.  In other words, a single process can have multiple threads where each thread is executing different instructions at the same time.
 	
 	\section{Forking}\index{fork}
-	In our example of handling multiple tasks at once we'll use the UNIX system call \textit{fork}.  Its fairly simple and straightforward to use.  As mentioned earlier, each process (parent and child) has a copy of the memory as it was when the \textit{fork} occurred.  This means there is an initial cost involved when the \textit{fork} occurs to copy memory from the parent process into the child process. 
+	In our first example of handling multiple tasks at once we'll use the UNIX system call \textit{fork}.  Its fairly simple and straightforward to use and as a result has been incorporated into many different projects.  For example, in certain versions of the Apache Web Server, they use a pre-fork model where they essentially have multiple \textit{forked} processes waiting for a request to come in.  As mentioned earlier, each process (parent and child) has a copy of the memory as it was when the \textit{fork} occurred.  This means there is an initial cost involved when the \textit{fork} occurs to copy memory from the parent process into the child process.  So by \textit{forking} before a request comes in, they incur this cost early on.  Additionally, once a request does come in and its handed to a child process, if something goes wrong with that request, it only affects that process instead of affecting the entire server.  Of course this also comes at the cost of higher resource utilization since each process has a separate copy of the server's memory at the time they were \textit{forked}.
 	
 	Lets take a look at a simple example of using \textit{fork}:\\
 	
@@ -27,7 +27,7 @@
 		On success, the PID of the child process is returned in the parent, and 0 is returned in the child.  On failure, -1 is returned in the parent, no child process is created, and errno is set appropriately.
 	\end{quotation}
 
-	This is why we follow up the \textit{fork} with an if statement to detect which process we are working with.  As you can see on lines 28 - 31, the child is merely looking up who its parent is and then calling the echo function that starts on line 40.  On line 35 the parent process calls the same echo function so that we can see them executing simultaneously.  
+	This is why we follow up the \textit{fork} with an if statement to detect which process we are working with.  As you can see on lines 31 - 34, the child is merely looking up who its parent is and then calling the echo function that starts on line 43.  On line 39 the parent process calls the same echo function so that we can see them executing simultaneously.  
 	
 	Since the execution of the echo function happens so quickly, I've added a \textit{nanosleep}\index{nanosleep} to slow it down.  With out this slow down, the parent process often finishes all of its prints before memory has been replicated into the child process and it begins printing as well.
 	
@@ -52,10 +52,59 @@
 	CHILD: I am a shared string!
 	\end{verbatim}
 	
-	Notice, that our program starts with a PID of 29803 and once \textit{fork} has taken place, the parent reports that its child has PID 29804.  Also notice that the child indicates it's parent is PID 29803.  Lastly notice that the nice both processes go about their business printing to the school.  Although this looks like a back and forth movement, this is really artificially created based on the sleeps that were added and the low CPU utilization on my computer when I ran it.  Since we didn't add any mechanisms for controlling when a process can execute, had my CPU been under a heavy load, we may have seen different results.
+	Notice, that our program starts with a PID of 29803 and once \textit{fork} has taken place, the parent reports that its child has PID 29804.  Also notice that the child indicates it's parent is PID 29803.  Lastly notice that both processes go about their business printing to the screen.  Although this looks like a back and forth movement, this is really artificially created based on the sleeps that were added and the low CPU utilization on my computer when I ran it.
 	
 	\section{Multithreading}\index{multithreading}
 	
-	As mentioned, using multiple \textbf{thread}\index{threads} is one way in which a program can execute different tasks concurrently.  
+	As mentioned, using multiple \textbf{thread}\index{threads} is one way in which a program can execute different tasks concurrently.  \textit{Threads} are lighter weight than using \textit{fork} because each thread does not get its own memory.  This makes communicating between threads easier but can also lead to \textit{race} conditions where values are updated at the same time by two different \text{threads}.  Extra care must be taken to protect shared memory and resources since its easy to mess up.
+	
+	There are two different libraries you'll often see used for multi-threading in C; \texttt{pthread.h} and \texttt{threads.h}.  \texttt{threads.h} was made a part of the C standard library in C11 and for portability reasons, should be what you use going forward.  However, \texttt{pthread.h} has been around for a long time for POSIX systems.  Due to this, you'll still see it taught and used.  In fact, even for current POSIX systems, \texttt{threads.h} is in many ways just a wrapper around \texttt{pthreads.h} and will require you to link in \texttt{pthread.h} during compilation.  Although \texttt{threads.h} was released as a part of the C11 standard, my Ubuntu 20.04 machine did not come with manpages for it.  It does however, have extensive documentation for the various functions in use within \texttt{pthread.h}.  If portability is a concern for you, I suggest you use \texttt{threads.h}.  If you know you'll be writing programs only for POSIX systems, feel free to use \texttt{pthreads.h} as well.  I will attempt to expose you to both.\\
+	
+	\lstinputlisting[caption={\lstname}, label={lst:threads}]{src/07-concurrency2.c}\index{threads}\index{mutex}
+	
+	\subsection{Threads.h}
+	
+	While this example isn't too involved, there are enough elements that you can see multi-threading in action.  The first thing to notice is that on line 3 we are using \textit{threads.h}.  This means we are using the C standard threading library. Lets follow the life of the actual threads.  On line 20, we see a \textit{thrd\_t struct} pointer declared.  On line 43, space for 5 threads is allocated and then on line 46 they are put to work.  During the \textit{thrd\_create} the individual threads are given a function to perform.  In this case, each thread will run the \textit{doWork} function.  The last argument in the \textit{thrd\_create} function is the argument that will be passed to the \textit{doWork} function.  In this case, we are not sending anything so it is set to NULL.  The function \textit{doWork} has a prescribed function prototype.  It must be of the form: \textit{int(*)(void\*)}.  This is means the function takes in a \textit{void *} as an argument and returns an integer.  This is different than the function prototype you'll pass to \textit{pthread\_create}.  It takes the form: \textit{void *(*)(void *)}.  This means that it takes in a \textit{void *} and returns a \textit{void *}. 
+	
+	So execution for each threads now starts at the \textit{doWork} function on line 66.  On line 73 we look up the thread ID.  This is only needed as it was nice to use during printing to see which thread it was that was perfoming work.  On line 86 we see the \textit{thrd\_yield} function used.  This does little in the context of this program but is a way for the thread to indicate to the OS that its ok to schedule it at a lower priority.  This could be due to the thread waiting for an action that may take awhile.  On line 90 we see \textit{thrd\_exit} being called.  This is how the thread returns values from the function.  So now that the thread is done with all of its work, its up to the main thread to call \textit{thrd\_join} on line 55.  This is a blocking action and the main thread will wait here for the thread it is joining to complete.  One by one the threads finish their work, exit, and are joined by the main thread.
+	
+	\subsection{Mutex}
+	
+	Another aspect of this program is the use of a \textbf{mutex}\index{mutex} (Mutual Exclusion).  In multithreaded applications, its important to protect shared memory that multiple threads could potentially access or change at the same time.  In the context of this example, there is a \textit{queue} that has work being enqueued by the main thread and dequeued by the worker threads.  Since it could cause issues if multiple threads tried to dequeue a job at the same time, we use a \textit{mutex} to protect it.  In order for a thread to access the \textit{queue} they have to first lock the \textit{mutex}.  Only one thread can lock it at a time so if the \textit{mutex} is already locked, other threads will wait.  Once it is unlocked, another thread will attempt to lock it.
+	
+	Since each thread must have access to the \textit{mutex} it is created globally on line 11.  On line 24 we zero out the \textit{mutex} and then initialize it on line 25.  We declare the \textit{mutex} to be a plain type (non-recursive - can only be locked once).  For the purpose of this program, the main thread doesn't need to lock the \textit{mutex} when enqueueing work since the other threads don't exist yet.  However, its left as a reminder that any thread, to include the main thread, needs to use a \textit{mutex} when accessing a shared resource.  On lines 75 and 78 we see the threads also utilize the \textit{mutex} before accessing the \textit{queue}.  Lastly, on line 61 we destroy the \textit{mutex} releasing any memory it is holding from when it was initialized.
+	
+	Let's see what running this example looks like.
+	
+	\begin{verbatim}
+	Enqueu work.
+	Creating Threads.
+	Creating Threads.
+	Creating Threads.
+	140045949937408: dequeue: A
+	Creating Threads.
+	140045941544704: dequeue: B
+	Creating Threads.
+	140045864400640: dequeue: C
+	140045864400640: dequeue: E
+	140045949937408: dequeue: F
+	140045856007936: dequeue: D
+	140045949937408: dequeue: I
+	140045941544704: dequeue: H
+	140045941544704: No work.
+	140045847615232: dequeue: J
+	140045847615232: No work.
+	140045856007936: No work.
+	140045949937408: No work.
+	140045864400640: dequeue: G
+	140045864400640: No work.
+	Thread 0 joined with result: 0
+	Thread 1 joined with result: 0
+	Thread 2 joined with result: 0
+	Thread 3 joined with result: 0
+	Thread 4 joined with result: 0
+	\end{verbatim}
+	
+	As we can see, although the \textit{queue} released the jobs in the same order they were enqueued, the individual threads printed them in a different order.  This is because each individual thread is operating independently of the others an may get scheduled differently by the OS.  
 	
 \end{document}
