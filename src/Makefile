@@ -3,6 +3,7 @@
 CC= gcc
 CFLAGS= -g -std=c11 -Wall -Wextra -Wpedantic -Wwrite-strings
 CFLAGS+= -Wfloat-equal -Waggregate-return -Winline -Wvla
+LDLIBS= -pthread
 
 # grab all files ending in c
 SRCS := $(wildcard *.c)
@@ -19,7 +20,7 @@ all: 01-basics1 01-basics2 01-basics3 02-integer-32bit \
 	02-xor 02-array1 02-array2 02-pointers1 \
 	02-dynamic1 03-if 04-cli1 04-cli2 \
 	05-struct1 06-file1 06-file2 \
-	06-file3 07-concurrency1
+	06-file3 07-concurrency1 07-concurrency2
 
 01-basics3: 01-helper.c 01-helper.h
 
@@ -27,6 +28,8 @@ all: 01-basics1 01-basics2 01-basics3 02-integer-32bit \
 
 02-integer-32bit:
 	${CC} ${CFLAGS} -m32 -o 02-integer-32bit 02-integer-32bit.c
+
+07-concurrency2: 07-concurrency2.c 07-queue.h 07-queue.c
 
 # remove all binaries verbosely
 clean:
