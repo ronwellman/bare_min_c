@@ -32,6 +32,14 @@ pop(stack_t *stack) {
 }
 
 bool
+stackFull(stack_t *stack) {
+	if (NULL == stack || stack->curSize == stack->maxSize) {
+		return true;
+	}
+	return false;
+}
+
+bool
 destroy(stack_t **stack, void(freeData)(void *)) {
     if (NULL == stack || NULL == *stack) {
         return false;

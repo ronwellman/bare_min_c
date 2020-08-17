@@ -20,6 +20,9 @@ void *
 pop(stack_t *);
 
 bool
+stackFull(stack_t *);
+
+bool
 destroy(stack_t **, void(freeData)(void *));
 
 #endif

@@ -27,7 +27,9 @@ main() {
     printf("%s\n", result ? "success" : "fail");
     result = push(stack, (void *)"fourth item");
     printf("%s\n", result ? "success" : "fail");
-   
+
+ 	printf("Stack full: %s\n", stackFull(stack) ? "true" : "false");
+
     printf("\nPopping from stack.\n");
     void *item = pop(stack);
     printf("%s\n", NULL != item ? (char *)item : "NULL");
@@ -38,6 +40,7 @@ main() {
     item = pop(stack);
     printf("%s\n", NULL != item ? (char *)item : "NULL");
     
+ 	printf("Stack full: %s\n", stackFull(stack) ? "true" : "false");
 
     printf("\nPushing more items onto stack.\n");
     result = push(stack, (void *)"another item");
