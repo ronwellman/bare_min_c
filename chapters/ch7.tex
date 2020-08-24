@@ -105,6 +105,53 @@
 	Thread 4 joined with result: 0
 	\end{verbatim}
 	
-	As we can see, although the \textit{queue} released the jobs in the same order they were enqueued, the individual threads printed them in a different order.  This is because each individual thread is operating independently of the others an may get scheduled differently by the OS.  
+	As we can see, although the \textit{queue} releases the jobs in the same order they were enqueued, the individual threads printed them in a different order.  This is because each individual thread is operating independently of the others and may get scheduled differently by the OS.  These little scheduling differences result in a few of the jobs being printed out in a different order.
+	
+	\subsection{Condition Variables}
+	
+	In the previous example, the threads continued to check if there was work to be done and as soon as there wasn't, they closed down.  As an example, it demonstrated the use of \textit{threads} and using a \textit{mutex} to protect a shared resource.  However, this is not very practical.  In the next example, we'll not only switch to using \textit{pthreads} but we'll also use \textbf{Condition Variables}\index{condition variables} to signal the threads when they need to "wake" up and perform some work.  There are number of functions that we could use to interact with our \textit{condition variable}.  The following are taken directly from the man pages:
+	
+
+	\textbf{pthread\_cond\_init} - initializes the condition variable cond.
+		
+	\textbf{pthread\_cond\_destroy} - destroys a condition variable, freeing the resources it might hold.
+		
+	\textbf{pthread\_cond\_wait} - atomically unlocks the mutex (as per pthread\_unlock\_mutex) and waits for the condition variable cond to be signaled. The thread execution is suspended and does not consume any  CPU	time  until the condition variable is signaled. The mutex must be locked by the calling thread on entrance to pthread\_cond\_wait. Before returning to the calling thread, pthread\_cond\_wait re-acquires mutex (as per pthread\_lock\_mutex).
+		
+	\textbf{pthread\_cond\_signal} - restarts  one of the threads that are waiting on the condition variable cond. If no threads are waiting on cond, nothing happens. If several threads are waiting on cond, exactly one is restarted, but it is not specified which.
+		
+	\textbf{pthread\_cond\_broadcast} - restarts all the threads that are waiting on the condition variable cond. Nothing happens if no threads are waiting on cond.
+
+	As we can see, threads will utilize a \textit{mutex} along with \textit{pthread\_cond\_wait}.  Once waiting, they will essentially stop consuming CPU cycles.  Another thread, most likely the main thread, will then either awaken a single thread with \textit{pthread\_cond\_signal} or all waiting threads with \textit{pthread\_cond\_broadcast}.  Let see how this pans out in our example:\\
+	
+	\lstinputlisting[caption={\lstname}, label={lst:threads}]{src/07-concurrency3.c}\index{threads}\index{condition variables}
+	
+	\begin{verbatim}
+	Enqueing and signaling.
+	Enqueing and signaling.
+	Enqueing and signaling.
+	Enqueing and signaling.
+	Enqueing and signaling.
+	Enqueing and signaling.
+	Enqueing and signaling.
+	Enqueing and signaling.
+	Enqueing and signaling.
+	Enqueing and signaling.
+	140303308343040 - 12/20 items were even.
+	140303308343040 - 9/20 items were even.
+	140303316735744 - 7/20 items were even.
+	140303316735744 - 11/20 items were even.
+	140303299950336 - 10/20 items were even.
+	140303299950336 - 9/20 items were even.
+	140303291557632 - 16/20 items were even.
+	140303291557632 - 11/20 items were even.
+	140303299950336 - 11/20 items were even.
+	140303308343040 - 8/20 items were even.
+	Send broadcast.
+	Joining 0.
+	Joining 1.
+	Joining 2.
+	Joining 3.
+	\end{verbatim}
 	
 \end{document}
