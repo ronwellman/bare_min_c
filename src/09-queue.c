@@ -10,17 +10,18 @@ createQueue(void) {
 }
 
 bool
-destroyQueue(queue_t *q) {
-    if (NULL == q) {
+destroyQueue(queue_t **q) {
+    if (NULL == q || NULL == *q) {
         return false;
     }
 
-    if (NULL == q->head) {
-        free(q);
+    if (NULL == (*q)->head) {
+        free(*q);
+        *q = NULL;
         return true;
     }
 
-    struct node *head = q->head;
+    struct node *head = (*q)->head;
     struct node *next = head->next;
 
     while(NULL != head) {
@@ -30,8 +31,11 @@ destroyQueue(queue_t *q) {
             next = next->next;
         }
     }
-    q->head = NULL;
-    q->tail = NULL;
+    (*q)->head = NULL;
+    (*q)->tail = NULL;
+
+    free(*q);
+    *q = NULL;
 
     return true;
 }

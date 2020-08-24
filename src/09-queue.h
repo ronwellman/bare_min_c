@@ -24,7 +24,7 @@ queue_t *
 createQueue(void);
 
 bool
-destroyQueue(queue_t *);
+destroyQueue(queue_t **);
 
 bool
 enqueue(queue_t *, void *);
