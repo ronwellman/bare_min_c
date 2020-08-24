@@ -57,7 +57,7 @@ main() {
 	}
 
 exitNow:
-	destroyQueue(q);
+	destroyQueue(&q);
 	mtx_destroy(&qMtx);
 	free(threads);
 	return returnCode;
