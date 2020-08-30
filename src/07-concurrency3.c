@@ -61,7 +61,13 @@ main() {
 			jobs[l][i] = random() % 1000;
 		}
 		
+		result = pthread_mutex_lock(&mtxQ);
+		if (0 != result) {
+			continue;
+		}
+
 		result = enqueue(q, jobs[l]);
+		pthread_mutex_unlock(&mtxQ);
 		if (result != true) {
 			fprintf(stderr, "Unable to enqueue list.\n");
 		} else {

@@ -10,7 +10,7 @@
 	%----------------------------------------------------------------------------------------
 	\chapter{Concurrency}\index{concurency}\label{ch:7}
 	Up until this point the programs that we've seen have only been able to execute a single task at any given time.  However, there are times when you may want your program to handle multiple things at the same time.  This is often the case with networked applications.  You may need to listen for incoming connections while processing existing connections.  There are a number of ways to do this and in this chapter we'll talk about a two.  
-	One way in which you can do this is to \textbf{fork} a process.  When a process is \textit{forked}, a child process with duplicate memory of the parent process is spun up.  These two processes can work independently of one another.  Another way in which a program may execute multiple tasks at a time is to create another \textbf{thread}.  Threads are independant streams of instructions.  In other words, a single process can have multiple threads where each thread is executing different instructions at the same time.
+	One way in which you can do this is to \textbf{fork} a process.  When a process is \textit{forked}, a child process with duplicate memory of the parent process is spun up.  These two processes can work independently of one another.  Another way in which a program may execute multiple tasks at a time is to create another \textbf{thread}.  Threads are independent streams of instructions.  In other words, a single process can have multiple threads where each thread is executing different instructions at the same time.
 	
 	\section{Forking}\index{fork}
 	In our first example of handling multiple tasks at once we'll use the UNIX system call \textit{fork}.  Its fairly simple and straightforward to use and as a result has been incorporated into many different projects.  For example, in certain versions of the Apache Web Server, they use a pre-fork model where they essentially have multiple \textit{forked} processes waiting for a request to come in.  As mentioned earlier, each process (parent and child) has a copy of the memory as it was when the \textit{fork} occurred.  This means there is an initial cost involved when the \textit{fork} occurs to copy memory from the parent process into the child process.  So by \textit{forking} before a request comes in, they incur this cost early on.  Additionally, once a request does come in and its handed to a child process, if something goes wrong with that request, it only affects that process instead of affecting the entire server.  Of course this also comes at the cost of higher resource utilization since each process has a separate copy of the server's memory at the time they were \textit{forked}.
@@ -56,7 +56,7 @@
 	
 	\section{Multithreading}\index{multithreading}
 	
-	As mentioned, using multiple \textbf{thread}\index{threads} is one way in which a program can execute different tasks concurrently.  \textit{Threads} are lighter weight than using \textit{fork} because each thread does not get its own memory.  This makes communicating between threads easier but can also lead to \textit{race} conditions where values are updated at the same time by two different \text{threads}.  Extra care must be taken to protect shared memory and resources since its easy to mess up.
+	As mentioned, using multiple \textbf{thread}\index{threads} is one way in which a program can execute different tasks concurrently.  \textit{Threads} are lighter weight than using \textit{fork} because each thread does not get its own memory.  This makes communicating between threads easier but can also lead to \textit{race} conditions where values are updated at the same time by two different \text{threads}.  Extra care must be taken to protect shared memory and resources since its easy to mess up. To the beginner, writing \textit{multithreaded} code doesn't sound overly difficult.  However, doing it correctly can be difficult to get working correctly.  Without extensive testing, its easy to write code that will \textit{deadlock}\index{deadlock} under certain conditions.  Whatever this condition is, it leads to a state where at least one thread gets stuck waiting for a resource that will never be available and as a result, it cannot perform any work.
 	
 	There are two different libraries you'll often see used for multi-threading in C; \texttt{pthread.h} and \texttt{threads.h}.  \texttt{threads.h} was made a part of the C standard library in C11 and for portability reasons, should be what you use going forward.  However, \texttt{pthread.h} has been around for a long time for POSIX systems.  Due to this, you'll still see it taught and used.  In fact, even for current POSIX systems, \texttt{threads.h} is in many ways just a wrapper around \texttt{pthreads.h} and will require you to link in \texttt{pthread.h} during compilation.  Although \texttt{threads.h} was released as a part of the C11 standard, my Ubuntu 20.04 machine did not come with manpages for it.  It does however, have extensive documentation for the various functions in use within \texttt{pthread.h}.  If portability is a concern for you, I suggest you use \texttt{threads.h}.  If you know you'll be writing programs only for POSIX systems, feel free to use \texttt{pthreads.h} as well.  I will attempt to expose you to both.\\
 	
@@ -109,7 +109,7 @@
 	
 	\subsection{Condition Variables}
 	
-	In the previous example, the threads continued to check if there was work to be done and as soon as there wasn't, they closed down.  As an example, it demonstrated the use of \textit{threads} and using a \textit{mutex} to protect a shared resource.  However, this is not very practical.  In the next example, we'll not only switch to using \textit{pthreads} but we'll also use \textbf{Condition Variables}\index{condition variables} to signal the threads when they need to "wake" up and perform some work.  There are number of functions that we could use to interact with our \textit{condition variable}.  The following are taken directly from the man pages:
+	In the previous example, the threads continued to check if there was work to be done and as soon as there wasn't, they closed down.  It demonstrated the use of \textit{threads} and using a \textit{mutex} to protect a shared resource (the queue).  However, this may not be very practical.  In the next example, we'll not only switch to using the \textit{pthread} library but we'll also use \textbf{condition variables}\index{condition variables} to signal the threads when they need to "wake" up and perform some work.  There are number of functions that we could use to interact with our \textit{condition variable}.  The following are taken directly from the man pages:
 	
 
 	\textbf{pthread\_cond\_init} - initializes the condition variable cond.
@@ -126,32 +126,54 @@
 	
 	\lstinputlisting[caption={\lstname}, label={lst:threads}]{src/07-concurrency3.c}\index{threads}\index{condition variables}
 	
+	On lines 18-20, we can see there are two \textit{mutexes} (\textit{phtread\_mute\_t}) being declared globally so that each thread has access to them.  Additionally, we have a \textit{condition variable} (\textit{pthread\_cond\_t}) being created as well.  One \textit{mutex} will be used in conjunction with this \textit{condition variable}. All three are initialized on lines 37-41 and destroyed on line 90-92.
+	
+	On line 46 we can see each of our different threads being created and added to an array.  The threads are told to perform the function \texttt{doWork} which takes no input and returns nothing either.
+	
+	Inside of the \texttt{doWork} function we can see that the thread looks up its ID utilizing \textit{pthread\_self} on line 99.  We can also see on line 103 where the thread looks to see if it should keep looping.
+	
+	Lines 106 and 116 are the bread and butter of what will keep the threads from wasting CPU cycles when there is no work to be performed.  In this case, they lock the \texttt{mtxJobs} \textit{mutex} and then begin waiting on the \textit{condition variable} by using \textit{pthread\_cond\_wait}.  This unlocks the \texttt{mtxJobs} \textit{mutex} and puts the thread in a wait state.
+	
+	Once the main thread determines there is work to be performed, on line 75 it utilizes \textit{pthread\_cond\_signal} to signal one of the waiting threads to wake up.  When this is done, the thread has to re-unlock the \texttt{mtxJobs} \textit{mutex}. It then proceeds to perform work until there is nothing for it to do.  At this point, it checks to see if it should continue looping and if so, it goes into a wait state once again.
+	
+	Once the main thread no longer has any work to assign, on line 80 it sets the \texttt{processJobs} flag to \texttt{false} and on line 82 sends a broadcast to all the threads with \textit{pthread\_cond\_signal}.  At this point, each thread wakes up and checks to see if there is any work remaining, sees that \texttt{processJobs} flag is no longer set, and returns by running \textit{pthread\_exit} on line 153.
+	
+	Now that the work has been created, assigned, and hopefully performed, the main thread performs a \textit{pthread\_join} on line 85 for each of the threads.
+	
+	Lets see what the results look like.
+	
 	\begin{verbatim}
+	$ ./07-concurrency3 
 	Enqueing and signaling.
 	Enqueing and signaling.
 	Enqueing and signaling.
 	Enqueing and signaling.
+	139982923020032 - 9/20 items were even.
+	139982923020032 - 7/20 items were even.
+	Enqueing and signaling.
+	139982923020032 - 7/20 items were even.
+	139982931412736 - 9/20 items were even.
+	139982914627328 - 13/20 items were even.
 	Enqueing and signaling.
 	Enqueing and signaling.
+	139982897841920 - 11/20 items were even.
+	139982881056512 - 12/20 items were even.
+	139982881056512 - 9/20 items were even.
 	Enqueing and signaling.
 	Enqueing and signaling.
+	139982872663808 - 8/20 items were even.
+	139982914627328 - 10/20 items were even.
 	Enqueing and signaling.
-	Enqueing and signaling.
-	140303308343040 - 12/20 items were even.
-	140303308343040 - 9/20 items were even.
-	140303316735744 - 7/20 items were even.
-	140303316735744 - 11/20 items were even.
-	140303299950336 - 10/20 items were even.
-	140303299950336 - 9/20 items were even.
-	140303291557632 - 16/20 items were even.
-	140303291557632 - 11/20 items were even.
-	140303299950336 - 11/20 items were even.
-	140303308343040 - 8/20 items were even.
 	Send broadcast.
 	Joining 0.
 	Joining 1.
 	Joining 2.
 	Joining 3.
+	Joining 4.
+	Joining 5.
+	Joining 6.
+	Joining 7.
 	\end{verbatim}
 	
+	A quick glance at the above output and we can see that ten jobs were created and the work was performed by at 6 different threads.  Your output will undoubtedly be different than mine.
 \end{document}
