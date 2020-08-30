@@ -122,9 +122,12 @@
 		
 	\textbf{pthread\_cond\_broadcast} - restarts all the threads that are waiting on the condition variable cond. Nothing happens if no threads are waiting on cond.
 
-	As we can see, threads will utilize a \textit{mutex} along with \textit{pthread\_cond\_wait}.  Once waiting, they will essentially stop consuming CPU cycles.  Another thread, most likely the main thread, will then either awaken a single thread with \textit{pthread\_cond\_signal} or all waiting threads with \textit{pthread\_cond\_broadcast}.  Let see how this pans out in our example:\\
+	As we can see, threads will utilize a \textit{mutex} along with \textit{pthread\_cond\_wait}.  Once waiting, they will essentially stop consuming CPU cycles.  Another thread, most likely the main thread, will then either awaken a single thread with \textit{pthread\_cond\_signal} or all waiting threads with \textit{pthread\_cond\_broadcast}.
 	
-	\lstinputlisting[caption={\lstname}, label={lst:threads}]{src/07-concurrency3.c}\index{threads}\index{condition variables}
+	\subsubsection{Thread Pool}\index{thread pool}
+	The last example and the following example contain parts that make up a very simple bare bones version of a \textbf{thread pool} where there are threads laying in wait for work to be performed.  Lets take a look at how this pans out in our next example. \\
+	
+	\lstinputlisting[caption={\lstname}, label={lst:threads}]{src/07-concurrency3.c}\index{threads}\index{condition variables}\index{thread pool}
 	
 	On lines 18-20, we can see there are two \textit{mutexes} (\textit{phtread\_mute\_t}) being declared globally so that each thread has access to them.  Additionally, we have a \textit{condition variable} (\textit{pthread\_cond\_t}) being created as well.  One \textit{mutex} will be used in conjunction with this \textit{condition variable}. All three are initialized on lines 37-41 and destroyed on line 90-92.
 	
