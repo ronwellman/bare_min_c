@@ -15,8 +15,40 @@
 	
 	Additionally, there is the concept of endianness.  Most end systems are little-endian these days and most networks utilize big-endian.  You will therefore often find yourself translating between the two when sending data between systems.
 	
-	Lets jump into a very simple example: \\
+	Lets jump into a very simple example of a threaded server application talking to a single remote client: \\
 	
-	       int socket(int domain, int type, int protocol);
+	\lstinputlisting[caption={\lstname}, label={lst:networking1}]{src/08-network1_server.c}
+	
+	AS we can see on lines 18-19 we create two \textit{sockaddr\_in structs} to hold our addresses both our local \textit{socket} address and remote connections.  
+	
+	On line 23 we use the \textit{socket} function to create a file descriptor.  In this instance, we are passing in AF_INET (IPv4) and SOCK_STREAM (TCP).
+	
+	In lines 29-31 we are manually packing our address.  We once again specify we will be using IPv4.  We also use \textit{htons} (Host to Network Short) to convert the port number to big-endian.  Lastly we use \textit{inet\_pton} (Presentation to Network) to convert the ip address (string) to a network address.
+	
+	Lets see what this looks like when we run it.
+	
+	\begin{verbatim}
+	$ ./10-network1-server 
+	Accepted a connection from: 127.0.0.1:39412
+	\end{verbatim}
+	
+	In one tab we fire up our server and once our client (in another tab) connects, we see its IP address and source port.  We can verify this by running \texttt{netstat -plantu | grep 8888}.  
+	
+	\begin{verbatim}
+	tcp        0      0 127.0.0.1:8888          127.0.0.1:39412         ESTABLISHED 9325/./10-network1- 
+	\end{verbatim}
+	
+	Now lets see what this looks like from a client:
+	
+	\begin{verbatim}
+	$ nc localhost 8888
+	Marco
+	Polo
+	Marco
+	NotPolo
+	
+	\end{verbatim}
+	
+	In another tab, we are connecting to the server via the program \texttt{netcat}.  I am immediately sent "Marco" from the server and I respond with "Polo".  I am once again sent "Marco" and I respond with "NotPolo".  When the server sees this, it drops my connection.  After hitting <ENTER> in \texttt{netcat} I am returned to the prompt.
 	
 \end{document}
