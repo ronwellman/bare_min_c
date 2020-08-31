@@ -28,8 +28,14 @@ main() {
 
 	addr.sin_family = AF_INET;
 	addr.sin_port = htons(8888);
-	//inet_pton(AF_INET, INADDR_LOOPBACK, &(addr.sin_addr));
 	inet_pton(AF_INET, "127.0.0.1", &(addr.sin_addr));
+
+	/* allow for address reuse, great for testing */
+	int reuse = 1;
+	result = setsockopt(sockFD, SOL_SOCKET, SO_REUSEADDR, &reuse, sizeof(reuse));
+	if (0 != result) {
+		fprintf(stderr, "Unable to set socket option for address reuse.");
+	}
 
 	/* bind the socket */
 	result = bind(sockFD, (struct sockaddr *)&addr, sizeof(addr));
@@ -52,11 +58,12 @@ main() {
 		goto exitNow;
 	}
 
-	temp = inet_ntop(AF_INET, (void *)&remote, address, INET_ADDRSTRLEN);
+	temp = inet_ntop(AF_INET, (void *)&(remote.sin_addr), address, INET_ADDRSTRLEN);
 	if (NULL == temp) {
 		fprintf(stderr, "Unable to convert address.\n");
 	} else {
-		printf("Accepted a connection from: %s\n", address);
+		int port = ntohs(remote.sin_port);
+		printf("Accepted a connection from: %s:%d\n", address, port);
 	}
 
 	for (;;) {
