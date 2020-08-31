@@ -9,5 +9,14 @@
 	%	Multithreading
 	%----------------------------------------------------------------------------------------
 	\chapter{Networking}\index{Networking}\label{ch:networking}
+	In this chapter I'll walk through a couple of examples using \textit{sockets} to send information back and forth between a client and a server application.  However, I am not going to go into any great depth.  What I actually suggest is to visit Brian "Beej Jorgensen" Hall's website at \url{http://beej.us/guide/bgnet/}.  His Guide to Network Programming \cite{beej_network_programming} is a much more thorough resource.  I personally look at it nearly every time I use \textit{sockets} and I've had other programmers mention they do the same. Go browse it now.  Going forward, I'm going to assume you have.
+	
+	First things first, you need to make a few decisions about the application you're building.  You'll need to decide whether you will be using TCP or UDP. You'll also need to decide whether you'll be working with IPv4, IPv6, or both.
+	
+	Additionally, there is the concept of endianness.  Most end systems are little-endian these days and most networks utilize big-endian.  You will therefore often find yourself translating between the two when sending data between systems.
+	
+	Lets jump into a very simple example: \\
+	
+	       int socket(int domain, int type, int protocol);
 	
 \end{document}
