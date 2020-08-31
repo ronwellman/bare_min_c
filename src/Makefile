@@ -21,7 +21,8 @@ all: 01-basics1 01-basics2 01-basics3 02-integer-32bit \
 	02-dynamic1 03-if 04-cli1 04-cli2 \
 	05-struct1 06-file1 06-file2 \
 	06-file3 07-concurrency1 07-concurrency2 \
-	07-concurrency3 09-queue 09-ll 09-stack
+	07-concurrency3 09-queue 09-ll 09-stack\
+	10-network1-server
 
 01-basics3: 01-helper.c 01-helper.h
 
