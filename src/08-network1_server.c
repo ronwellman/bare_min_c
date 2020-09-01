@@ -28,8 +28,8 @@ main() {
 
 	addr.sin_family = AF_INET;
 	addr.sin_port = htons(8888);
-	inet_pton(AF_INET, "127.0.0.1", &(addr.sin_addr));
-
+	addr.sin_addr.s_addr = htonl(INADDR_LOOPBACK);
+	
 	/* allow for address reuse, great for testing */
 	int reuse = 1;
 	result = setsockopt(sockFD, SOL_SOCKET, SO_REUSEADDR, &reuse, sizeof(reuse));
