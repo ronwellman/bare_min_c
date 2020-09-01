@@ -21,9 +21,23 @@
 	
 	AS we can see on lines 18-19 we create two \textit{sockaddr\_in structs} to hold our addresses both our local \textit{socket} address and remote connections.  
 	
-	On line 23 we use the \textit{socket} function to create a file descriptor.  In this instance, we are passing in AF_INET (IPv4) and SOCK_STREAM (TCP).
+	On line 23 we use the \textit{socket} function to create a file descriptor.  In this instance, we are passing in AF\_INET (IPv4) and SOCK\_STREAM (TCP).
 	
-	In lines 29-31 we are manually packing our address.  We once again specify we will be using IPv4.  We also use \textit{htons} (Host to Network Short) to convert the port number to big-endian.  Lastly we use \textit{inet\_pton} (Presentation to Network) to convert the ip address (string) to a network address.
+	In lines 29-31 we are manually packing our address.  We once again specify we will be using IPv4.  We also use \textit{htons} (Host to Network Short) to convert the port number to big-endian.  Lastly we use \textit{htonl} (Host to Network Long) to convert the loopback address to big-endian.  We could have used \textit{inet\_pton} (Presentation to Network) to convert the ip address (string) to a network address as well.
+	
+	On line 35 we use \textit{setsockopt} to allow the address to be used again.  In this scenario, it allows us to relaunch our server application quickly after it was shutdown.  This is great for testing since you don't have to wait for the previous listener to time out before launching a new one.  \textit{SOL\_SOCKET} indicates that the option is at socket level and instead of another protocol and the specific option we are adjusting is \textit{SO\_REUSEADDR}.
+	
+	The \texttt{man} page for \textit{bind} indicates:
+	\begin{quotation}
+		When a socket is created with socket(2), it exists in a name space (address family) but has no address assigned to it.  bind() assigns the address specified by addr to the socket referred to by the file descriptor sockfd
+	\end{quotation}
+	This is exactly what we do on line 41 where we \textit{bind} the address we created to the socket.
+	
+	On line 48 we begin listening on the socket.  This allows for us to \textit{accept} new connections on line 55.  The address of the incoming connection ends up in the \textit{remote struct}.  Once filled, we use \textit{inet\_ntop} (Network to Presentation) on line 61 to convert the address into something you and I would recognize.
+	
+	Now that we've accepted a new TCP connection, we are able to \textit{send} and \textit{recv} over the new file descriptor as we do on lines 70 and 76.
+	
+	Once our communications are complete we \textit{close} the field descriptors on lines 89 and 92.
 	
 	Lets see what this looks like when we run it.
 	
