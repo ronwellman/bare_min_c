@@ -58,7 +58,8 @@ main() {
 		goto exitNow;
 	}
 
-	temp = inet_ntop(AF_INET, (void *)&(remote.sin_addr), address, INET_ADDRSTRLEN);
+	temp = inet_ntop(AF_INET, (void *)&(remote.sin_addr), address,
+			INET_ADDRSTRLEN);
 	if (NULL == temp) {
 		fprintf(stderr, "Unable to convert address.\n");
 	} else {
