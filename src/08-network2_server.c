@@ -54,9 +54,9 @@ main() {
         /* create the socket */
 		sockFD = socket(adapter->ai_family, adapter->ai_socktype,
 				adapter->ai_protocol);
-        if (-1 == sockFD) {
-            continue;
-        }
+		if (-1 == sockFD) {
+			continue;
+		}
 		
 		/* allow for address reuse, great for testing */
 		int reuse = 1;
@@ -73,7 +73,13 @@ main() {
 			continue;
 		}
 		break;
-    }
+	}
+
+	/* we were unable to successfully create a socket and bind to it */
+	if (-1 == sockFD || 0 != result) {
+		returncode = -1;
+		goto exitNow;
+	}
 
 	/* listen for incoming connections */
 	result = listen(sockFD, 64);
@@ -155,7 +161,7 @@ handleConnection(int remoteFD) {
 
 static void
 sigHandler(int sig) {
-	if (sig == SIGINT) {
+	if (SIGINT == sig) {
 		keepRepeating = false;
 	}
 }
