@@ -6,7 +6,7 @@
 
 \begin{document}
 	%----------------------------------------------------------------------------------------
-	%	Multithreading
+	%	Networking
 	%----------------------------------------------------------------------------------------
 	\chapter{Networking}\index{Networking}\label{ch:networking}
 	In this chapter I'll walk through a couple of examples using \textit{sockets} to send information back and forth between a client and a server application.  However, I am not going to go into any great depth.  What I actually suggest is to visit Brian "Beej Jorgensen" Hall's website at \url{http://beej.us/guide/bgnet/}.  His Guide to Network Programming \cite{beej_network_programming} is a much more thorough resource.  I personally look at it nearly every time I use \textit{sockets} and I've had other programmers mention they do the same. Go browse it now.  Going forward, I'm going to assume you have.
@@ -49,10 +49,10 @@
 	In one tab we fire up our server and once our client (in another tab) connects, we see its IP address and source port.  We can verify this by running \texttt{netstat -plantu | grep 8888}.  
 	
 	\begin{verbatim}
-	tcp        0      0 127.0.0.1:8888          127.0.0.1:39412         ESTABLISHED 9325/./10-network1- 
+	tcp   0  0 127.0.0.1:8888   127.0.0.1:39412   ESTABLISHED 9325/./10-network1- 
 	\end{verbatim}
 	
-	Now lets see what this looks like from a client:
+	Now lets see what this looks like from the client:
 	
 	\begin{verbatim}
 	$ nc localhost 8888
@@ -63,6 +63,33 @@
 	
 	\end{verbatim}
 	
-	In another tab, we are connecting to the server via the program \texttt{netcat}.  I am immediately sent "Marco" from the server and I respond with "Polo".  I am once again sent "Marco" and I respond with "NotPolo".  When the server sees this, it drops my connection.  After hitting <ENTER> in \texttt{netcat} I am returned to the prompt.
+	In another tab, we connect to the server via the program \texttt{netcat}.  We immediately receive "Marco" from the server and respond with "Polo".  Once again we receive "Marco" from the server and this time respond with "NotPolo".  When the server sees this, line 85 causes it to break out of the loop and close the connection.  After hitting <ENTER> in \texttt{netcat} we are returned to the prompt.
 	
+	\section{getaddrinfo}\index{getaddrinfo}
+	Another way of specifying the address that we want our server to run on is to use \textbf{getaddrinfo}.  The \texttt{man} page has a nice explaination of why you might use this function rather than the manual method we used in the last example:
+	
+	\begin{quotation}
+		Given node and service, which identify an Internet host and a service, getaddrinfo() returns one or more addrinfo structures, each of which contains an Internet address that can be specified in a call to bind(2) or connect(2).  The getaddrinfo() function combines the
+		functionality provided by the gethostbyname(3) and getservbyname(3) functions into a single interface, but unlike the latter functions, getaddrinfo() is reentrant and allows programs to eliminate IPv4-versus-IPv6 dependencies.
+	\end{quotation}
+
+	Let take a look at it in action with our next example:\\
+	
+	\lstinputlisting[caption={\lstname}, label={lst:networking2}]{src/08-network2_server.c}
+	
+	I've tried to be generous with the comments as there is a bit to unpack.  On lines 40-42 we fill out an \textit{addrinfo struct} called \textit{hints}.  This serves as the guide for the resulting \textit{structs} that we'll use.  Here we specify \textit{AF\_UNSPEC} meaning we are good with both IPv4 and IPv6.  We also specify \textit{SOCK\_STREAM} (TCP).  Lastly we set it to \textit{AI\_PASSIVE}.  The \texttt{man} page says this about \textit{AI\_PASSIVE}:
+	
+	\begin{quotation}
+	If the AI\_PASSIVE flag is specified in hints.ai\_flags, and node is NULL, then the returned socket addresses will be suitable for bind(2)ing a socket that will accept(2) connections.  The returned socket address will contain the "wildcard address" (INADDR\_ANY for IPv4
+	addresses, IN6ADDR\_ANY\_INIT for IPv6 address).  The wildcard address is used by applications (typically servers) that intend to accept connections on any of the host's network addresses.  If node is not NULL, then the AI\_PASSIVE flag is ignored.
+	\end{quotation}  
+	
+	Now when we call \textit{getaddrinfo} on line 45, the \textit{res struct} is filled with the IPv4 and IPv6 wildcard addresses.  The next thing we do in lines 53-76 is attempt to loop through each one until we can create a socket, update it's options, and \textit{bind} to it.  In my tests, this always resulted in my program binding to "0.0.0.0:8888".  Of note, \textit{getaddrinfo} allocates space for the \textit{addrinfo structs} dynamically on the \textit{heap}.  Therefore, you need to call \textit{freeaddrinfo} as I do on line 127 in order to ensure it is free'd.
+	
+	Now that we have a socket and have bound our address to it, we can now call \textit{listen} on line 85 and \textit{accept} on line 100 much like we did in the previous example.  However, instead of interacting with the remote socket, we instead call \textit{fork}\index{fork} on line 112.  This allows the child to handle the remote connection and the parent to go back to wait for the next connection.  In our discussions of \textit{fork} (\ref{sec:fork}) I mentioned that both the parent and the child have copies of the memory in use when the \textit{fork} took place.  However, the child doesn't require the main socket field descriptor \textit{sockFD} so it closes it on line 115.  The socket doesn't actually get closed though since the parent process is still using it.  Additionally, the parent process doesn't need to interact with the new remote socket \textit{remoteFD} so it closes it on line 120.  Again, the socket doesn't actually get closed since the child is still using it.  If we didn't do this, the sockets wouldn't get closed when they need to because the parent would continue holding \textit{remoteFD} and the child would continue holding \textit{sockFD}.
+	
+	\section{sigaction}\index{sigaction}
+	The last thing worth pointing out in this example is the use of \textbf{sigaction}.  In order to shut the server down, the user is expected to hit \texttt{<CTRL+C>}.  This sends a \texttt{SIGINT} (Interrupt from keyboard).  Without doing so, the server would be blocking on \textit{accept}.  
+	
+	Using \textit{sigaction} is fairly straight forward.  On line 31, I define a \textit{sigaction struct}.  On line 33 I pass it a pointer to a function that will be called when a signal is received. On line 35 I then call \textit{sigaction} and indicate that the signal I am concerned with is \texttt{SIGINT}. Now when a \texttt{SIGINT} is received, the \textit{sigHandler} function will be called.  Only certain actions should take place here especially in a multithreaded environment (which this is not).  In the context of this program, the \textit{sigHandler} function sets a flag causing the children to exit.  In the parent process, the \texttt{SIGINT} causes the \textit{accept} to return a -1 and sets \textit{errno} to be set to \textit{EINTR}.  Sensing this, I break out of the loop and return from the program after closing sockFD and cleaning up memory.
 \end{document}
