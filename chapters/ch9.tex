@@ -17,6 +17,12 @@
 	\lstinputlisting[caption={\lstname}, label={lst:ll_header}]{src/09-ll.h}
 	In the header file we have two \textit{structs}, \textit{ll\_t} and \textit{node\_t}.  The \textit{ll\_t struct} will contain the first \textit{node\_t} which is called the "head".  The "next" pointer in each \textit{node\_t struct} will point to the next node in the list unless there are no additional nodes.  In that case, the "next" pointer will be \textit{NULL}.
 	
+	\begin{figure}[h]
+		\centering\includegraphics[scale=0.5]{linkedlist.png}
+		\caption{Linked-List}
+		\label{fig:linked_list}
+	\end{figure}
+
 	\lstinputlisting[caption={\lstname}, label={lst:ll}]{src/09-ll.c}
 	
 	\section{Queue}
