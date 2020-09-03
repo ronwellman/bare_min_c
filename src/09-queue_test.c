@@ -31,7 +31,7 @@ main() {
     enqueue(q, (void *)"fourth item");
     printQueue(q);
     
-    destroyQueue(q);
+    destroyQueue(&q);
     printQueue(q);
     free(q);
 }
