@@ -59,7 +59,7 @@
 \begingroup
 \thispagestyle{empty} % Suppress headers and footers on the title page
 \begin{tikzpicture}[remember picture,overlay]
-\node[inner sep=0pt] (background) at (current page.center) {\includegraphics[width=\paperwidth]{cover.pdf}};
+\node[inner sep=0pt] (background) at (current page.center) {\includegraphics[width=\paperwidth]{cover3.pdf}};
 \draw (current page.center) node [fill=gray!30!white,fill opacity=0.6,text opacity=1,inner sep=1cm]{\Huge\centering\bfseries\sffamily\parbox[c][][t]{\paperwidth}{\centering C Programming\\[15pt] % Book title
 {\Large The Bare Minimum}\\[20pt] % Subtitle
 {\huge Ron Wellman}}}; % Author name
@@ -156,6 +156,24 @@
 %----------------------------------------------------------------------------------------
 
 \subfile{chapters/ch7}
+
+%----------------------------------------------------------------------------------------
+%	CHAPTER 8
+%----------------------------------------------------------------------------------------
+
+\subfile{chapters/ch8}
+
+%----------------------------------------------------------------------------------------
+%	PART 3
+%----------------------------------------------------------------------------------------
+
+\part{Part Three}
+
+%----------------------------------------------------------------------------------------
+%	CHAPTER 9
+%----------------------------------------------------------------------------------------
+
+\subfile{chapters/ch9}
 
 %----------------------------------------------------------------------------------------
 %	BIBLIOGRAPHY
