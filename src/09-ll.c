@@ -11,7 +11,7 @@ createList() {
 
 bool
 destroyList(ll_t **list, void(*destroyData)(void *)) {
-	if (NULL == list) {
+	if (NULL == list || NULL == *list) {
 		return false;
 	}
 
@@ -25,7 +25,7 @@ destroyList(ll_t **list, void(*destroyData)(void *)) {
 	}
 
 	free(*list);
-	list = NULL;
+	*list = NULL;
 
 	return true;
 }
