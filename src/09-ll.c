@@ -94,14 +94,14 @@ removeNode(ll_t *list, void *searchData, bool(*compare)(void *, void *)) {
 }
 
 void
-printList(ll_t *list, void(*printList)(void *)) {
+printList(ll_t *list, void(*printData)(void *)) {
     if (NULL == list || NULL == list->head) {
         return;
     }
 
     node_t *temp = list->head;
     while (NULL != temp) {
-        printList(temp->data);
+        printData(temp->data);
         temp = temp->next;
     }
 }
