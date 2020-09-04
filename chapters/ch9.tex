@@ -15,7 +15,8 @@
 	A \textit{linked-list} is a fairly simple data structure where one node points to the next node.  You may see a \textit{singly linked-list}, \textit{doubly linked-list}, and even a \textit{circly linked-list}.  We'll keep it simple with a \textit{singly linked-list}.\\
 	
 	\lstinputlisting[caption={\lstname}, label={lst:ll_header}]{src/09-ll.h}
-	In the header file we have two \textit{structs}, \textit{ll\_t} and \textit{node\_t}.  The \textit{ll\_t struct} will contain the first \textit{node\_t} which is called the "head".  The "next" pointer in each \textit{node\_t struct} will point to the next node in the list unless there are no additional nodes.  In that case, the "next" pointer will be \textit{NULL}.
+	
+	In the header file we have two \textit{structs}, \textit{ll\_t} and \textit{node\_t}.  The \textit{ll\_t struct} will contain the first \textit{node\_t} which is called the "head".  The "next" pointer in each \textit{node\_t struct} will point to the next node in the list unless there are no additional nodes.  In that case, the "next" pointer will be \textit{NULL}.  Again, there are a handful of different ways you could construct a linked-list.  However, the basis premise is one node points to the next node.
 	
 	\begin{figure}[h]
 		\centering\includegraphics[scale=0.5]{linkedlist.png}
@@ -23,7 +24,85 @@
 		\label{fig:linked_list}
 	\end{figure}
 
+	In this implementation I am even keeping track of the number of nodes by having a \textit{numNodes} entry in the \textit{ll\_t struct}.  This isn't necessary nor is it probably common.  However, you are free to customize your implementation to your application.  Maybe periodically looking up how many nodes are in my list is something my program needs to be aware of.  If this wasn't something I was already keeping track of, I would have to traverse the entire list to count the nodes each time I needed to know.  
+	
+	We can also see in the header file that I have implemented a number of functions that will serve sat the API to interact with the linked-list.  In this case, we have functions to initially create the list, destroy the list, add a node to the list, remove a node from the list, and even print our list.  Because we are storing the data as \textit{void *}, the implementation requires the passing in of function pointers that know how to handle the particular data type that we've stored.  
+	
+	Let's look to see how all of this is implemented:\\
+
 	\lstinputlisting[caption={\lstname}, label={lst:ll}]{src/09-ll.c}
+	
+	\subsection{createList}
+	On line 8 of \textit{createList} you can see that I use \textit{calloc} to dynamically allocate space for the \textit{ll\_t struct}.  This means that \textit{numNodes} will be set to zero and \textit{head} will be set to \textit{NULL}.
+	
+	\subsection{destroyList}
+	On line 13 we begin the \textit{destroyList} function.  Here we see the list is passed in as a pointer to a pointer.  This is so that we can \textit{NULL} out the final list as we do on line 28.  As you'll see in most of the following functions, we first check to see if we've received a \textit{NULL} for the list.  Without doing this, we can expect to have \textit{SEGMENTATION} faults.  I don't check for every possible scenario throughout but checking for some of the most common issues goes a long way.
+	
+	Also notice within DestroyData that I am passing in a pointer to a function called \textit{destroyData}.  Because the data that is stored in the list may have been dynamically allocated, we need to ensure it can be cleaned up properly. However, since we are storing it as \textit{void *}, we don't actually know how to handle the data.  What we are expecting is that the function passed in does know how to handle the data so on line 22 I am passing the data to the \textit{destroyData} function.
+	
+	Overall, the idea is that on lines 18 - 25, we are looping through each node, destroying the data and freeing the node.  Once we reach the final node where \textit{next} is set to \textit{NULL} we know we've reached the end of the list.  At this time, we free the list itself and set it to \textit{NULL}.
+
+	\subsection{addNode}
+	The \textit{addNode} function allocates space for the new node on line 39.  It then checks to see if there is already a node in the list on line 49 by checking the \textit{head}.  If one is not present, it is added on line 49.  Otherwise, the newly created node sets its \textit{next} to the current \textit{head} on line 55, and then replaces the \textit{head} with its own address on line 56.
+	
+	\subsection{removeNode}
+	\textit{removeNode} may look complicated at first, but in actuality is quite simple.  What the function takes in is the list itself, \textit{searchData} to identify the node, and a function pointer called \textit{compare} to perform the match.  This allows the calling program that understands the data type stored in the list to properly identify the node to remove.
+	
+	Lines 72 - 76 are if the data is found at the current \textit{head}.  In this case, it saves off the node in a temporary variable on line 66, slides the \text{head} down on line 73, saves off the data on line 74, and then frees the temporary node.  
+	
+	If the data wasn't found at the \textit{head}, lines 80-89 traverse the list looking for it.  Once identified, the previous node gets patched around the temp node on line 83, the data is saved off off line 84, and then the temp node is free'd.
+	
+	If after traversing the entire list the data is not identified, \textit{NULL} is returned.
+	
+	\subsection{printList}
+	\textit{printList} is a function that was written just so that I could demonstrate a more complex data type being handled.  In this case, it takes in the list as well as a function pointer that interprets the data and prints it.  Lines 102-105 merely traverse the list passing the data in each node to the function pointer called \textit{printData}.
+	
+	\subsection{Linked-List in use}
+	Lets take a look at how we might utilize our linked list:\\
+	
+	\lstinputlisting[caption={\lstname}, label={lst:ll_test}]{src/09-ll_test.c}
+	
+	As you can see on line 26 - 28 I define function pointers that we'll use later when interacting with the linked-list API.  On lines 31 - 34 I define some sample data to be used in our list.  On line 37 we finally create our list and begin adding our sample data to it.  Notice when I add my data to the list, I am type casting it as \textit{void *}.  Also notice on line 43 that when I call the \textit{printList} function I also pass in the function pointer to my function called \textit{print}.
+	
+	Lines 47 - 56 is where I remove nodes.  I have to define a value that will be used as the \textit{searchData} in the \textit{removeData} function.  Additionally, I have to pass in a pointer to the compareData function that begins on line 75 that will identify when we've found the correct node.  Out of convenience, I'm passing the result of \textit{removeNode} to my \textit{print} function for an easy way to display it.
+	
+	Lastly, on lines 64 and 65 I destroy my list.  The first time to ensure it works and the second time to see what happens when passing in a \textit{NULL} for the list.
+	
+	\begin{verbatim}
+	$ valgrind --leak-check=full --show-leak-kinds=all ./09-ll 
+	==47082== Memcheck, a memory error detector
+	==47082== Copyright (C) 2002-2017, and GNU GPL'd, by Julian Seward et al.
+	==47082== Using Valgrind-3.15.0 and LibVEX; rerun with -h for copyright info
+	==47082== Command: ./09-ll
+	==47082== 
+	Adding nodes.
+	Timmy: 101
+	Julie: 101
+	Joseph: 76
+	Jimmy: 85
+	
+	Removing Nodes:
+	Joseph: 76
+	Timmy: 101
+	Jimmy: 85
+	Julie: 101
+	NULL
+	
+	Add Node.
+	Joseph: 76
+	
+	Destroy list.
+	==47082== 
+	==47082== HEAP SUMMARY:
+	==47082==     in use at exit: 0 bytes in 0 blocks
+	==47082==   total heap usage: 7 allocs, 7 frees, 1,120 bytes allocated
+	==47082== 
+	==47082== All heap blocks were freed -- no leaks are possible
+	==47082== 
+	==47082== For lists of detected and suppressed errors, rerun with: -s
+	==47082== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 0 from 0)
+	\end{verbatim}
+	
 	
 	\section{Queue}
 	
