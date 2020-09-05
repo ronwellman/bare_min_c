@@ -11,13 +11,13 @@ struct student {
 	char name[20];
 };
 
-void
+static void
 destroyData(void *);
 
-bool
+static bool
 compareData(void *, void*);
 
-void
+static void
 print(void *);
 
 int
@@ -66,18 +66,18 @@ main() {
 	return 0;
 }
 
-void
+static void
 destroyData(void *data) {
 	UNUSED(data);
 }
 
-bool
+static bool
 compareData(void *d1, void *d2) {
 	struct student s = *(struct student *)d1;
 	return s.studentID == *(int *)d2;
 }
 
-void
+static void
 print(void *data) {
 	if (NULL == data) {
 		printf("NULL\n");

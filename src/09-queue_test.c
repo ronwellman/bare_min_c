@@ -9,13 +9,13 @@ struct bottle {
 	char author[24];
 };
 
-struct bottle *
+static struct bottle *
 newMessage(void);
 
-void
+static void
 printMessage(void *);
 
-void
+static void
 destroyMessage(void *);
 
 int
@@ -50,7 +50,7 @@ main() {
 	destroyQueue(&q, dm);
 }
 
-struct bottle *
+static struct bottle *
 newMessage(void) {
 	struct bottle *b = calloc(1, sizeof(*b));
 	size_t readSize = 0;
@@ -74,7 +74,7 @@ newMessage(void) {
 	return b;
 }
 
-void
+static void
 destroyMessage(void *b) {
 	if (NULL == b) {
 		return;
@@ -83,7 +83,7 @@ destroyMessage(void *b) {
 	free(b);
 }
 
-void
+static void
 printMessage(void *b) {
 	if (NULL == b) {
 		return;
