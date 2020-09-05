@@ -10,21 +10,21 @@
  *   -> node->next node->next NULL <-
  */
 
-struct node {
-    void *op;
-    struct node *next;
-};
+typedef struct node {
+	void *data;
+	struct node *next;
+} node_t;
 
 typedef struct queue {
-    struct node * head;
-    struct node * tail;    
+	struct node * head;
+	struct node * tail;    
 } queue_t;
 
 queue_t *
 createQueue(void);
 
 bool
-destroyQueue(queue_t **);
+destroyQueue(queue_t **, void(*)(void *));
 
 bool
 enqueue(queue_t *, void *);

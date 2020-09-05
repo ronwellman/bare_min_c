@@ -5,79 +5,78 @@
 
 queue_t *
 createQueue(void) {
-    queue_t *newQueue = (queue_t *)calloc(1, sizeof(*newQueue));
-    return newQueue;
+	queue_t *newQueue = (queue_t *)calloc(1, sizeof(*newQueue));
+	return newQueue;
 }
 
 bool
-destroyQueue(queue_t **q) {
-    if (NULL == q || NULL == *q) {
-        return false;
-    }
+destroyQueue(queue_t **q, void(*destroyData)(void *)) {
+	if (NULL == q || NULL == *q) {
+		return false;
+	}
 
-    if (NULL == (*q)->head) {
-        free(*q);
-        *q = NULL;
-        return true;
-    }
+    /* queue is empty */
+	if (NULL == (*q)->head) {
+		free(*q);
+		*q = NULL;
+		return true;
+	}
 
-    struct node *head = (*q)->head;
-    struct node *next = head->next;
+	node_t *head = (*q)->head;
+	node_t *next = head->next;
 
-    while(NULL != head) {
-        free(head);
-        head = next;
-        if (NULL != next) {
-            next = next->next;
-        }
-    }
-    (*q)->head = NULL;
-    (*q)->tail = NULL;
+	while(NULL != head) {
+		destroyData(head->data);
+		free(head);
+		head = next;
+		if (NULL != next) {
+			next = next->next;
+		}
+	}
 
-    free(*q);
-    *q = NULL;
+	free(*q);
+	*q = NULL;
 
-    return true;
+	return true;
 }
 
 bool
-enqueue(queue_t *q, void *op) {
-    if (NULL == q) {
-        return false;
-    }
+enqueue(queue_t *q, void *data) {
+	if (NULL == q) {
+		return false;
+	}
 
-    struct node *newNode = (struct node *)calloc(1, sizeof(*newNode));
+	node_t *newNode = (node_t *)calloc(1, sizeof(*newNode));
+	if (NULL == newNode) {
+		perror("Unable to allocate for new node.");
+		return false;
+	}
 
-    if (NULL == newNode) {
-        perror("Unable to allocate for new node.");
-        return false;
-    }
-    
-    newNode->op = op;
+	newNode->data = data;
+	if (NULL == q->tail) {
+		q->tail = newNode;
+		q->head = newNode;
+	} else {
+		q->tail->next = newNode;
+		q->tail = newNode;
+	}
 
-    if (NULL == q->tail) {
-        q->tail = newNode;
-        q->head = newNode;
-    } else {
-        q->tail->next = newNode;
-        q->tail = newNode;
-    }
-    
-    return true;
+	return true;
 }
 
 void *
 dequeue(queue_t *q) {
-    if (NULL == q || q->head == NULL) {
-        return NULL;
-    }
+	if (NULL == q || q->head == NULL) {
+		return NULL;
+	}
 
-    void *op = q->head->op;
-    struct node *temp = q->head->next;
-    free(q->head);
-    q->head = temp;
-    if (NULL == q->head) {
-        q->tail = NULL;
-    }
-    return op;
+	void *data = q->head->data;
+	node_t *temp = q->head->next;
+	free(q->head);
+	q->head = temp;
+	
+	if (NULL == q->head) {
+		q->tail = NULL;
+	}
+	return data;
 }
