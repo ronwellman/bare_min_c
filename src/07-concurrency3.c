@@ -22,10 +22,14 @@ static pthread_cond_t condJobs = { 0 };
 void *
 doWork(void *);
 
+void
+destroyJob(void *);
+
 int
 main() {
 	int retVal = 0;
 	int result;
+	void(*dj)(void *) = destroyJob;
 	time_t clock;
 	time(&clock);
 	srandom(clock);
@@ -86,7 +90,7 @@ main() {
 	}
 
 exitNow:
-	destroyQueue(&q);
+	destroyQueue(&q, dj);
 	pthread_mutex_destroy(&mtxJobs);
 	pthread_mutex_destroy(&mtxQ);
 	pthread_cond_destroy(&condJobs);
@@ -151,4 +155,9 @@ doWork(void *nothing) {
 		}
 	}
 	pthread_exit(NULL);
+}
+
+void
+destroyJob(void *job) {
+	UNUSED(job);
 }

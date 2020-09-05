@@ -10,6 +10,9 @@
 queue_t *q;
 mtx_t qMtx;
 
+void
+destroyJob(void *);
+
 static int
 doWork(void *);
 
@@ -17,6 +20,7 @@ int
 main() {
 	int returnCode = 0;
 	int result; 
+	void(*dj)(void *) = destroyJob;
 	thrd_t *threads = NULL;
 	char work[ITEMS][2] = {"A","B","C","D","E","F","G","H","I","J"};
 
@@ -57,7 +61,7 @@ main() {
 	}
 
 exitNow:
-	destroyQueue(&q);
+	destroyQueue(&q, dj);
 	mtx_destroy(&qMtx);
 	free(threads);
 	return returnCode;
@@ -88,4 +92,9 @@ doWork(void *nothing) {
 	}
 	/* return 0 */
 	thrd_exit(0);
+}
+
+void
+destroyJob(void *job) {
+	UNUSED(job);
 }
