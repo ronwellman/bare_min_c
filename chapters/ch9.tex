@@ -57,7 +57,7 @@
 	\subsection{printList}
 	\textit{printList} is a function that was written just so that I could demonstrate a more complex data type being handled.  In this case, it takes in the list as well as a function pointer that interprets the data and prints it.  Lines 102-105 merely traverse the list passing the data in each node to the function pointer called \textit{printData}.
 	
-	\subsection{Linked-List in use}
+	\subsection{Testing the Linked-List}
 	Lets take a look at how we might utilize our linked list:\\
 	
 	\lstinputlisting[caption={\lstname}, label={lst:ll_test}]{src/09-ll_test.c}
@@ -104,10 +104,64 @@
 	\end{verbatim}
 	
 	
-	\section{Queue}
+	\section{Queue}\index{queue}
+	One variation that we can make with our linked-list is to turn it into a queue.  A queue is a First-In-First-Out (FIFO) container.  Again, we can implement it in many different ways but I wanted to show you how we can use a plain old linked-list as a queue.\\
 	
 	\lstinputlisting[caption={\lstname}, label={lst:queue_header}]{src/09-queue.h}
+	
+	The first thing you may notice is that the \textit{node\_t} looks the same as it did before.  However, \textit{queue\_t} look similar but we now have both a \textit{head} and a \textit{tail}.  There are two primary function that we'll use with the queue, \textit{enqueue} adds an item to the queue and \textit{dequeue} removes an item from the queue.\\
+	
 	\lstinputlisting[caption={\lstname}, label={lst:queue}]{src/09-queue.c}
+	
+	\subsection{createQueue}
+	Here we allocate space for a \textit{queue\_t}.  We use \textit{calloc} so that both the \textit{head} and \textit{tail} are initially set to \textit{NULL}.
+	
+	\subsection{destroyQueue}
+	In \textit{destroyQueue} we once again take in a pointer to queue pointer to ensure we can set it to \textit{NULL} when complete.  We also take in a function pointer called \textit{destroyData} since we're storing items as \textit{void *}.  The first thing we check is to make sure the queue isn't already \textit{NULL}.  We then loop through the queue if there are leftover nodes and pass the data to the \textit{destroyData} function pointer.  
+	
+	Now that all data and nodes have been free'd, we free the queue itsfelf, set it to \textit{NULL} and return.
+	
+	\subsection{enqueue}
+	When adding something to the queue, we \textit{enqueue} that data to the \textit{tail}.  This is why on line 56 we first check to see if the \textit{tail} is \textit{NULL}.  This would indicate there isn nothing currently queue'd so both the \textit{head} and the \textit{tail} get set to the new node.  If however it already points to a node, we point that node's \textit{next} pointer to the new node on line 60 and then point \textit{tail} to the new node on line 61.
+	
+	\subsection{dequeue}
+	When we \text{dequeue}, we remove a node from the \textit{head}.  This is why we must first check on line 69 to see if the current \textit{head} is already pointing to \textit{NULL}.  Assuming there are nodes in the queue, we save off the data on line 73, save a temp pointer to \textit{head->next}, free the current \textit{head}, and then assign the temp pointer back to the \textit{head} on line 76.  Finally, if the \textit{head} is now set to \textit{NULL}, this means there are no nodes left in the queue so we need to set the current \textit{tail} to \textit{NULL} as well.  We do this on lines 78 - 80 and then return the data.
+	
+	\subsection{Testing the Queue}
+	Lets take a look at what it looks like to use our queue:\\
+	
+	\lstinputlisting[caption={\lstname}, label={lst:queue_test}]{src/09-queue_test.c}
+	
+	Here we create our queue on line 27. We then \textit{enqueue} three messages. We attempt to \textit{dequeue} four messages to make sure it doesn't break after \textit{dequeueing} more items than were \textit{enqueue'd}.  Lastly, we \textit{enqueue} a final message and \textit{destroyQueue}.  Lets see if everything works correctly with \textit{valgrind}.
+	
+	\begin{verbatim}
+	$ valgrind --leak-check=full --show-leak-kinds=all ./09-queue 
+	==34017== Memcheck, a memory error detector
+	==34017== Copyright (C) 2002-2017, and GNU GPL'd, by Julian Seward et al.
+	==34017== Using Valgrind-3.15.0 and LibVEX; rerun with -h for copyright info
+	==34017== Command: ./09-queue
+	==34017== 
+	Enqueue:
+	Message to send: Never gonna give you up
+	Message to send: Never gonna let you down
+	Message to send: Never gonna run around and desert you
+	Dequeue:
+	Rick Astley: Never gonna give you up
+	Rick Astley: Never gonna let you down
+	Rick Astley: Never gonna run around and desert you
+	Enqueue:
+	Message to send: Never gonna make you cry
+	Destroy:
+	==34017== 
+	==34017== HEAP SUMMARY:
+	==34017==     in use at exit: 0 bytes in 0 blocks
+	==34017==   total heap usage: 15 allocs, 15 frees, 2,736 bytes allocated
+	==34017== 
+	==34017== All heap blocks were freed -- no leaks are possible
+	==34017== 
+	==34017== For lists of detected and suppressed errors, rerun with: -s
+	==34017== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 0 from 0)
+	\end{verbatim}
 	
 	\section{Stack}
 	
