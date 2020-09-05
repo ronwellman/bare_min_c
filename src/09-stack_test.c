@@ -1,17 +1,23 @@
+#define _POSIX_C_SOURCE  200809L
 #include <stdio.h>
 #include <stdbool.h>
 #include <stdlib.h>
 #include "09-stack.h"
 #define MAXSIZE 3
+#define ITEMSIZE 20
 #define UNUSED(x) (void)(x)
 
-void
+static char *
+getItem(void);
+
+static void
 freeData(void *);
 
 int
 main() {
-    void (*ptrFreeData)(void *) = &freeData;
-    printf("Createing stack with maxsize: %d\n", MAXSIZE);
+	void (*fd)(void *) = &freeData;
+    
+	printf("Creating stack with maxsize: %d\n", MAXSIZE);
     stack_t *stack = createStack(MAXSIZE);
     if (NULL == stack) {
         fprintf(stderr, "Stack not allocated.\n");
@@ -19,41 +25,61 @@ main() {
     }
     
     printf("\nPushing onto stack:\n");
-    bool result = push(stack, (void *)"first item");
-    printf("%s\n", result ? "success" : "fail");
-    result = push(stack, (void *)"second item");
-    printf("%s\n", result ? "success" : "fail");
-    result = push(stack, (void *)"third item");
-    printf("%s\n", result ? "success" : "fail");
-    result = push(stack, (void *)"fourth item");
-    printf("%s\n", result ? "success" : "fail");
-
- 	printf("Stack full: %s\n", stackFull(stack) ? "true" : "false");
+	bool result;
+	char *msg;
+    for (int i = 0; i < MAXSIZE + 1; i++) {
+		msg = getItem();
+		result = push(stack, (void *)msg);
+		if (false == result) {
+			freeData(msg);
+		}
+		printf("Stack full: %s\n", stackFull(stack) ? "true" : "false");
+	}
+ 	
 
     printf("\nPopping from stack.\n");
-    void *item = pop(stack);
-    printf("%s\n", NULL != item ? (char *)item : "NULL");
-    item = pop(stack);
-    printf("%s\n", NULL != item ? (char *)item : "NULL");
-    item = pop(stack);
-    printf("%s\n", NULL != item ? (char *)item : "NULL");
-    item = pop(stack);
-    printf("%s\n", NULL != item ? (char *)item : "NULL");
-    
- 	printf("Stack full: %s\n", stackFull(stack) ? "true" : "false");
+    void *item; 
+	for (int i = 0; i < MAXSIZE + 1; i++) {
+		item = pop(stack);
+    	printf("%s\n", NULL != item ? (char *)item : "NULL");
+		freeData(item);
+	}
 
     printf("\nPushing more items onto stack.\n");
-    result = push(stack, (void *)"another item");
-    printf("%s\n", result ? "success" : "fail");
+    msg = getItem();
+	result = push(stack, (void *)msg);
+	if (false == result) {
+		freeData(msg);
+	}
+	printf("Stack full: %s\n", stackFull(stack) ? "true" : "false");
     
     printf("\nDestroying stack.\n");
-    result = destroy(&stack, ptrFreeData);
-    printf("%s\n", result ? "success" : "fail");
+    destroyStack(&stack, fd);
+    destroyStack(&stack, fd);
 
     return 0;
 }
 
-void
+static char *
+getItem() {
+	char *msg = NULL;
+	size_t readSize = 0;
+
+	printf("Message to send: ");
+	ssize_t bytes = getline(&msg, &readSize, stdin);
+	if (-1 == bytes) {
+		free(msg);
+		return NULL;
+	}
+
+	if ('\n' == msg[bytes - 1]) {
+		msg[bytes-1] = 0;
+	}
+	return msg;
+}
+
+
+static void
 freeData(void *data) {
-    UNUSED(data);
+    free(data);
 }

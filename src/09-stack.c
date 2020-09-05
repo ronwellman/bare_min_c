@@ -12,6 +12,22 @@ createStack(size_t maxSize) {
 }
 
 bool
+destroyStack(stack_t **stack, void(freeData)(void *)) {
+    if (NULL == stack || NULL == *stack) {
+        return false;
+    }
+
+    for (size_t i = 0; i < (*stack)->curSize; i++) {
+        freeData((*stack)->items[i]);
+    }
+
+    free((*stack)->items);
+    free(*stack);
+	*stack = NULL;
+    return true;
+}
+
+bool
 push(stack_t *stack, void *data) {
     if (NULL == stack || stack->curSize == stack->maxSize) {
         return false;
@@ -38,19 +54,3 @@ stackFull(stack_t *stack) {
 	}
 	return false;
 }
-
-bool
-destroy(stack_t **stack, void(freeData)(void *)) {
-    if (NULL == stack || NULL == *stack) {
-        return false;
-    }
-
-    for (size_t i = 0; i < (*stack)->curSize; i++) {
-        freeData((*stack)->items[i]);
-    }
-
-    free((*stack)->items);
-    free(*stack);
-    return true;
-}
-

@@ -14,6 +14,9 @@ stack_t *
 createStack(size_t);
 
 bool
+destroyStack(stack_t **, void(freeData)(void *));
+
+bool
 push(stack_t *, void *);
 
 void *
@@ -21,8 +24,5 @@ pop(stack_t *);
 
 bool
 stackFull(stack_t *);
-
-bool
-destroy(stack_t **, void(freeData)(void *));
 
 #endif
