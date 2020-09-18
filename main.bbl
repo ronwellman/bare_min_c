@@ -75,6 +75,31 @@
       \endverb
       \keyw{attributes,packed,struct}
     \endentry
+    \entry{beej_network_programming}{book}{}
+      \name{author}{1}{}{%
+        {{hash=a8016c96ab64590b0d3bfdebc15ed3c5}{%
+           family={Hall},
+           familyi={H\bibinitperiod},
+           given={Brian},
+           giveni={B\bibinitperiod}}}%
+      }
+      \list{publisher}{1}{%
+        {Brian “Beej Jorgensen” Hall}%
+      }
+      \strng{namehash}{a8016c96ab64590b0d3bfdebc15ed3c5}
+      \strng{fullhash}{a8016c96ab64590b0d3bfdebc15ed3c5}
+      \strng{bibnamehash}{a8016c96ab64590b0d3bfdebc15ed3c5}
+      \strng{authorbibnamehash}{a8016c96ab64590b0d3bfdebc15ed3c5}
+      \strng{authornamehash}{a8016c96ab64590b0d3bfdebc15ed3c5}
+      \strng{authorfullhash}{a8016c96ab64590b0d3bfdebc15ed3c5}
+      \field{sortinit}{H}
+      \field{sortinithash}{6db6145dae8dc9e1271a8d556090b50a}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{title}{Beej's Guide to Network Programming: Using Internet Sockets}
+      \field{version}{3.0.21}
+      \field{year}{16}
+    \endentry
     \entry{kr_manual}{book}{}
       \name{author}{2}{}{%
         {{hash=cef3a18f3097ba31cc4cf18c95bfdfbc}{%

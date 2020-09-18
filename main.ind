@@ -32,6 +32,8 @@
   \item cli\dotfill \hyperpage{45}
   \item compile\dotfill \hyperpage{7}
   \item compiler\dotfill \hyperpage{8}
+  \item concurency\dotfill \hyperpage{73}
+  \item condition variables\dotfill \hyperpage{80}, \hyperpage{84}
   \item const\dotfill \hyperpage{5}
   \item control flow\dotfill \hyperpage{41}
 
@@ -39,6 +41,7 @@
 \nopagebreak
 \tikz\node at (0pt,0pt) [draw=none,fill=ocre!50,line width=1pt,inner sep=5pt]{\parbox{\linewidth-2\fboxsep-2\fboxrule-2pt}{\centering\large\sffamily\bfseries\textcolor{white}{D}}};\vspace*{0.2cm}\nopagebreak
 
+  \item deadlock\dotfill \hyperpage{76}
   \item definition\dotfill \hyperpage{54}
   \item double\dotfill \hyperpage{23}
   \item DRY principle\dotfill \hyperpage{5}
@@ -53,18 +56,26 @@
 \nopagebreak
 \tikz\node at (0pt,0pt) [draw=none,fill=ocre!50,line width=1pt,inner sep=5pt]{\parbox{\linewidth-2\fboxsep-2\fboxrule-2pt}{\centering\large\sffamily\bfseries\textcolor{white}{F}}};\vspace*{0.2cm}\nopagebreak
 
+  \item fclose\dotfill \hyperpage{63}
+  \item fflush\dotfill \hyperpage{68}
+  \item fgets\dotfill \hyperpage{63}
   \item float\dotfill \hyperpage{23}
+  \item fopen\dotfill \hyperpage{61}
+  \item fork\dotfill \hyperpage{73}, \hyperpage{95}
+  \item fputs\dotfill \hyperpage{63}
   \item free\dotfill \hyperpage{36}
   \item function
     \subitem declaration\dotfill \hyperpage{4}
     \subitem definition\dotfill \hyperpage{5}
     \subitem static\dotfill \hyperpage{4}
+  \item fwrite\dotfill \hyperpage{67}
 
   \indexspace
 \nopagebreak
 \tikz\node at (0pt,0pt) [draw=none,fill=ocre!50,line width=1pt,inner sep=5pt]{\parbox{\linewidth-2\fboxsep-2\fboxrule-2pt}{\centering\large\sffamily\bfseries\textcolor{white}{G}}};\vspace*{0.2cm}\nopagebreak
 
   \item gcc\dotfill \hyperpage{7}
+  \item getaddrinfo\dotfill \hyperpage{91}
   \item guard\dotfill \hyperindexformat{\see {header, guard}}{6}
 
   \indexspace
@@ -98,11 +109,15 @@
   \item make\dotfill \hyperpage{10}
   \item Makefile\dotfill \hyperpage{11}
   \item malloc\dotfill \hyperpage{36}
+  \item multithreading\dotfill \hyperpage{76}
+  \item mutex\dotfill \hyperpage{78, 79}
 
   \indexspace
 \nopagebreak
 \tikz\node at (0pt,0pt) [draw=none,fill=ocre!50,line width=1pt,inner sep=5pt]{\parbox{\linewidth-2\fboxsep-2\fboxrule-2pt}{\centering\large\sffamily\bfseries\textcolor{white}{N}}};\vspace*{0.2cm}\nopagebreak
 
+  \item nanosleep\dotfill \hyperpage{75}
+  \item Networking\dotfill \hyperpage{87}
   \item NULL\dotfill \hyperpage{27}, \hyperpage{30}
   \item null terminator\dotfill \hyperpage{30}
 
@@ -116,8 +131,15 @@
 \nopagebreak
 \tikz\node at (0pt,0pt) [draw=none,fill=ocre!50,line width=1pt,inner sep=5pt]{\parbox{\linewidth-2\fboxsep-2\fboxrule-2pt}{\centering\large\sffamily\bfseries\textcolor{white}{P}}};\vspace*{0.2cm}\nopagebreak
 
+  \item packed\dotfill \hyperpage{65}
   \item pointer\dotfill \hyperpage{27}, \hyperpage{30}
   \item preprocessor\dotfill \hyperpage{7}
+
+  \indexspace
+\nopagebreak
+\tikz\node at (0pt,0pt) [draw=none,fill=ocre!50,line width=1pt,inner sep=5pt]{\parbox{\linewidth-2\fboxsep-2\fboxrule-2pt}{\centering\large\sffamily\bfseries\textcolor{white}{Q}}};\vspace*{0.2cm}\nopagebreak
+
+  \item queue\dotfill \hyperpage{107}
 
   \indexspace
 \nopagebreak
@@ -133,9 +155,11 @@
 \tikz\node at (0pt,0pt) [draw=none,fill=ocre!50,line width=1pt,inner sep=5pt]{\parbox{\linewidth-2\fboxsep-2\fboxrule-2pt}{\centering\large\sffamily\bfseries\textcolor{white}{S}}};\vspace*{0.2cm}\nopagebreak
 
   \item short\dotfill \hyperpage{16}
+  \item sigaction\dotfill \hyperpage{95}
   \item signed\dotfill \hyperpage{17}
   \item size\_t\dotfill \hyperpage{19}
   \item sizeof\dotfill \hyperpage{29}
+  \item stack\dotfill \hyperpage{114}
   \item stack frame\dotfill \hyperpage{34}
   \item struct\dotfill \hyperpage{53}
 
@@ -143,6 +167,8 @@
 \nopagebreak
 \tikz\node at (0pt,0pt) [draw=none,fill=ocre!50,line width=1pt,inner sep=5pt]{\parbox{\linewidth-2\fboxsep-2\fboxrule-2pt}{\centering\large\sffamily\bfseries\textcolor{white}{T}}};\vspace*{0.2cm}\nopagebreak
 
+  \item thread pool\dotfill \hyperpage{81}, \hyperpage{84}
+  \item threads\dotfill \hyperpage{76}, \hyperpage{78}, \hyperpage{84}
   \item typedef\dotfill \hyperpage{24}
 
   \indexspace
