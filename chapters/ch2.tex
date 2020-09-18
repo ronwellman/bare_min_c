@@ -460,7 +460,7 @@
 	If you've never looked at assembly code before, this can look a bit crazy.  Without going into the nitty gritty details of assembly\index{assembly} language syntax, I wanted to take a second and point out a few things.  There is something called a \textbf{stack frame}\index{stack frame}.  \textit{Stack frames} typically hold the variables declared during compilation time.  What do I mean about during compilation time?  Essentially, the compiler has enough information during compilation to determine how much space to allocate for a variable and what its lifetime will be.  Each function gets its own stack frame.  This is somethine worth considering especially for recursive functions (functions that call themselves) because for each call, a new stack is provisioned.  There is also something called a \textbf{call stack}\index{call stack} that is composed of various stack frames and the return addresses associated with them.  This is demonstrated in figure \ref{fig:callstack}.
 	
 	\begin{figure}[h]
-		\centering\includegraphics[scale=0.3]{callstack3.png}
+		\centering\includegraphics[scale=0.3]{callstack.png}
 		\caption{Call Stack}
 		\label{fig:callstack}
 	\end{figure}
