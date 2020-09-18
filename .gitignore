@@ -17,5 +17,4 @@
 *.brf
 *.out
 *.ptc
-output/*
 .vscode
