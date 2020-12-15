@@ -1,6 +1,8 @@
 # Bare Min C
 This guide will hopefully guide our developers in gaining a better understanding of the C programming language.  It is expected to grow as we identify common issues that our developers encounter or gaps in their knowledge.  It is not expected to be an all encompassing guide to the C programming language. Below is a rough idea of the topics that will be covered.  Topics may or may not survive in this order or at all. 
 
+**This book is not finished and I don't know when I will get to it because I'm lazy...**
+
 ## General Outline
 1. Getting started
 	1. Basic Structure of a C Program
