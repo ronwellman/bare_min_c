@@ -42,7 +42,7 @@ This guide will hopefully guide our developers in gaining a better understanding
 	1. HashTable (Incomplete)
 
 ## Documents
-I have decided to use Latex for writing this document.  I'll probably end up regretting this down the road but for not, it stays.
+I have decided to use Latex for writing this document.  I'll probably end up regretting this down the road but for now, it stays.
 
 ### Template
 I have downloaded a book template from: [Latex Templates](latextemplates.com/cat/books).  I'll probably modify it slightly but wanted to get some of the hard stuff out of the way early on.
